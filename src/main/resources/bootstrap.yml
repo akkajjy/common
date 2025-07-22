@@ -74,3 +74,11 @@ sequence:
       - seq_clr_trial_apply
 mybatis:
   mapper-locations: classpath:mapper/*.xml
+knife4j:
+  enable: true
+  documents:
+    - group: 默认接口
+      name: 所有接口
+      locations: classpath:api/**
+  # 生产环境需关闭文档 (重要!)
+  production: false # 开发环境设为false
