@@ -5,6 +5,7 @@ import com.palwy.common.entity.ClrDictDO;
 import com.palwy.common.mapper.ClrDictDOMapper;
 import com.palwy.common.service.ClrDictService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,7 +22,7 @@ import java.util.Map;
 @Service
 public class ClrDictServiceImpl implements ClrDictService {
 
-    @Resource
+    @Autowired
     private ClrDictDOMapper clrDictDOMapper;
 
     @Override

@@ -2,6 +2,7 @@ package com.palwy.common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.StopWatch;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -23,8 +24,12 @@ import java.net.InetAddress;
 @SpringBootApplication
 @ImportResource("classpath:beanRefContext.xml")
 @RefreshScope
-@EnableFeignClients(basePackages = { "com.palwy.account.api","com.palwy.product.api"})
-@ComponentScan(basePackages = {"org.com.palwy","org.com.palwy.dal.mapper"})
+@MapperScan("com.palwy.common.mapper")
+@ComponentScan(basePackages = {
+        "com.palwy.common",
+        "com.palwy.common.mapper",
+        "com.palwy.common.controller" // 新增控制器包路径
+})
 public class Application {
 
     /**

@@ -12,11 +12,11 @@ import java.util.Map;
  **/
 public interface ClrDictDOMapper {
 
-    public int insert(ClrDictDO clrDictDO);
+     int insert(ClrDictDO clrDictDO);
 
-    public int update(ClrDictDO clrDictDO);
+     int update(ClrDictDO clrDictDO);
 
-    public ClrDictDO select(Map<String, Object> map);
+     ClrDictDO select(Map<String, Object> map);
 
-    public List<ClrDictDO> selectList(Map<String, Object> map);
+     List<ClrDictDO> selectList(Map<String, Object> map);
 }
