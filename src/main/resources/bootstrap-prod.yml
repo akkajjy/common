@@ -1,0 +1,26 @@
+spring:
+  cloud:
+    loadbalancer:
+      nacos:
+        enabled: true # 开启 nacos 的负载均衡策略
+    nacos:
+      config:
+        enabled: true
+        server-addr: 10.96.0.10:8848
+        namespace: b253a41e-152e-4bb5-928e-9b88576567b2
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        auto-refresh: true
+        refresh-enabled: true
+        username: nacos
+        password: k%^FQT95
+        import-check:
+          enabled: false
+      discovery:
+        server-addr: 10.96.0.10:8848
+        namespace: b253a41e-152e-4bb5-928e-9b88576567b2
+        group: DEFAULT_GROUP
+        username: nacos
+        password: k%^FQT95
+
+
