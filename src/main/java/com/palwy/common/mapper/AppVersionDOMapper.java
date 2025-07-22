@@ -20,5 +20,5 @@ public interface AppVersionDOMapper {
 
     List<AppVersionDO> getAllAppVersions();
 
-
+    int deleteVersionsByAppId(Long appId);
 }

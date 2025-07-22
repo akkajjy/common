@@ -8,4 +8,8 @@ public interface AppInfoService {
     List<AppInfoDO> getAllAppInfos();
 
     int addAppInfo(AppInfoDO appInfoDO);
+
+    AppInfoDO getAppInfoById(Long id);
+
+    int updateAppInfo(AppInfoDO appInfoDO);
 }

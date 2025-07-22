@@ -70,4 +70,26 @@
     <select id="getAllAppVersionsByAppId" parameterType="int" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/> FROM app_version WHERE app_id = #{appId} AND is_deleted = 'N'
     </select>
+
+    <update id="deleteVersionsByAppId">
+        UPDATE app_version
+        SET is_deleted = 'Y',
+            modifier = #{modifier},
+            gmt_modified = NOW()
+        WHERE app_id = #{appId} AND is_deleted = 'N'
+    </update>
+
+    <insert id="saveBatchAppVersion">
+        INSERT INTO app_version (app_id, version_code, version_name, download_url,
+        file_path, channel, device_filter, show_cash_loan,
+        force_update_type, update_desc, is_deleted,
+        creator, modifier, gmt_created, gmt_modified)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.appId}, #{item.versionCode}, #{item.versionName}, #{item.downloadUrl},
+            #{item.filePath}, #{item.channel}, #{item.deviceFilter}, #{item.showCashLoan},
+            #{item.forceUpdateType}, #{item.updateDesc}, 'N',
+            #{item.creator}, #{item.modifier}, NOW(), NOW())
+        </foreach>
+    </insert>
 </mapper>

@@ -97,4 +97,14 @@ public class AppVersionServiceImpl implements AppVersionService {
     public int deleteAppVersion(Long id, String modifier) {
         return appVersionDOMapper.deleteAppVersion(id, modifier);
     }
+
+    @Override
+    public int deleteVersionsByAppId(Long appId) {
+        return appVersionDOMapper.deleteVersionsByAppId(appId);
+    }
+
+    @Override
+    public int saveBatchAppVersion(List<AppVersionDO> versions) {
+        return batchInsertWithFallback(versions);
+    }
 }

@@ -8,7 +8,8 @@ import java.util.List;
 
 @Data
 public class AppInfoReq {
-
+    @ApiModelProperty("应用Id")
+    private Long id;
     @ApiModelProperty("应用名称")
     @NotBlank(message = "应用名称不能为空")
     private String appName;

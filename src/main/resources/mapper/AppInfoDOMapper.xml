@@ -35,4 +35,14 @@
     <select id="getAllAppVersionsByAppId" parameterType="int" resultType="com.palwy.common.entity.AppVersionDO">
         SELECT <include refid="Base_Column_List"/> FROM app_version WHERE app_id = #{appId} AND is_deleted = 'N'
     </select>
+    <update id="updateAppInfo">
+        UPDATE app_info
+        SET app_name = #{appName},
+            app_type = #{appType},
+            os_type = #{osType},
+            extra_info = #{extraInfo},
+            modifier = #{modifier},
+            gmt_modified = NOW()
+        WHERE id = #{id} AND is_deleted = 'N'
+    </update>
 </mapper>

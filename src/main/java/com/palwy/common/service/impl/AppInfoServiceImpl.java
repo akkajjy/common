@@ -6,6 +6,7 @@ import com.palwy.common.service.AppInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -22,5 +23,15 @@ public class AppInfoServiceImpl implements AppInfoService {
     @Override
     public int addAppInfo(AppInfoDO appInfoDO) {
         return appInfoDOMapper.saveAppInfo(appInfoDO);
+    }
+
+    @Override
+    public AppInfoDO getAppInfoById(Long id) {
+        return appInfoDOMapper.getAppInfoById(id);
+    }
+
+    @Override
+    public int updateAppInfo(AppInfoDO appInfoDO) {
+        return appInfoDOMapper.updateAppInfo(appInfoDO);
     }
 }
