@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.palwy.common.mapper.AppInfoDOMapper">
+    <resultMap id="BaseResultMap" type="com.palwy.common.entity.AppInfoDO">
+        <result property="id" column="id" />
+        <result property="appName" column="app_name" />
+        <result property="appType" column="app_type" />
+        <result property="osType" column="os_type" />
+        <result property="platform" column="platform" />
+        <result property="extraInfo" column="extra_info" />
+        <result property="isDeleted" column="is_deleted" />
+        <result property="creator" column="creator" />
+        <result property="gmtCreated" column="gmt_created" />
+        <result property="modifier" column="modifier" />
+        <result property="gmtModified" column="gmt_modified" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, app_name, app_type, os_type, platform, extra_info, is_deleted, creator, modifier, gmt_created, gmt_modified
+    </sql>
+    <select id="getAllAppInfos" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_info WHERE is_deleted = 'N'
+    </select>
+    <select id="getAppInfoById" parameterType="long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_info WHERE id = #{id} AND is_deleted = 'N'
+    </select>
+    <insert id="saveAppInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO app_info (app_name, app_type, os_type, platform, extra_info, is_deleted, creator, modifier, gmt_created)
+        VALUES (#{appName}, #{appType}, #{osType}, #{platform}, #{extraInfo}, 'N', #{creator}, #{modifier}, NOW())
+    </insert>
+    <select id="findByAppNameAndOsType" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_info WHERE app_name = #{appName} AND os_type = #{osType} AND is_deleted = 'N'
+    </select>
+    <select id="getAllAppVersionsByAppId" parameterType="int" resultType="com.palwy.common.entity.AppVersionDO">
+        SELECT <include refid="Base_Column_List"/> FROM app_version WHERE app_id = #{appId} AND is_deleted = 'N'
+    </select>
+</mapper>

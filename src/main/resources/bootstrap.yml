@@ -72,3 +72,5 @@ sequence:
     retryTimes: 5
     sequenceNames:
       - seq_clr_trial_apply
+mybatis:
+  mapper-locations: classpath:mapper/*.xml

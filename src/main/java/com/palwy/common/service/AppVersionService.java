@@ -1,0 +1,15 @@
+package com.palwy.common.service;
+
+import com.palwy.common.entity.AppInfoDO;
+import com.palwy.common.entity.AppVersionDO;
+import com.palwy.common.req.AppInfoReq;
+
+import java.util.List;
+
+public interface AppVersionService {
+    List<AppVersionDO> getAllAppVersions();
+    AppVersionDO getAppVersionById(Long id);
+    int saveAppVersion(AppInfoDO appInfoDO, AppInfoReq appInfoReq);
+    int updateAppVersion(AppVersionDO appVersion);
+    int deleteAppVersion(Long id, String modifier);
+}

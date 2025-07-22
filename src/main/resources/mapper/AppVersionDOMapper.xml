@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.palwy.common.mapper.AppVersionDOMapper">
+    <resultMap id="BaseResultMap" type="com.palwy.common.entity.AppVersionDO">
+        <result property="id" column="id"/>
+        <result property="appId" column="app_id"/>
+        <result property="versionCode" column="version_code"/>
+        <result property="versionName" column="version_name"/>
+        <result property="downloadUrl" column="download_url"/>
+        <result property="filePath" column="file_path"/>
+        <result property="channel" column="channel"/>
+        <result property="deviceFilter" column="device_filter"/>
+        <result property="showCashLoan" column="show_cash_loan"/>
+        <result property="forceUpdateType" column="force_update_type"/>
+        <result property="updateDesc" column="update_desc"/>
+        <result property="isDeleted" column="is_deleted"/>
+        <result property="creator" column="creator"/>
+        <result property="gmtCreated" column="gmt_created"/>
+        <result property="modifier" column="modifier"/>
+        <result property="gmtModified" column="gmt_modified"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, app_id, version_code, version_name, download_url, file_path, channel, device_filter,
+        show_cash_loan, force_update_type, update_desc, is_deleted, creator, gmt_created, modifier, gmt_modified
+    </sql>
+    
+    <insert id="saveAppVersion" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO app_version (app_id, version_code, version_name, download_url, file_path, channel, device_filter,
+                                 show_cash_loan, force_update_type, update_desc, is_deleted, creator, modifier, gmt_created, gmt_modified)
+        VALUES (#{appId}, #{versionCode}, #{versionName}, #{downloadUrl}, #{filePath}, #{channel}, #{deviceFilter},
+                #{showCashLoan}, #{forceUpdateType}, #{updateDesc}, 'N', #{creator}, #{modifier}, NOW(), NOW())
+    </insert>
+    
+    <update id="updateAppVersion">
+        UPDATE app_version
+        SET app_id = #{appId},
+            version_code = #{versionCode},
+            version_name = #{versionName},
+            download_url = #{downloadUrl},
+            file_path = #{filePath},
+            channel = #{channel},
+            device_filter = #{deviceFilter},
+            show_cash_loan = #{showCashLoan},
+            force_update_type = #{forceUpdateType},
+            update_desc = #{updateDesc},
+            modifier = #{modifier},
+            gmt_modified = NOW()
+        WHERE id = #{id} AND is_deleted = 'N'
+    </update>
+    
+    <delete id="deleteAppVersion">
+        UPDATE app_version
+        SET is_deleted = 'Y',
+            modifier = #{modifier},
+            gmt_modified = NOW()
+        WHERE id = #{id}
+    </delete>
+    
+    <select id="getAppVersionById" parameterType="long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_version WHERE id = #{id} AND is_deleted = 'N'
+    </select>
+    
+    <select id="getAllAppVersions" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_version WHERE is_deleted = 'N'
+    </select>
+    
+    <!-- 新增SQL：获取指定应用的所有版本 -->
+    <select id="getAllAppVersionsByAppId" parameterType="int" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_version WHERE app_id = #{appId} AND is_deleted = 'N'
+    </select>
+</mapper>
