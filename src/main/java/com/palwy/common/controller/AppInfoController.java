@@ -3,7 +3,6 @@ package com.palwy.common.controller;
 import com.palwy.common.entity.ClrDictDO;
 import com.palwy.common.req.AppInfoReq;
 import com.palwy.common.service.AppInfoService;
-import com.palwy.common.service.AppVersionService;
 import com.palwy.common.service.ClrDictService;
 import com.palwy.common.util.ResultVOUtil;
 import com.palwy.common.vo.ResultVO;
@@ -21,8 +20,6 @@ import java.util.List;
 public class AppInfoController {
     @Resource
     private AppInfoService appInfoService;
-    @Resource
-    private AppVersionService appVersionService;
     @Resource
     private ClrDictService clrDictService;
 
@@ -52,6 +49,4 @@ public class AppInfoController {
     public ResultVO update(@Valid @RequestBody AppInfoReq appInfoReq) {
         return appInfoService.updateAppAndVersion(appInfoReq);
     }
-
-
 }
