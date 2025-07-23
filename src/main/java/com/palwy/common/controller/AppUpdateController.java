@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppUpdateManage;
 import com.palwy.common.req.AppVersionQueryReq;
 import com.palwy.common.service.AppUpdateManageService;
+import com.palwy.common.util.ResultVOUtil;
+import com.palwy.common.vo.ResultVO;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -20,33 +22,48 @@ public class AppUpdateController {
 
     @ApiOperation(value = "创建应用更新记录")
     @PostMapping("/create")
-    public int create(@RequestBody AppUpdateManage record) {
-        return service.create(record);
+    public ResultVO create(@RequestBody AppUpdateManage record) {
+        int flag = service.create(record);
+        if (flag > 0) {
+            return ResultVOUtil.success();
+        }else{
+            return ResultVOUtil.fail("创建失败");
+        }
     }
 
     @PostMapping("/update")
     @ApiOperation("更新应用更新记录")
-    public int update(@RequestBody AppUpdateManage record) {
-        return service.update(record);
+    public ResultVO update(@RequestBody AppUpdateManage record) {
+        int flag = service.update(record);
+        if (flag > 0) {
+            return ResultVOUtil.success();
+        }else{
+            return ResultVOUtil.fail("修改失败");
+        }
     }
 
     @DeleteMapping("/{id}")
     @ApiOperation("删除应用更新记录")
-    public int delete(@PathVariable Integer id) {
-        return service.delete(id);
+    public ResultVO delete(@PathVariable Integer id) {
+        int flag = service.delete(id);
+        if (flag > 0) {
+            return ResultVOUtil.success();
+        }else{
+            return ResultVOUtil.fail("删除失败");
+        }
     }
 
     @GetMapping("/{id}")
     @ApiOperation("根据ID获取应用更新记录")
-    public AppUpdateManage getById(@PathVariable Integer id) {
-        return service.getById(id);
+    public ResultVO<AppUpdateManage> getById(@PathVariable Integer id) {
+        return ResultVOUtil.success(service.getById(id));
     }
 
     @PostMapping("/page")
     @ApiOperation("分页查询应用更新记录")
-    public PageInfo<AppUpdateManage> listByPage(
+    public ResultVO<PageInfo<AppUpdateManage>> listByPage(
             @RequestBody AppVersionQueryReq req) {
-        return service.listByPage(req.getPageNum(), req.getPageSize(), req.getAppName(), req.getOsType());
+        return ResultVOUtil.success(service.listByPage(req.getPageNum(), req.getPageSize(), req.getAppName(), req.getOsType()));
     }
 
     @GetMapping("/force-update")
@@ -56,10 +73,10 @@ public class AppUpdateController {
             @ApiImplicitParam(name = "versionCode", value = "当前版本号", required = true),
             @ApiImplicitParam(name = "platform", value = "平台标识", required = true)
     })
-    public AppUpdateManage checkForceUpdate(
+    public ResultVO<AppUpdateManage> checkForceUpdate(
             @RequestHeader("osType") String osType,
             @RequestHeader("versionCode") String versionCode,
             @RequestHeader("platform") String platform) {
-        return service.checkForceUpdate(osType, versionCode, platform);
+        return ResultVOUtil.success(service.checkForceUpdate(osType, versionCode, platform));
     }
 }
