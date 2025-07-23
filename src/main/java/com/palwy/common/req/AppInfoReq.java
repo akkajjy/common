@@ -14,7 +14,6 @@ public class AppInfoReq {
     @NotBlank(message = "应用名称不能为空")
     private String appName;
     @ApiModelProperty("应用类型1:商城 2:助贷 ...")
-    @NotBlank(message = "应用类型不能为空")
     private String appType;
     @ApiModelProperty("平台类型1:Android 2:iOS")
     @NotBlank(message = "请选择Android或IOS")

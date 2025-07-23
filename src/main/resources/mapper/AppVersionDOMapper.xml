@@ -85,7 +85,6 @@
             <if test="appName != null and appName != ''">
                 AND i.app_name = #{appName}
             </if>
-            <!-- 新增操作系统类型筛选 -->
             <if test="osType != null and osType != ''">
                 AND i.os_type = #{osType}
             </if>
