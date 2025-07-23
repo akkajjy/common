@@ -1,10 +1,13 @@
 package com.palwy.common.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppInfoDO;
 import com.palwy.common.entity.AppVersionDO;
 import com.palwy.common.mapper.AppVersionDOMapper;
 import com.palwy.common.req.AppInfoReq;
+import com.palwy.common.resp.AppVersionResp;
 import com.palwy.common.service.AppVersionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -106,5 +109,22 @@ public class AppVersionServiceImpl implements AppVersionService {
     @Override
     public int saveBatchAppVersion(List<AppVersionDO> versions) {
         return batchInsertWithFallback(versions);
+    }
+
+    public PageInfo<AppVersionResp> listAppVersionsByCondition(
+            String appName,
+            String osType,
+            List<String> channels,
+            int pageNum,
+            int pageSize) {
+
+        // 启动分页
+        PageHelper.startPage(pageNum, pageSize);
+
+        // 执行查询 - 传入osType参数
+        List<AppVersionResp> list = appVersionDOMapper.listByCondition(
+                appName, osType, channels);
+
+        return new PageInfo<>(list);
     }
 }

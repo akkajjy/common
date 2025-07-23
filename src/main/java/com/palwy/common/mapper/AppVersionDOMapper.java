@@ -1,6 +1,7 @@
 package com.palwy.common.mapper;
 
 import com.palwy.common.entity.AppVersionDO;
+import com.palwy.common.resp.AppVersionResp;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -21,4 +22,9 @@ public interface AppVersionDOMapper {
     List<AppVersionDO> getAllAppVersions();
 
     int deleteVersionsByAppId(Long appId);
+
+
+    List<AppVersionResp> listByCondition(@Param("appName") String appName,
+                                         @Param("osType") String osType,
+                                         @Param("channels") List<String> channels);
 }
