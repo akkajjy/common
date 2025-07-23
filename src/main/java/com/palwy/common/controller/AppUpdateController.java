@@ -18,7 +18,7 @@ public class AppUpdateController {
     @Autowired
     private AppUpdateManageService service;
 
-    @PostMapping
+    @PostMapping("/create")
     @ApiOperation("创建应用更新记录")
     public int create(@RequestBody AppUpdateManage record) {
         return service.create(record);
