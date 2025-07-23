@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -33,9 +35,18 @@ public class AppInfoController {
     //查询发版平台
     @ApiOperation(value = "查询发版平台")
     @GetMapping("/getVersionPlatformList")
-    public ResultVO<List<ClrDictDO>> getVersionPlatformList() {
+    public ResultVO getVersionPlatformList() {
         List<ClrDictDO> clrDictDOList = clrDictService.getClrDictListByDictType("VersionPlatformEnum");
-        return ResultVOUtil.success(clrDictDOList);
+
+        // 转换为Map: dictValue -> dictLabel
+        Map<String, String> platformMap = clrDictDOList.stream()
+                .collect(Collectors.toMap(
+                        ClrDictDO::getDictValue,
+                        ClrDictDO::getDictLabel,
+                        (existing, replacement) -> existing // 重复键处理策略
+                ));
+
+        return ResultVOUtil.success(platformMap);
     }
 
     @ApiOperation(value = "新增应用及版本")
