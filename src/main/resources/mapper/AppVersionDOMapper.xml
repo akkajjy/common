@@ -45,7 +45,6 @@
             show_cash_loan = #{showCashLoan},
             force_update_type = #{forceUpdateType},
             update_desc = #{updateDesc},
-            modifier = #{modifier},
             gmt_modified = NOW()
         WHERE id = #{id} AND is_deleted = 'N'
     </update>
@@ -103,7 +102,6 @@
     <update id="deleteVersionsByAppId">
         UPDATE app_version
         SET is_deleted = 'Y',
-            modifier = #{modifier},
             gmt_modified = NOW()
         WHERE app_id = #{appId} AND is_deleted = 'N'
     </update>

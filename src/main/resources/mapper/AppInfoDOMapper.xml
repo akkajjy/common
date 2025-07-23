@@ -41,7 +41,6 @@
             app_type = #{appType},
             os_type = #{osType},
             extra_info = #{extraInfo},
-            modifier = #{modifier},
             gmt_modified = NOW()
         WHERE id = #{id} AND is_deleted = 'N'
     </update>
