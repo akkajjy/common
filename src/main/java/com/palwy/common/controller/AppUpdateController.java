@@ -68,17 +68,13 @@ public class AppUpdateController {
         return ResultVOUtil.success(service.listByPage(req.getPageNum(), req.getPageSize(), req.getAppName(), req.getOsType()));
     }
 
-    @GetMapping("/force-update")
+    @GetMapping("/checkForceUpdate")
     @ApiOperation("检查强制更新状态")
     public ResultVO<AppUpdateManage> checkForceUpdate(
             @RequestHeader("osType") String osType,
             @RequestHeader("versionCode") String versionCode,
             @RequestHeader("platform") String platform) {
         AppUpdateManage appUpdateManage = service.checkForceUpdate(osType, versionCode, platform);
-        if(appUpdateManage!=null){
-            return ResultVOUtil.success(appUpdateManage);
-        }else{
-            return ResultVOUtil.fail("查询失败，该记录不存在");
-        }
+        return ResultVOUtil.success(appUpdateManage!=null);
     }
 }
