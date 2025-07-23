@@ -31,10 +31,10 @@
     <insert id="insert" parameterType="com.palwy.common.entity.AppUpdateManage">
         INSERT INTO app_update_manage (
             app_name, version_code, version_name, platform, force_update_type,
-            low_version_code, update_desc, creator, modifier, os_type
+            low_version_code, update_desc, os_type
         ) VALUES (
                      #{appName}, #{versionCode}, #{versionName}, #{platform}, #{forceUpdateType},
-                     #{lowVersionCode}, #{updateDesc}, #{creator}, #{modifier}, #{osType}
+                     #{lowVersionCode}, #{updateDesc}, #{osType}
                  )
     </insert>
 
@@ -47,7 +47,6 @@
             force_update_type = #{forceUpdateType},
             low_version_code = #{lowVersionCode},
             update_desc = #{updateDesc},
-            modifier = #{modifier},
             gmt_modified = NOW()
         WHERE id = #{id}
     </update>

@@ -6,6 +6,7 @@ import com.palwy.common.req.AppVersionQueryReq;
 import com.palwy.common.service.AppUpdateManageService;
 import com.palwy.common.util.ResultVOUtil;
 import com.palwy.common.vo.ResultVO;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequestMapping("/api/app-update")
+@Api(tags = "应用更新管理接口")
 public class AppUpdateController {
     @Autowired
     private AppUpdateManageService service;
