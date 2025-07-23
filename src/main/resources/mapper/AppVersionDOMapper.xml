@@ -28,9 +28,9 @@
     
     <insert id="saveAppVersion" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO app_version (app_id, version_code, version_name, download_url, file_path, channel, device_filter,
-                                 show_cash_loan, force_update_type, update_desc, is_deleted, creator, modifier, gmt_created, gmt_modified)
+                                 show_cash_loan, force_update_type, update_desc, is_deleted, gmt_created, gmt_modified)
         VALUES (#{appId}, #{versionCode}, #{versionName}, #{downloadUrl}, #{filePath}, #{channel}, #{deviceFilter},
-                #{showCashLoan}, #{forceUpdateType}, #{updateDesc}, 'N', #{creator}, #{modifier}, NOW(), NOW())
+                #{showCashLoan}, #{forceUpdateType}, #{updateDesc}, 'N',  NOW(), NOW())
     </insert>
     
     <update id="updateAppVersion">
@@ -112,13 +112,13 @@
         INSERT INTO app_version (app_id, version_code, version_name, download_url,
         file_path, channel, device_filter, show_cash_loan,
         force_update_type, update_desc, is_deleted,
-        creator, modifier, gmt_created, gmt_modified)
+        gmt_created, gmt_modified)
         VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.appId}, #{item.versionCode}, #{item.versionName}, #{item.downloadUrl},
             #{item.filePath}, #{item.channel}, #{item.deviceFilter}, #{item.showCashLoan},
             #{item.forceUpdateType}, #{item.updateDesc}, 'N',
-            #{item.creator}, #{item.modifier}, NOW(), NOW())
+            NOW(), NOW())
         </foreach>
     </insert>
 </mapper>

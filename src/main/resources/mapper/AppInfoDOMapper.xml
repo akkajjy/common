@@ -26,8 +26,8 @@
         SELECT <include refid="Base_Column_List"/> FROM app_info WHERE id = #{id} AND is_deleted = 'N'
     </select>
     <insert id="saveAppInfo" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO app_info (app_name, app_type, os_type, platform, extra_info, is_deleted, creator, modifier, gmt_created)
-        VALUES (#{appName}, #{appType}, #{osType}, #{platform}, #{extraInfo}, 'N', #{creator}, #{modifier}, NOW())
+        INSERT INTO app_info (app_name, app_type, os_type, platform, extra_info, is_deleted, gmt_created)
+        VALUES (#{appName}, #{appType}, #{osType}, #{platform}, #{extraInfo}, 'N', NOW())
     </insert>
     <select id="findByAppNameAndOsType" parameterType="map" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/> FROM app_info WHERE app_name = #{appName} AND os_type = #{osType} AND is_deleted = 'N'
