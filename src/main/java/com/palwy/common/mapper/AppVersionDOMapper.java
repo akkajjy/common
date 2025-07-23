@@ -17,7 +17,7 @@ public interface AppVersionDOMapper {
 
     int deleteAppVersion(@Param("id") Long id);
 
-    AppVersionDO getAppVersionById(@Param("id") Long id);
+    AppVersionResp getAppVersionById(@Param("id") Long id);
 
     List<AppVersionDO> getAllAppVersions();
 

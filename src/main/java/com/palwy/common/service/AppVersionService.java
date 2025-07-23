@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AppVersionService {
     List<AppVersionDO> getAllAppVersions();
-    AppVersionDO getAppVersionById(Long id);
+    AppVersionResp getAppVersionById(Long id);
     int saveAppVersion(AppInfoDO appInfoDO, AppInfoReq appInfoReq);
     int updateAppVersion(AppVersionDO appVersion);
     int deleteAppVersion(Long id);

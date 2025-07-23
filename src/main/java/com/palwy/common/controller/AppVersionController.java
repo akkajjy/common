@@ -51,4 +51,15 @@ public class AppVersionController {
             return ResultVOUtil.fail("删除失败");
         }
     }
+
+    @ApiOperation(value = "根据ID查询版本详情", notes = "获取指定版本的详细信息")
+    @GetMapping("/{id}")
+    public ResultVO<AppVersionResp> getVersionById(@PathVariable Long id) {
+        AppVersionResp detail = appVersionService.getAppVersionById(id);
+        if (detail != null) {
+            return ResultVOUtil.success(detail);
+        } else {
+            return ResultVOUtil.fail("未找到该版本信息");
+        }
+    }
 }

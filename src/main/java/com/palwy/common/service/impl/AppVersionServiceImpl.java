@@ -32,7 +32,7 @@ public class AppVersionServiceImpl implements AppVersionService {
     }
 
     @Override
-    public AppVersionDO getAppVersionById(Long id) {
+    public AppVersionResp getAppVersionById(Long id) {
         return appVersionDOMapper.getAppVersionById(id);
     }
 

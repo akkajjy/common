@@ -57,8 +57,13 @@
         WHERE id = #{id}
     </delete>
     
-    <select id="getAppVersionById" parameterType="long" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/> FROM app_version WHERE id = #{id} AND is_deleted = 'N'
+    <select id="getAppVersionById" parameterType="long" resultType="com.palwy.common.resp.AppVersionResp">
+        SELECT
+            v.id,i.app_name as appName,v.channel,v.version_code as versionCode,v.version_name AS versionName,v.download_url AS downloadUrl,v.show_cash_loan AS showCashLoan,v.gmt_created AS gmtCreated
+        FROM app_version v
+                 INNER JOIN app_info i ON v.app_id = i.id
+        WHERE v.id = #{id} AND v.is_deleted = 'N'
+          AND i.is_deleted = 'N'
     </select>
     
     <select id="getAllAppVersions" resultMap="BaseResultMap">
