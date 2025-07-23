@@ -4,22 +4,22 @@ import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppUpdateManage;
 import com.palwy.common.req.AppVersionQueryReq;
 import com.palwy.common.service.AppUpdateManageService;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/app-update")
-@Api(tags = "应用更新管理接口")
 public class AppUpdateController {
     @Autowired
     private AppUpdateManageService service;
 
+    @ApiOperation(value = "创建应用更新记录")
     @PostMapping("/create")
-    @ApiOperation("创建应用更新记录")
     public int create(@RequestBody AppUpdateManage record) {
         return service.create(record);
     }

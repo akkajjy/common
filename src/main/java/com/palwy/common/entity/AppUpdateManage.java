@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class AppUpdateManage {
+public class AppUpdateManage implements Serializable {
     @ApiModelProperty("主键ID")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
