@@ -1,6 +1,7 @@
 package com.palwy.common.service.impl;
 
 import com.palwy.common.Enum.AppTypeEnum;
+import com.palwy.common.Enum.OsTypeEnum;
 import com.palwy.common.entity.AppInfoDO;
 import com.palwy.common.entity.AppVersionDO;
 import com.palwy.common.mapper.AppInfoDOMapper;
@@ -55,7 +56,7 @@ public class AppInfoServiceImpl implements AppInfoService {
             AppInfoDO appInfoDO = AppInfoDO.builder()
                     .appName(appInfoReq.getAppName())
                     .appType(AppTypeEnum.fromValue(Integer.parseInt(appInfoReq.getAppType())).getDescription())
-                    .osType(AppTypeEnum.fromValue(Integer.parseInt(appInfoReq.getOsType())).getDescription())
+                    .osType(OsTypeEnum.fromValue(Integer.parseInt(appInfoReq.getOsType())).getDescription())
                     .extraInfo(appInfoReq.getExtraInfo())
                     .build();
 
@@ -85,7 +86,7 @@ public class AppInfoServiceImpl implements AppInfoService {
                     .id(appInfoReq.getId())
                     .appName(appInfoReq.getAppName())
                     .appType(AppTypeEnum.fromValue(Integer.parseInt(appInfoReq.getAppType())).getDescription())
-                    .osType(AppTypeEnum.fromValue(Integer.parseInt(appInfoReq.getOsType())).getDescription())
+                    .osType(OsTypeEnum.fromValue(Integer.parseInt(appInfoReq.getOsType())).getDescription())
                     .extraInfo(appInfoReq.getExtraInfo())
                     .build();
 
