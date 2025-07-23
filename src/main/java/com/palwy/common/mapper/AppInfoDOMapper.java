@@ -18,4 +18,6 @@ public interface AppInfoDOMapper {
     AppInfoDO findByAppNameAndOsType(@Param("appName") String appName, @Param("osType") String osType);
 
     int updateAppInfo(AppInfoDO appInfo);
+
+    Integer getAppInfoByName(String appName);
 }

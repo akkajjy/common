@@ -53,6 +53,10 @@ public class AppInfoServiceImpl implements AppInfoService {
     public ResultVO addAppAndVersion(AppInfoReq appInfoReq) {
         log.debug("新增应用: {}", appInfoReq.getAppName());
         try {
+            boolean nameExists = appInfoDOMapper.getAppInfoByName(appInfoReq.getAppName())>0;
+            if (nameExists) {
+                return ResultVOUtil.fail("应用保存失败，该应用名称已存在");
+            }
             AppInfoDO appInfoDO = AppInfoDO.builder()
                     .appName(appInfoReq.getAppName())
                     .appType(AppTypeEnum.fromValue(Integer.parseInt(appInfoReq.getAppType())).getDescription())

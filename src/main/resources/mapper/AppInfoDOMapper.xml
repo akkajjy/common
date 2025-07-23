@@ -44,4 +44,9 @@
             gmt_modified = NOW()
         WHERE id = #{id} AND is_deleted = 'N'
     </update>
+
+    <select id="getAppInfoByName" resultType="java.lang.Integer">
+        SELECT count(1) FROM app_info
+        WHERE app_name = #{appName} AND is_deleted = 'N'
+    </select>
 </mapper>
