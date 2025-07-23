@@ -13,7 +13,7 @@ public interface AppVersionService {
     AppVersionDO getAppVersionById(Long id);
     int saveAppVersion(AppInfoDO appInfoDO, AppInfoReq appInfoReq);
     int updateAppVersion(AppVersionDO appVersion);
-    int deleteAppVersion(Long id, String modifier);
+    int deleteAppVersion(Long id);
 
     int deleteVersionsByAppId(Long appId);
     int saveBatchAppVersion(List<AppVersionDO> versions);

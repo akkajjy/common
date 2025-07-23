@@ -97,8 +97,8 @@ public class AppVersionServiceImpl implements AppVersionService {
     }
 
     @Override
-    public int deleteAppVersion(Long id, String modifier) {
-        return appVersionDOMapper.deleteAppVersion(id, modifier);
+    public int deleteAppVersion(Long id) {
+        return appVersionDOMapper.deleteAppVersion(id);
     }
 
     @Override
