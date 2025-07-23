@@ -4,7 +4,6 @@ import com.palwy.common.Enum.AppTypeEnum;
 import com.palwy.common.entity.AppInfoDO;
 import com.palwy.common.entity.AppVersionDO;
 import com.palwy.common.mapper.AppInfoDOMapper;
-import com.palwy.common.mapper.AppVersionDOMapper;
 import com.palwy.common.req.AppInfoReq;
 import com.palwy.common.service.AppInfoService;
 import com.palwy.common.service.AppVersionService;

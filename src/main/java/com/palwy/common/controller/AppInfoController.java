@@ -1,8 +1,5 @@
 package com.palwy.common.controller;
 
-import com.palwy.common.Enum.AppTypeEnum;
-import com.palwy.common.entity.AppInfoDO;
-import com.palwy.common.entity.AppVersionDO;
 import com.palwy.common.entity.ClrDictDO;
 import com.palwy.common.req.AppInfoReq;
 import com.palwy.common.service.AppInfoService;
@@ -12,15 +9,11 @@ import com.palwy.common.util.ResultVOUtil;
 import com.palwy.common.vo.ResultVO;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -59,4 +52,6 @@ public class AppInfoController {
     public ResultVO update(@Valid @RequestBody AppInfoReq appInfoReq) {
         return appInfoService.updateAppAndVersion(appInfoReq);
     }
+
+
 }
