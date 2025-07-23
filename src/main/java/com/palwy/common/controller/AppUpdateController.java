@@ -24,7 +24,7 @@ public class AppUpdateController {
         return service.create(record);
     }
 
-    @PostMapping
+    @PostMapping("/update")
     @ApiOperation("更新应用更新记录")
     public int update(@RequestBody AppUpdateManage record) {
         return service.update(record);
