@@ -51,5 +51,4 @@ public class AppVersionController {
             return ResultVOUtil.fail("删除失败");
         }
     }
-
 }
