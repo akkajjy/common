@@ -119,4 +119,12 @@
             NOW(), NOW())
         </foreach>
     </insert>
+
+    <select id="getVersionByAppIdAndChannel" resultType="com.palwy.common.entity.AppVersionDO">
+        SELECT <include refid="Base_Column_List"/>
+        FROM app_version
+        WHERE version_code = #{versionCode}
+          AND is_deleted = 'N'
+            LIMIT 1
+    </select>
 </mapper>

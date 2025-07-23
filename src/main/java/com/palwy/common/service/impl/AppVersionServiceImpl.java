@@ -127,4 +127,13 @@ public class AppVersionServiceImpl implements AppVersionService {
 
         return new PageInfo<>(list);
     }
+
+    @Override
+    public boolean checkForceUpdate(String versionCode) {
+        // 查询指定版本信息
+        AppVersionDO version = appVersionDOMapper.getVersionByAppIdAndChannel(versionCode);
+
+        // 判断强制更新状态
+        return version != null && version.getForceUpdateType()>0;
+    }
 }

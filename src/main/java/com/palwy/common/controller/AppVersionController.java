@@ -62,4 +62,12 @@ public class AppVersionController {
             return ResultVOUtil.fail("未找到该版本信息");
         }
     }
+    @ApiOperation(value = "查询版本强制更新状态")
+    @GetMapping("/checkForceUpdate")
+    public ResultVO<Boolean> checkForceUpdate(@RequestHeader("versionCode") String versionCode) {
+
+
+        boolean isForceUpdate = appVersionService.checkForceUpdate(versionCode);
+        return ResultVOUtil.success(isForceUpdate);
+    }
 }

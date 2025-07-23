@@ -24,4 +24,6 @@ public interface AppVersionService {
             List<String> channels,
             int pageNum,
             int pageSize);
+
+    boolean checkForceUpdate(String versionCode);
 }
