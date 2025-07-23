@@ -70,15 +70,15 @@ public class AppUpdateController {
 
     @GetMapping("/force-update")
     @ApiOperation("检查强制更新状态")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "osType", value = "系统类型(1:Android 2:iOS)", required = true),
-            @ApiImplicitParam(name = "versionCode", value = "当前版本号", required = true),
-            @ApiImplicitParam(name = "platform", value = "平台标识", required = true)
-    })
     public ResultVO<AppUpdateManage> checkForceUpdate(
             @RequestHeader("osType") String osType,
             @RequestHeader("versionCode") String versionCode,
             @RequestHeader("platform") String platform) {
-        return ResultVOUtil.success(service.checkForceUpdate(osType, versionCode, platform));
+        AppUpdateManage appUpdateManage = service.checkForceUpdate(osType, versionCode, platform);
+        if(appUpdateManage!=null){
+            return ResultVOUtil.success(appUpdateManage);
+        }else{
+            return ResultVOUtil.fail("查询失败，该记录不存在");
+        }
     }
 }
