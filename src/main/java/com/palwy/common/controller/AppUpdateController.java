@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/app/update")
+@RequestMapping("/api/app-update")
 @Api(tags = "应用更新管理接口")
 public class AppUpdateController {
     @Autowired
@@ -24,7 +24,7 @@ public class AppUpdateController {
         return service.create(record);
     }
 
-    @PutMapping("/{id}")
+    @PostMapping
     @ApiOperation("更新应用更新记录")
     public int update(@RequestBody AppUpdateManage record) {
         return service.update(record);
@@ -42,7 +42,7 @@ public class AppUpdateController {
         return service.getById(id);
     }
 
-    @GetMapping("/page")
+    @PostMapping("/page")
     @ApiOperation("分页查询应用更新记录")
     public PageInfo<AppUpdateManage> listByPage(
             @RequestBody AppVersionQueryReq req) {
