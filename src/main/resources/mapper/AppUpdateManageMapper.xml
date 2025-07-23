@@ -1,0 +1,96 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.palwy.common.mapper.AppUpdateManageMapper">
+
+    <!-- 1. 添加BaseResultMap映射 -->
+    <resultMap id="BaseResultMap" type="com.palwy.common.entity.AppUpdateManage">
+        <id property="id" column="id" />
+        <result property="appName" column="app_name" />
+        <result property="versionCode" column="version_code" />
+        <result property="versionName" column="version_name" />
+        <result property="platform" column="platform" />
+        <result property="forceUpdateType" column="force_update_type" />
+        <result property="lowVersionCode" column="low_version_code" />
+        <result property="updateDesc" column="update_desc" />
+        <result property="creator" column="creator" />
+        <result property="modifier" column="modifier" />
+        <result property="gmtCreated" column="gmt_created" />
+        <result property="gmtModified" column="gmt_modified" />
+        <result property="isDeleted" column="is_deleted" />
+        <result property="osType" column="os_type" />
+    </resultMap>
+
+    <!-- 2. 定义可重用SQL片段 -->
+    <sql id="Base_Column_List">
+        id, app_name, version_code, version_name, platform,
+        force_update_type, low_version_code, update_desc,
+        creator, modifier, gmt_created, gmt_modified, is_deleted, os_type
+    </sql>
+
+    <!-- 3. 使用显式参数类型和resultMap -->
+    <insert id="insert" parameterType="com.palwy.common.entity.AppUpdateManage">
+        INSERT INTO app_update_manage (
+            app_name, version_code, version_name, platform, force_update_type,
+            low_version_code, update_desc, creator, modifier, os_type
+        ) VALUES (
+                     #{appName}, #{versionCode}, #{versionName}, #{platform}, #{forceUpdateType},
+                     #{lowVersionCode}, #{updateDesc}, #{creator}, #{modifier}, #{osType}
+                 )
+    </insert>
+
+    <update id="update" parameterType="com.palwy.common.entity.AppUpdateManage">
+        UPDATE app_update_manage
+        SET app_name = #{appName},
+            version_code = #{versionCode},
+            version_name = #{versionName},
+            platform = #{platform},
+            force_update_type = #{forceUpdateType},
+            low_version_code = #{lowVersionCode},
+            update_desc = #{updateDesc},
+            modifier = #{modifier},
+            gmt_modified = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <update id="delete">
+        UPDATE app_update_manage
+        SET is_deleted = 'Y'
+        WHERE id = #{id}
+    </update>
+
+    <!-- 4. 查询统一使用resultMap和include -->
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM app_update_manage
+        WHERE id = #{id} AND is_deleted = 'N'
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM app_update_manage
+        WHERE is_deleted = 'N'
+    </select>
+
+    <select id="selectByPage" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM app_update_manage
+        WHERE is_deleted = 'N'
+        <if test="appName != null and appName != ''">
+            AND app_name LIKE CONCAT('%', #{appName}, '%')
+        </if>
+        <if test="osType != null and osType != ''">
+            AND os_type = #{osType}
+        </if>
+        ORDER BY gmt_modified DESC
+    </select>
+
+    <select id="selectForceUpdate" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM app_update_manage
+        WHERE os_type = #{osType}
+        AND platform = #{platform}
+        AND version_code = #{versionCode}
+        AND is_deleted = 'N'
+        LIMIT 1
+    </select>
+</mapper>
