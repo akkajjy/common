@@ -1,6 +1,5 @@
 package com.palwy.common.controller;
 
-import com.palwy.common.Enum.AppNameEnum;
 import com.palwy.common.entity.ClrDictDO;
 import com.palwy.common.req.AppInfoReq;
 import com.palwy.common.service.AppInfoService;
@@ -31,9 +30,11 @@ public class AppInfoController {
     @ApiOperation(value = "查询应用")
     @GetMapping("/getAppList")
     public ResultVO<List<ClrDictDO>> getAppList() {
-        List<String> list = new ArrayList<>();
-        list.add(AppNameEnum.TDD.getDescription());
-        return ResultVOUtil.success(list);
+        List<String> labelList = clrDictService.getClrDictListByDictType("AppNameEnum")
+                .stream()
+                .map(ClrDictDO::getDictLabel)
+                .collect(Collectors.toList());
+        return ResultVOUtil.success(labelList);
     }
 
     //查询发版平台
