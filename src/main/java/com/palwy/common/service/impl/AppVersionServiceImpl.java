@@ -125,7 +125,9 @@ public class AppVersionServiceImpl implements AppVersionService {
         List<AppVersionResp> list = appVersionDOMapper.listByCondition(
                 appName, osType, channels);
 
-        return new PageInfo<>(list);
+        PageInfo<AppVersionResp> pageInfo = new PageInfo<>(list);
+        pageInfo.setTotal(list.size());
+        return pageInfo;
     }
 
     @Override
