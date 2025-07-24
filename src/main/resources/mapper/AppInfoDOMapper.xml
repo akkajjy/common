@@ -20,7 +20,21 @@
         id, app_name, app_type, os_type, platform, extra_info, is_deleted, creator, modifier, gmt_created, gmt_modified
     </sql>
     <select id="getAllAppInfos" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/> FROM app_info WHERE is_deleted = 'N'
+        SELECT
+            ANY_VALUE(id) AS id,
+            app_name as appName,
+            ANY_VALUE(app_type) AS appType,
+            ANY_VALUE(os_type) AS osType,
+            ANY_VALUE(platform) AS platform,
+            ANY_VALUE(extra_info) AS extraInfo,
+            ANY_VALUE(is_deleted) AS isDeleted,
+            ANY_VALUE(creator) AS creator,
+            ANY_VALUE(gmt_created) AS gmtCreated,
+            ANY_VALUE(modifier) AS modifier,
+            ANY_VALUE(gmt_modified) AS gmtModified
+        FROM app_info
+        WHERE is_deleted = 'N'
+        GROUP BY app_name;
     </select>
     <select id="getAppInfoById" parameterType="long" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/> FROM app_info WHERE id = #{id} AND is_deleted = 'N'
