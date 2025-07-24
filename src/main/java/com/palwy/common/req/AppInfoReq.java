@@ -29,6 +29,7 @@ public class AppInfoReq {
     @ApiModelProperty("版本别名(可选)")
     private String versionName;
     @ApiModelProperty("下载地址")
+    @NotBlank(message = "下载地址不能为空")
     private String downloadUrl;
     @ApiModelProperty("上传文件地址")
     private String filePath;
@@ -36,6 +37,7 @@ public class AppInfoReq {
     private List<String> channelList;
     @ApiModelProperty("设备信息过滤(JSON)")
     private String deviceFilter;
+    @NotBlank(message = "是否展示现金贷不能为空")
     @ApiModelProperty("是否展示现金贷(0:否 1:是)")
     private Integer showCashLoan;
     @ApiModelProperty("强制更新(0:否 1:是)")
