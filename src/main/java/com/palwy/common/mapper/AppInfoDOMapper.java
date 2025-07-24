@@ -19,5 +19,5 @@ public interface AppInfoDOMapper {
 
     int updateAppInfo(AppInfoDO appInfo);
 
-    Integer getAppInfoByName(String appName);
+    Integer getAppInfoByNameAndVersion(String appName,String versionCode);
 }

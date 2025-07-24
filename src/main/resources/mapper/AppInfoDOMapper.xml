@@ -45,8 +45,9 @@
         WHERE id = #{id} AND is_deleted = 'N'
     </update>
 
-    <select id="getAppInfoByName" resultType="java.lang.Integer">
-        SELECT count(1) FROM app_info
-        WHERE app_name = #{appName} AND is_deleted = 'N'
+    <select id="getAppInfoByNameAndVersion" resultType="java.lang.Integer">
+        SELECT count(1) FROM app_info ai
+                                 LEFT JOIN app_version av on ai.id=av.app_id
+        WHERE app_name = #{appName} and version_code =#{versionCode} AND ai.is_deleted = 'N' and av.is_deleted='N'
     </select>
 </mapper>
