@@ -21,4 +21,6 @@ public interface AppInfoDOMapper {
 
     Integer getAppInfoByNameAndVersion(@Param("appName")String appName,@Param("versionCode")String versionCode,
                                        @Param("channel")String channel,@Param("osType")String osType);
+
+    int deleteAppInfo(@Param("id") Long id);
 }

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppInfoDO;
 import com.palwy.common.entity.AppVersionDO;
+import com.palwy.common.mapper.AppInfoDOMapper;
 import com.palwy.common.mapper.AppVersionDOMapper;
 import com.palwy.common.req.AppInfoReq;
 import com.palwy.common.resp.AppVersionResp;
@@ -25,7 +26,8 @@ public class AppVersionServiceImpl implements AppVersionService {
 
     @Autowired
     private AppVersionDOMapper appVersionDOMapper;
-
+    @Autowired
+    private AppInfoDOMapper appInfoDOMapper;
     @Override
     public List<AppVersionDO> getAllAppVersions() {
         return appVersionDOMapper.getAllAppVersions();
@@ -95,6 +97,9 @@ public class AppVersionServiceImpl implements AppVersionService {
 
     @Override
     public int deleteAppVersion(Long id) {
+        AppVersionDO appVersionDO =appVersionDOMapper.getAppInfo(id);
+        AppInfoDO infoDO = appInfoDOMapper.getAppInfoById(appVersionDO.getAppId());
+        appInfoDOMapper.deleteAppInfo(infoDO.getId());
         return appVersionDOMapper.deleteAppVersion(id);
     }
 

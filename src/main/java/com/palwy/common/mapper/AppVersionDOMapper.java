@@ -29,4 +29,6 @@ public interface AppVersionDOMapper {
                                          @Param("channel") String channel);
 
     AppVersionDO getVersionByAppIdAndChannel(@Param("versionCode") String versionCode);
+
+    AppVersionDO getAppInfo(@Param("id") Long id);
 }

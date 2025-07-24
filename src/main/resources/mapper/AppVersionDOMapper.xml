@@ -65,7 +65,12 @@
         WHERE v.id = #{id} AND v.is_deleted = 'N'
           AND i.is_deleted = 'N'
     </select>
-    
+
+    <select id="getAppInfo" parameterType="long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_version WHERE id = #{id} AND is_deleted = 'N'
+    </select>
+
+
     <select id="getAllAppVersions" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/> FROM app_version WHERE is_deleted = 'N'
     </select>
