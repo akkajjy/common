@@ -52,7 +52,8 @@ public class AppInfoServiceImpl implements AppInfoService {
     public ResultVO addAppAndVersion(AppInfoReq appInfoReq) {
         log.debug("新增应用: {}", appInfoReq.getAppName());
         try {
-            boolean nameExists = appInfoDOMapper.getAppInfoByNameAndVersion(appInfoReq.getAppName(),appInfoReq.getVersionCode())>0;
+            boolean nameExists = appInfoDOMapper.getAppInfoByNameAndVersion(appInfoReq.getAppName(),
+                    appInfoReq.getVersionCode(),appInfoReq.getChannel(),appInfoReq.getOsType())>0;
             if (nameExists) {
                 return ResultVOUtil.fail("应用保存失败，该应用名称已存在");
             }

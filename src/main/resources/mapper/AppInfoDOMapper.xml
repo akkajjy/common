@@ -48,6 +48,6 @@
     <select id="getAppInfoByNameAndVersion" resultType="java.lang.Integer">
         SELECT count(1) FROM app_info ai
                                  LEFT JOIN app_version av on ai.id=av.app_id
-        WHERE app_name = #{appName} and version_code =#{versionCode} AND ai.is_deleted = 'N' and av.is_deleted='N'
+        WHERE app_name = #{appName} and version_code =#{versionCode} and channel = #{channel} and os_type=#{osType} AND ai.is_deleted = 'N' and av.is_deleted='N'
     </select>
 </mapper>

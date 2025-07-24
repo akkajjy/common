@@ -19,5 +19,6 @@ public interface AppInfoDOMapper {
 
     int updateAppInfo(AppInfoDO appInfo);
 
-    Integer getAppInfoByNameAndVersion(String appName,String versionCode);
+    Integer getAppInfoByNameAndVersion(@Param("appName")String appName,@Param("versionCode")String versionCode,
+                                       @Param("channel")String channel,@Param("osType")String osType);
 }

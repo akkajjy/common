@@ -34,6 +34,7 @@ public class AppInfoReq {
     @ApiModelProperty("上传文件地址")
     private String filePath;
     @ApiModelProperty("发版平台(如应用宝)")
+    @NotBlank(message = "发版平台不能为空")
     private String channel;
     @ApiModelProperty("设备信息过滤(JSON)")
     private String deviceFilter;
