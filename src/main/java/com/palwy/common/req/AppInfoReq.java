@@ -37,7 +37,6 @@ public class AppInfoReq {
     private List<String> channelList;
     @ApiModelProperty("设备信息过滤(JSON)")
     private String deviceFilter;
-    @NotBlank(message = "是否展示现金贷不能为空")
     @ApiModelProperty("是否展示现金贷(0:否 1:是)")
     private Integer showCashLoan;
     @ApiModelProperty("强制更新(0:否 1:是)")

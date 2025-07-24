@@ -59,7 +59,6 @@ public class AppInfoServiceImpl implements AppInfoService {
             }
             AppInfoDO appInfoDO = AppInfoDO.builder()
                     .appName(appInfoReq.getAppName())
-                    .appType(AppTypeEnum.fromValue(Integer.parseInt(appInfoReq.getAppType())).getDescription())
                     .osType(OsTypeEnum.fromValue(Integer.parseInt(appInfoReq.getOsType())).getDescription())
                     .extraInfo(appInfoReq.getExtraInfo())
                     .build();
