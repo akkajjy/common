@@ -34,7 +34,7 @@ public class AppInfoReq {
     @ApiModelProperty("上传文件地址")
     private String filePath;
     @ApiModelProperty("发版平台(如应用宝)")
-    private List<String> channelList;
+    private String channel;
     @ApiModelProperty("设备信息过滤(JSON)")
     private String deviceFilter;
     @ApiModelProperty("是否展示现金贷(0:否 1:是)")

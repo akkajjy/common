@@ -14,7 +14,7 @@ public class AppVersionQueryReq {
     private String osType;
 
     @ApiModelProperty("渠道列表")
-    private List<String> channels;
+    private String channel;
 
     @ApiModelProperty(value = "页码", example = "1")
     private Integer pageNum = 1;

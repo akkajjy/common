@@ -1,7 +1,5 @@
 package com.palwy.common.service.impl;
 
-import com.palwy.common.Enum.AppTypeEnum;
-import com.palwy.common.Enum.OsTypeEnum;
 import com.palwy.common.entity.AppInfoDO;
 import com.palwy.common.entity.AppVersionDO;
 import com.palwy.common.mapper.AppInfoDOMapper;
@@ -16,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -106,19 +105,23 @@ public class AppInfoServiceImpl implements AppInfoService {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveAppVersionInNewTransaction(AppInfoDO appInfoDO, AppInfoReq req) {
-        Optional.ofNullable(req.getVersionCode())
-                .ifPresent(v -> appVersionService.saveAppVersion(appInfoDO, req));
+        String channel = req.getChannel();
+        if (channel != null && !channel.isEmpty()) {
+            appVersionService.saveAppVersion(appInfoDO, req); // 直接传递整个请求对象
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateAppVersionsInNewTransaction(AppInfoDO appInfoDO, AppInfoReq req) {
         if (req.getVersionCode() != null) {
             appVersionService.deleteVersionsByAppId(appInfoDO.getId());
-            List<AppVersionDO> newVersions = req.getChannelList().stream()
-                    .filter(channel -> !channel.isEmpty())
-                    .map(channel -> buildAppVersionDO(appInfoDO, req, channel))
-                    .collect(Collectors.toList());
-            appVersionService.saveBatchAppVersion(newVersions);
+            String channel = req.getChannel();
+            if (channel != null && !channel.isEmpty()) {
+                AppVersionDO newVersion = buildAppVersionDO(appInfoDO, req, channel);
+                List<AppVersionDO> newVersions = new ArrayList<>();
+                newVersions.add(newVersion);
+                appVersionService.saveBatchAppVersion(newVersions);
+            }
         }
     }
 

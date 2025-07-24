@@ -38,22 +38,19 @@ public class AppVersionServiceImpl implements AppVersionService {
 
     @Override
     public int saveAppVersion(AppInfoDO appInfoDO, AppInfoReq appInfoReq) {
-        // 参数校验优化：精准校验必要参数
         if (appInfoDO == null || appInfoReq == null) {
             log.debug("无效参数: appInfoDO={}, appInfoReq={}", appInfoDO, appInfoReq);
             return 0;
         }
-
-        // 日志级别降级 & 精简日志内容
         log.debug("开始插入APP版本信息, appId={}", appInfoDO.getId());
 
-        // 使用Stream API优化集合操作
-        List<AppVersionDO> addAppVersionDOList = appInfoReq.getChannelList().stream()
-                .filter(channel -> !channel.isEmpty()) // 过滤空渠道[2](@ref)
-                .map(channel -> buildAppVersion(appInfoDO, appInfoReq, channel)) // 抽取构建方法
-                .collect(Collectors.toList());
+        List<AppVersionDO> addAppVersionDOList = new ArrayList<>();
+        String channel = appInfoReq.getChannel();
+        if (channel != null && !channel.isEmpty()) {
+            AppVersionDO version = buildAppVersion(appInfoDO, appInfoReq, channel);
+            addAppVersionDOList.add(version);
+        }
 
-        // 分批次插入（防止超大数据量）
         return batchInsertWithFallback(addAppVersionDOList);
     }
 
