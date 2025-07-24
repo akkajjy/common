@@ -42,8 +42,8 @@ public class AppVersionController {
     }
 
     @ApiOperation(value = "软删除应用版本", notes = "通过版本ID逻辑删除记录")
-    @DeleteMapping("/{id}")
-    public ResultVO softDeleteVersion(@PathVariable Long id) {
+    @GetMapping("/deleteById")
+    public ResultVO softDeleteVersion(@RequestParam("id") Long id) {
         int flag = appVersionService.deleteAppVersion(id);
         if(flag>0){
             return ResultVOUtil.success();
