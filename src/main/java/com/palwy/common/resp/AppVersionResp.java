@@ -14,7 +14,10 @@ public class AppVersionResp {
     @ApiModelProperty(value = "应用名称", example = "APP1")
     private String appName;
 
-    @ApiModelProperty(value = "发版平台", example = "小米")
+    @ApiModelProperty(value = "平台", example = "ios")
+    private String osType;
+
+    @ApiModelProperty(value = "渠道", example = "小米")
     private String channel;
 
     @ApiModelProperty(value = "版本号", example = "1.0.0")
