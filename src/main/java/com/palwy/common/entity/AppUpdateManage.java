@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Date;
@@ -14,31 +15,36 @@ public class AppUpdateManage implements Serializable {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
+
     @ApiModelProperty("应用名称")
-    @NotBlank(message = "应用名称不能为空")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String appName;
 
+    @Valid
     @ApiModelProperty("版本号")
     @NotBlank(message = "版本号不能为空")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String versionCode;
 
+    @Valid
     @ApiModelProperty("版本名称")
     @NotBlank(message = "版本名称不能为空")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String versionName;
 
+    @Valid
     @ApiModelProperty("平台")
     @NotBlank(message = "发版平台不能为空")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String platform;
 
+    @Valid
     @ApiModelProperty("强制更新类型(0:不更新 1:不强制更新 2:强制更新)")
     @NotBlank(message = "强制更新类型不能为空")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private String forceUpdateType;
 
+    @Valid
     @ApiModelProperty("最低支持版本号")
     @NotBlank(message = "最低支持版本号不能为空")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
