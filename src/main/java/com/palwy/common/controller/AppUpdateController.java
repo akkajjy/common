@@ -44,9 +44,9 @@ public class AppUpdateController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/deleteById")
     @ApiOperation("删除应用更新记录")
-    public ResultVO delete(@PathVariable Integer id) {
+    public ResultVO delete(@RequestParam("id") Integer id) {
         int flag = service.delete(id);
         if (flag > 0) {
             return ResultVOUtil.success();

@@ -87,7 +87,7 @@
         SELECT <include refid="Base_Column_List"/>
         FROM app_update_manage
         WHERE os_type = #{osType}
-        AND platform = #{platform}
+        AND platform like CONCAT('%', #{platform}, '%')
         AND version_code = #{versionCode}
         AND is_deleted = 'N'
         LIMIT 1
