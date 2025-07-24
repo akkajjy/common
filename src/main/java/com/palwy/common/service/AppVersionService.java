@@ -21,7 +21,7 @@ public interface AppVersionService {
     PageInfo<AppVersionResp> listAppVersionsByCondition(
             String appName,
             String osType,
-            List<String> channels,
+            String channels,
             int pageNum,
             int pageSize);
 

@@ -26,7 +26,7 @@ public interface AppVersionDOMapper {
 
     List<AppVersionResp> listByCondition(@Param("appName") String appName,
                                          @Param("osType") String osType,
-                                         @Param("channels") List<String> channels);
+                                         @Param("channel") String channel);
 
     AppVersionDO getVersionByAppIdAndChannel(@Param("versionCode") String versionCode);
 }

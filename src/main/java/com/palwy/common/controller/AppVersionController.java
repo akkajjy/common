@@ -33,7 +33,7 @@ public class AppVersionController {
         PageInfo<AppVersionResp> pageInfo = appVersionService.listAppVersionsByCondition(
                 queryReq.getAppName(),
                 queryReq.getOsType(),
-                queryReq.getChannels(),
+                queryReq.getChannel(),
                 queryReq.getPageNum(),
                 queryReq.getPageSize());
 

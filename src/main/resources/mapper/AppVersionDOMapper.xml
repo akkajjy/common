@@ -89,11 +89,8 @@
             <if test="osType != null and osType != ''">
                 AND i.os_type = #{osType}
             </if>
-            <if test="channels != null and !channels.isEmpty()">
-                AND v.channel IN
-                <foreach collection="channels" item="channel" open="(" separator="," close=")">
-                    #{channel}
-                </foreach>
+            <if test="channel != null and channel != ''">
+                AND v.channel = #{channel}
             </if>
         </where>
         ORDER BY v.gmt_modified DESC

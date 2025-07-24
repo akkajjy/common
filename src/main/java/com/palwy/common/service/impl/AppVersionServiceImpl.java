@@ -111,7 +111,7 @@ public class AppVersionServiceImpl implements AppVersionService {
     public PageInfo<AppVersionResp> listAppVersionsByCondition(
             String appName,
             String osType,
-            List<String> channels,
+            String channel,
             int pageNum,
             int pageSize) {
 
@@ -120,7 +120,7 @@ public class AppVersionServiceImpl implements AppVersionService {
 
         // 执行查询 - 传入osType参数
         List<AppVersionResp> list = appVersionDOMapper.listByCondition(
-                appName, osType, channels);
+                appName, osType, channel);
 
         PageInfo<AppVersionResp> pageInfo = new PageInfo<>(list);
         pageInfo.setTotal(list.size());
