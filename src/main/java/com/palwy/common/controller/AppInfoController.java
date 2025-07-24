@@ -1,5 +1,6 @@
 package com.palwy.common.controller;
 
+import com.palwy.common.Enum.AppNameEnum;
 import com.palwy.common.entity.ClrDictDO;
 import com.palwy.common.req.AppInfoReq;
 import com.palwy.common.service.AppInfoService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,7 +31,9 @@ public class AppInfoController {
     @ApiOperation(value = "查询应用")
     @GetMapping("/getAppList")
     public ResultVO<List<ClrDictDO>> getAppList() {
-        return ResultVOUtil.success(appInfoService.getAllAppInfos());
+        List<String> list = new ArrayList<>();
+        list.add(AppNameEnum.TDD.getDescription());
+        return ResultVOUtil.success(list);
     }
 
     //查询发版平台
