@@ -40,7 +40,9 @@ public class AppUpdateManageServiceImpl implements AppUpdateManageService {
                                                 String appName, String osType) {
         PageHelper.startPage(pageNum, pageSize);
         List<AppUpdateManage> list = mapper.selectByPage(appName, osType);
-        return new PageInfo<>(list);
+        PageInfo<AppUpdateManage> pageList = new PageInfo<>(list);
+        pageList.setTotal(list.size());
+        return pageList;
     }
 
     @Override

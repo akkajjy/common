@@ -2,7 +2,7 @@ spring:
   application:
     name: fin-clrcore-service
   profiles:
-    active: prod
+    active: test
   cloud:
     bootstrap:
       enabled: true

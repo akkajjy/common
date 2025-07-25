@@ -10,24 +10,41 @@ import com.palwy.common.mapper.AppVersionDOMapper;
 import com.palwy.common.req.AppInfoReq;
 import com.palwy.common.resp.AppVersionResp;
 import com.palwy.common.service.AppVersionService;
+import com.palwy.common.utils.TOSUpFileUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class AppVersionServiceImpl implements AppVersionService {
+    private static final int BATCH_SIZE = 500;
+    private static final int DEFAULT_URL_EXPIRY_MINUTES = 30;
+
+    @Resource
+    private TOSUpFileUtil tosUpFileUtil;
 
     @Autowired
     private AppVersionDOMapper appVersionDOMapper;
+
     @Autowired
     private AppInfoDOMapper appInfoDOMapper;
+
+    @Autowired
+    private Executor asyncExecutor;
+
     @Override
     public List<AppVersionDO> getAllAppVersions() {
         return appVersionDOMapper.getAllAppVersions();
@@ -35,28 +52,32 @@ public class AppVersionServiceImpl implements AppVersionService {
 
     @Override
     public AppVersionResp getAppVersionById(Long id) {
-        return appVersionDOMapper.getAppVersionById(id);
+        AppVersionResp resp = appVersionDOMapper.getAppVersionById(id);
+        if (resp != null && StringUtils.isNotBlank(resp.getDownloadUrl())) {
+            resp.setDownloadUrl(generatePresignedUrlSafe(resp.getDownloadUrl()));
+        }
+        return resp;
     }
 
     @Override
     public int saveAppVersion(AppInfoDO appInfoDO, AppInfoReq appInfoReq) {
         if (appInfoDO == null || appInfoReq == null) {
-            log.debug("无效参数: appInfoDO={}, appInfoReq={}", appInfoDO, appInfoReq);
+            log.warn("无效参数: appInfoDO={}, appInfoReq={}", appInfoDO, appInfoReq);
             return 0;
         }
-        log.debug("开始插入APP版本信息, appId={}", appInfoDO.getId());
+        log.info("开始插入APP版本信息, appId={}", appInfoDO.getId());
 
-        List<AppVersionDO> addAppVersionDOList = new ArrayList<>();
         String channel = appInfoReq.getChannel();
-        if (channel != null && !channel.isEmpty()) {
-            AppVersionDO version = buildAppVersion(appInfoDO, appInfoReq, channel);
-            addAppVersionDOList.add(version);
+        if (StringUtils.isBlank(channel)) {
+            log.warn("缺少渠道信息, appId={}", appInfoDO.getId());
+            return 0;
         }
 
-        return batchInsertWithFallback(addAppVersionDOList);
+        AppVersionDO version = buildAppVersion(appInfoDO, appInfoReq, channel);
+        return saveBatchAppVersion(Collections.singletonList(version));
     }
 
-    // 抽取对象构建方法（避免重复代码）
+    // 对象构建方法
     private AppVersionDO buildAppVersion(AppInfoDO appInfoDO, AppInfoReq req, String channel) {
         AppVersionDO entity = new AppVersionDO();
         entity.setAppId(appInfoDO.getId());
@@ -72,19 +93,20 @@ public class AppVersionServiceImpl implements AppVersionService {
         return entity;
     }
 
-    // 7. 分批次插入 + 异常处理
+    // 批量插入 + 异常处理
     private int batchInsertWithFallback(List<AppVersionDO> dataList) {
-        final int BATCH_SIZE = 500; // 每批500条[8](@ref)
-        int totalCount = 0;
+        if (CollectionUtils.isEmpty(dataList)) return 0;
 
+        int totalCount = 0;
         for (int i = 0; i < dataList.size(); i += BATCH_SIZE) {
-            List<AppVersionDO> batchList = dataList.subList(i, Math.min(i + BATCH_SIZE, dataList.size()));
+            int endIndex = Math.min(i + BATCH_SIZE, dataList.size());
+            List<AppVersionDO> batchList = dataList.subList(i, endIndex);
+
             try {
                 int count = appVersionDOMapper.saveBatchAppVersion(batchList);
                 totalCount += count;
             } catch (DataAccessException e) {
-                log.error("批次插入失败: 批次[{}-{}], 原因: {}",
-                        i, i + batchList.size(), e.getMessage());
+                log.error("批次插入失败: 批次[{}-{}], 原因: {}", i, endIndex, e.getMessage());
             }
         }
         return totalCount;
@@ -92,19 +114,44 @@ public class AppVersionServiceImpl implements AppVersionService {
 
     @Override
     public int updateAppVersion(AppVersionDO appVersion) {
+        if (appVersion == null || appVersion.getId() == null) {
+            log.warn("更新APP版本失败: 无效参数");
+            return 0;
+        }
         return appVersionDOMapper.updateAppVersion(appVersion);
     }
 
     @Override
     public int deleteAppVersion(Long id) {
-        AppVersionDO appVersionDO =appVersionDOMapper.getAppInfo(id);
-        AppInfoDO infoDO = appInfoDOMapper.getAppInfoById(appVersionDO.getAppId());
-        appInfoDOMapper.deleteAppInfo(infoDO.getId());
-        return appVersionDOMapper.deleteAppVersion(id);
+        if (id == null) {
+            log.warn("删除APP版本失败: ID为空");
+            return 0;
+        }
+
+        AppVersionDO appVersionDO = appVersionDOMapper.getAppInfo(id);
+        if (appVersionDO == null) {
+            log.warn("找不到要删除的APP版本, id={}", id);
+            return 0;
+        }
+
+        try {
+            AppInfoDO infoDO = appInfoDOMapper.getAppInfoById(appVersionDO.getAppId());
+            if (infoDO != null) {
+                appInfoDOMapper.deleteAppInfo(infoDO.getId());
+            }
+            return appVersionDOMapper.deleteAppVersion(id);
+        } catch (Exception e) {
+            log.error("删除APP版本及相关信息失败, id={}", id, e);
+            return 0;
+        }
     }
 
     @Override
     public int deleteVersionsByAppId(Long appId) {
+        if (appId == null) {
+            log.warn("按AppID删除版本失败: appId为空");
+            return 0;
+        }
         return appVersionDOMapper.deleteVersionsByAppId(appId);
     }
 
@@ -113,6 +160,7 @@ public class AppVersionServiceImpl implements AppVersionService {
         return batchInsertWithFallback(versions);
     }
 
+    @Override
     public PageInfo<AppVersionResp> listAppVersionsByCondition(
             String appName,
             String osType,
@@ -120,24 +168,51 @@ public class AppVersionServiceImpl implements AppVersionService {
             int pageNum,
             int pageSize) {
 
-        // 启动分页
         PageHelper.startPage(pageNum, pageSize);
+        List<AppVersionResp> list = appVersionDOMapper.listByCondition(appName, osType, channel);
 
-        // 执行查询 - 传入osType参数
-        List<AppVersionResp> list = appVersionDOMapper.listByCondition(
-                appName, osType, channel);
+        // 并行生成预签名URL（使用线程池）
+        if (!CollectionUtils.isEmpty(list)) {
+            List<CompletableFuture<Void>> futures = new ArrayList<>();
 
-        PageInfo<AppVersionResp> pageInfo = new PageInfo<>(list);
-        pageInfo.setTotal(list.size());
-        return pageInfo;
+            for (AppVersionResp resp : list) {
+                futures.add(CompletableFuture.runAsync(() -> {
+                    String signedUrl = generatePresignedUrlSafe(resp.getDownloadUrl());
+                    if (signedUrl != null) {
+                        resp.setDownloadUrl(signedUrl);
+                    }
+                }, asyncExecutor));
+            }
+
+            // 等待所有异步任务完成
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        }
+        PageInfo<AppVersionResp> pageList = new PageInfo<>(list);
+        pageList.setTotal(list.size());
+        return pageList;
+    }
+
+    // 安全生成预签名URL（带空值检查）
+    private String generatePresignedUrlSafe(String downloadUrl) {
+        if (StringUtils.isBlank(downloadUrl)) {
+            return null;
+        }
+        try {
+            return tosUpFileUtil.generatePresignedUrl(downloadUrl, DEFAULT_URL_EXPIRY_MINUTES);
+        } catch (Exception e) {
+            log.error("生成预签名URL失败: url={}", downloadUrl, e);
+            return downloadUrl; // 返回原始URL避免功能中断
+        }
     }
 
     @Override
     public boolean checkForceUpdate(String versionCode) {
-        // 查询指定版本信息
-        AppVersionDO version = appVersionDOMapper.getVersionByAppIdAndChannel(versionCode);
+        if (StringUtils.isBlank(versionCode)) {
+            log.warn("检查强制更新失败: 版本号为空");
+            return false;
+        }
 
-        // 判断强制更新状态
-        return version != null && version.getForceUpdateType()>0;
+        AppVersionDO version = appVersionDOMapper.getVersionByAppIdAndChannel(versionCode);
+        return version != null && version.getForceUpdateType() > 0;
     }
 }
