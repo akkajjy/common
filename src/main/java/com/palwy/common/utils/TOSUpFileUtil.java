@@ -128,22 +128,19 @@ public class TOSUpFileUtil {
      */
     public String generatePresignedUrl(String objectKey, int expiryDurationMinutes) {
         try {
-            // 确保客户端已初始化
-            TOSV2 client = getTosClient();
+            // 使用自定义域名创建专用客户端
+            TOSV2 client = createCustomDomainClient();
 
-            // 将分钟转换为秒
             long expiresSeconds = Duration.ofMinutes(expiryDurationMinutes).getSeconds();
 
-            // 创建预签名URL请求
             PreSignedURLInput input = new PreSignedURLInput()
-                    .setHttpMethod(HttpMethod.GET)  // 设置HTTP方法
-                    .setBucket(BUCKET)             // 设置存储桶名称
-                    .setKey(objectKey)              // 设置对象键
-                    .setExpires(expiresSeconds);   // 设置过期时间
+                    .setHttpMethod(HttpMethod.GET)
+                    .setBucket(BUCKET)
+                    .setKey(objectKey)
+                    .setExpires(expiresSeconds);
 
             PreSignedURLOutput output = client.preSignedURL(input);
-            //需要把生成链接中的wy-tdd-test.tos-cn-shanghai.volces.com替换成clrcorecdn-test.shhpalwy.com
-            return generateFileUrl(output.getSignedUrl()); // 从输出对象中获取URL字符串
+            return output.getSignedUrl();
 
         } catch (TosClientException e) {
             log.error("客户端错误: {}", e.getMessage());
@@ -155,4 +152,8 @@ public class TOSUpFileUtil {
         return null;
     }
 
+    private TOSV2 createCustomDomainClient() {
+        return new TOSV2ClientBuilder()
+                .build(REGION, FINAL_URL, ACCESS_KEY, ENCODED_SECRET);
+    }
 }
