@@ -19,7 +19,6 @@ import java.util.Date;
 @Slf4j
 @Component
 public class TOSUpFileUtil {
-    // 配置常量（建议抽离到配置中心）
     @Value("${tos.cn}")
     private String ENDPOINT;
     @Value("${tos.sh}")
@@ -143,7 +142,8 @@ public class TOSUpFileUtil {
                     .setExpires(expiresSeconds);   // 设置过期时间
 
             PreSignedURLOutput output = client.preSignedURL(input);
-            return output.getSignedUrl(); // 从输出对象中获取URL字符串
+            //需要把生成链接中的wy-tdd-test.tos-cn-shanghai.volces.com替换成clrcorecdn-test.shhpalwy.com
+            return generateFileUrl(output.getSignedUrl()); // 从输出对象中获取URL字符串
 
         } catch (TosClientException e) {
             log.error("客户端错误: {}", e.getMessage());
@@ -155,10 +155,4 @@ public class TOSUpFileUtil {
         return null;
     }
 
-    /**
-     * 重载方法：使用默认有效期(30分钟)
-     */
-    public String generatePresignedUrl(String objectKey) {
-        return generatePresignedUrl(objectKey, 30); // 默认30分钟
-    }
 }
