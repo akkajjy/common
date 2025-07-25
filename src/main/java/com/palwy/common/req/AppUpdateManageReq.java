@@ -1,4 +1,4 @@
-package com.palwy.common.entity;
+package com.palwy.common.req;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,12 +7,11 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Data
-public class AppUpdateManage implements Serializable {
-
+public class AppUpdateManageReq {
     @ApiModelProperty("主键ID")
     private Long id;
 
@@ -31,7 +30,7 @@ public class AppUpdateManage implements Serializable {
     @ApiModelProperty("平台")
     @NotBlank(message = "发版平台不能为空")
     @JsonFormat(shape = JsonFormat.Shape.STRING)
-    private String platform;
+    private List<String> platform;
 
     @ApiModelProperty("强制更新类型(0:不更新 1:不强制更新 2:强制更新)")
     @NotNull(message = "强制更新类型不能为空")

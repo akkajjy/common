@@ -11,6 +11,7 @@ import com.palwy.common.req.AppInfoReq;
 import com.palwy.common.resp.AppVersionResp;
 import com.palwy.common.service.AppVersionService;
 import com.palwy.common.utils.TOSUpFileUtil;
+import com.palwy.common.utils.TosUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -35,7 +36,8 @@ public class AppVersionServiceImpl implements AppVersionService {
 
     @Resource
     private TOSUpFileUtil tosUpFileUtil;
-
+    @Resource
+    private TosUtils tosUtils;
     @Autowired
     private AppVersionDOMapper appVersionDOMapper;
 
@@ -177,7 +179,7 @@ public class AppVersionServiceImpl implements AppVersionService {
 
             for (AppVersionResp resp : list) {
                 futures.add(CompletableFuture.runAsync(() -> {
-                    String signedUrl = generatePresignedUrlSafe(resp.getDownloadUrl());
+                    String signedUrl = tosUtils.getTemporaryUrl(resp.getDownloadUrl());
                     if (signedUrl != null) {
                         resp.setDownloadUrl(signedUrl);
                     }

@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppUpdateManage;
 import com.palwy.common.mapper.AppUpdateManageMapper;
+import com.palwy.common.req.AppUpdateManageReq;
 import com.palwy.common.service.AppUpdateManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,13 +17,33 @@ public class AppUpdateManageServiceImpl implements AppUpdateManageService {
     private AppUpdateManageMapper mapper;
 
     @Override
-    public int create(AppUpdateManage record) {
-        return mapper.insert(record);
+    public int create(AppUpdateManageReq record) {
+        String platformString = String.join(",", record.getPlatform());
+        AppUpdateManage appUpdateManage = new AppUpdateManage();
+        appUpdateManage.setAppName(record.getAppName());
+        appUpdateManage.setVersionCode(record.getVersionCode());
+        appUpdateManage.setVersionName(record.getVersionName());
+        appUpdateManage.setPlatform(platformString);
+        appUpdateManage.setForceUpdateType(record.getForceUpdateType());
+        appUpdateManage.setLowVersionCode(record.getLowVersionCode());
+        appUpdateManage.setUpdateDesc(record.getUpdateDesc());
+        appUpdateManage.setOsType(record.getOsType());
+        return mapper.insert(appUpdateManage);
     }
 
     @Override
-    public int update(AppUpdateManage record) {
-        return mapper.update(record);
+    public int update(AppUpdateManageReq record) {
+        String platformString = String.join(",", record.getPlatform());
+        AppUpdateManage appUpdateManage = new AppUpdateManage();
+        appUpdateManage.setAppName(record.getAppName());
+        appUpdateManage.setVersionCode(record.getVersionCode());
+        appUpdateManage.setVersionName(record.getVersionName());
+        appUpdateManage.setPlatform(platformString);
+        appUpdateManage.setForceUpdateType(record.getForceUpdateType());
+        appUpdateManage.setLowVersionCode(record.getLowVersionCode());
+        appUpdateManage.setUpdateDesc(record.getUpdateDesc());
+        appUpdateManage.setOsType(record.getOsType());
+        return mapper.update(appUpdateManage);
     }
 
     @Override

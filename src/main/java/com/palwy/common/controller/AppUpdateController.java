@@ -2,13 +2,12 @@ package com.palwy.common.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppUpdateManage;
+import com.palwy.common.req.AppUpdateManageReq;
 import com.palwy.common.req.AppVersionQueryReq;
 import com.palwy.common.service.AppUpdateManageService;
 import com.palwy.common.util.ResultVOUtil;
 import com.palwy.common.vo.ResultVO;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,7 @@ public class AppUpdateController {
 
     @ApiOperation(value = "创建应用更新记录")
     @PostMapping("/create")
-    public ResultVO create(@RequestBody AppUpdateManage record) {
+    public ResultVO create(@RequestBody AppUpdateManageReq record) {
         int flag = service.create(record);
         if (flag > 0) {
             return ResultVOUtil.success();
@@ -35,7 +34,7 @@ public class AppUpdateController {
 
     @PostMapping("/update")
     @ApiOperation("更新应用更新记录")
-    public ResultVO update(@RequestBody AppUpdateManage record) {
+    public ResultVO update(@RequestBody AppUpdateManageReq record) {
         int flag = service.update(record);
         if (flag > 0) {
             return ResultVOUtil.success();

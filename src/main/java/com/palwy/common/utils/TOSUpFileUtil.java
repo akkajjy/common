@@ -1,16 +1,14 @@
 package com.palwy.common.utils;
 
+import com.volcengine.tos.*;
+import com.volcengine.tos.auth.StaticCredentials;
 import com.volcengine.tos.model.object.*;
 import com.volcengine.tos.comm.HttpMethod;
-import com.volcengine.tos.TosClientException;
-import com.volcengine.tos.TosServerException;
-import com.volcengine.tos.TOSV2;
-import com.volcengine.tos.TOSV2ClientBuilder;
 import com.volcengine.tos.comm.common.ACLType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
+import com.volcengine.tos.TOSClientConfiguration;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -40,7 +38,7 @@ public class TOSUpFileUtil {
     public enum BusinessType {
         FUND_PARTY, LIGHT_ASSET, MEMBER_BENEFITS, SELF_OPERATED
     }
-
+    private volatile TOSV2 presignedUrlClient;
     public String uploadFile(BusinessType businessType, String userId,
                                     String filename, InputStream fileStream) {
         String objectKey = generateObjectKey(businessType, userId, filename);
@@ -128,32 +126,44 @@ public class TOSUpFileUtil {
      */
     public String generatePresignedUrl(String objectKey, int expiryDurationMinutes) {
         try {
-            // 使用自定义域名创建专用客户端
             TOSV2 client = createCustomDomainClient();
-
             long expiresSeconds = Duration.ofMinutes(expiryDurationMinutes).getSeconds();
 
+            // 关键修改1: 设置空存储桶名称
             PreSignedURLInput input = new PreSignedURLInput()
                     .setHttpMethod(HttpMethod.GET)
-                    .setBucket(BUCKET)
+                    .setBucket(BUCKET)  // 使用空字符串
                     .setKey(objectKey)
                     .setExpires(expiresSeconds);
 
             PreSignedURLOutput output = client.preSignedURL(input);
-            return output.getSignedUrl();
+            String signedUrl = output.getSignedUrl();
 
-        } catch (TosClientException e) {
-            log.error("客户端错误: {}", e.getMessage());
-        } catch (TosServerException e) {
-            log.error("服务端错误: 状态码={}, 错误码={}", e.getStatusCode(), e.getCode());
+            // 关键修改2: 替换路径中的双重斜杠
+            if (signedUrl != null) {
+                // 处理可能的双重斜杠问题
+                signedUrl = signedUrl.replace("//" + FINAL_URL + "//", "//" + FINAL_URL + "/");
+            }
+
+            return signedUrl;
+        } catch (TosException e) {
+            log.error("生成预签名 URL 失败: {}", e.getMessage());
         } catch (Exception e) {
-            log.error("未知错误: {}", e.getMessage());
+            log.error("系统异常: {}", e.getMessage());
         }
         return null;
     }
 
     private TOSV2 createCustomDomainClient() {
-        return new TOSV2ClientBuilder()
-                .build(REGION, FINAL_URL, ACCESS_KEY, ENCODED_SECRET);
+        log.info("创建预签名URL专用客户端，域名: {}", FINAL_URL);
+
+        return new TOSV2ClientBuilder().build(
+                TOSClientConfiguration.builder()
+                        .endpoint(FINAL_URL)
+                        .disableEncodingMeta(true) // 关键修复：禁用路径编码
+                        .credentials(new StaticCredentials(ACCESS_KEY, ENCODED_SECRET))
+                        .region(REGION)
+                        .build()
+        );
     }
 }
