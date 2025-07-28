@@ -83,7 +83,7 @@
         SELECT <include refid="Base_Column_List"/>
         FROM app_update_manage
         WHERE FIND_IN_SET(#{platform}, platform) > 0
-        AND version_code = #{versionCode}
+        AND version_code &lt; #{versionCode}
         AND is_deleted = 'N'
         LIMIT 1
     </select>

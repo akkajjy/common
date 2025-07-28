@@ -18,7 +18,6 @@ public interface AppUpdateManageMapper {
     List<AppUpdateManage> selectByPage(@Param("platform") String platform);
 
     // 强制更新查询接口
-    AppUpdateManage selectForceUpdate(@Param("osType") String osType,
-                                      @Param("versionCode") String versionCode,
+    AppUpdateManage selectForceUpdate(@Param("versionCode") String versionCode,
                                       @Param("platform") String platform);
 }

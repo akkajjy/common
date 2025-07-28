@@ -10,5 +10,5 @@ public interface AppUpdateManageService {
     int delete(Integer id);
     AppUpdateManage getById(Integer id);
     PageInfo<AppUpdateManage> listByPage(int pageNum, int pageSize, String platform);
-    AppUpdateManage checkForceUpdate(String osType, String versionCode, String platform);
+    AppUpdateManage checkForceUpdate(String versionCode, String platform);
 }

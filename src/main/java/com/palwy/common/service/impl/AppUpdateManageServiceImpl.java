@@ -71,7 +71,7 @@ public class AppUpdateManageServiceImpl implements AppUpdateManageService {
     }
 
     @Override
-    public AppUpdateManage checkForceUpdate(String osType, String versionCode, String platform) {
-        return mapper.selectForceUpdate(osType, versionCode, platform);
+    public AppUpdateManage checkForceUpdate(String versionCode, String platform) {
+        return mapper.selectForceUpdate(versionCode, platform);
     }
 }

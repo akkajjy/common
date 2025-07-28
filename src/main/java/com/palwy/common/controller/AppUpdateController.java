@@ -70,10 +70,9 @@ public class AppUpdateController {
     @GetMapping("/checkForceUpdate")
     @ApiOperation("检查强制更新状态")
     public ResultVO<AppUpdateManage> checkForceUpdate(
-            @RequestHeader("osType") String osType,
             @RequestHeader("versionCode") String versionCode,
             @RequestHeader("platform") String platform) {
-        AppUpdateManage appUpdateManage = service.checkForceUpdate(osType, versionCode, platform);
-        return ResultVOUtil.success(appUpdateManage!=null);
+        AppUpdateManage appUpdateManage = service.checkForceUpdate(versionCode, platform);
+        return ResultVOUtil.success(appUpdateManage);
     }
 }
