@@ -23,4 +23,8 @@ public interface AppUpdateManageMapper {
     );
     AppUpdateManage isMax(@Param("appName") String appName,
                            @Param("platform") String platform);
+
+    AppUpdateManage isAdd(@Param("appName") String appName,
+                          @Param("platform") String platform,
+                          @Param("platform") String versionCode);
 }

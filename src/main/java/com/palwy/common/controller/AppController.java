@@ -2,7 +2,9 @@ package com.palwy.common.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppInfo;
+import com.palwy.common.entity.AppUpdateManage;
 import com.palwy.common.entity.ClrDictDO;
+import com.palwy.common.mapper.AppUpdateManageMapper;
 import com.palwy.common.req.AppReq;
 import com.palwy.common.service.AppService;
 import com.palwy.common.service.ClrDictService;
@@ -26,6 +28,8 @@ public class AppController {
     private AppService appService;
     @Resource
     private ClrDictService clrDictService;
+    @Autowired
+    private AppUpdateManageMapper mapper;
     //查询应用
     @ApiOperation(value = "查询应用")
     @GetMapping("/getAppList")
@@ -59,8 +63,13 @@ public class AppController {
     @PostMapping("/create")
     @ApiOperation("创建应用并初始化更新配置")
     public ResultVO<Long> createApp(@RequestBody AppInfo appInfo) {
-        appService.createAppWithDefaultUpdate(appInfo);
-        return ResultVOUtil.success();
+        AppUpdateManage appUpdateManage = mapper.isAdd(appInfo.getAppName(),appInfo.getPlatform(),appInfo.getVersionCode());
+        if(appUpdateManage==null){
+            appService.createAppWithDefaultUpdate(appInfo);
+            return ResultVOUtil.success();
+        }else{
+            return ResultVOUtil.fail("已存在相同版本");
+        }
     }
 
     @GetMapping("/deleteById")
