@@ -2,12 +2,9 @@ package com.palwy.common.req;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import org.springframework.web.bind.annotation.RequestHeader;
-
-import java.util.List;
 
 @Data
-public class AppVersionQueryReq {
+public class AppReq {
     @ApiModelProperty("应用名称")
     private String appName;
 

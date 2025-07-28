@@ -8,16 +8,16 @@ import java.util.List;
 
 @Mapper
 public interface AppUpdateManageMapper {
-    int insert(AppUpdateManage record);
-    int update(AppUpdateManage record);
-    int delete(Integer id);
-    AppUpdateManage selectById(Integer id);
-    List<AppUpdateManage> selectAll();
-
-    // 分页查询
-    List<AppUpdateManage> selectByPage(@Param("platform") String platform);
-
-    // 强制更新查询接口
-    AppUpdateManage selectForceUpdate(@Param("versionCode") String versionCode,
-                                      @Param("platform") String platform);
+    int insertAppUpdateManage(AppUpdateManage manage);
+    int updateAppUpdateManage(AppUpdateManage manage);
+    int deleteAppUpdateManageById(@Param("id") Long id);
+    int updateIsDeletedByAppId(@Param("appId") Long appId);
+    int updateByAppId(@Param("manage") AppUpdateManage manage);
+    // 新增方法
+    List<AppUpdateManage> selectAppUpdateManageList(AppUpdateManage manage);
+    AppUpdateManage selectAppUpdateManageById(@Param("id")Long id);
+    AppUpdateManage selectByVersionAndPlatform(
+            @Param("versionCode") String versionCode,
+            @Param("platform") String platform
+    );
 }

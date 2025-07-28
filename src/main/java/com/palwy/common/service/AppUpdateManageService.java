@@ -1,14 +1,33 @@
 package com.palwy.common.service;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppUpdateManage;
-import com.palwy.common.req.AppUpdateManageReq;
+import com.palwy.common.mapper.AppUpdateManageMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-public interface AppUpdateManageService {
-    int create(AppUpdateManageReq record);
-    int update(AppUpdateManageReq record);
-    int delete(Integer id);
-    AppUpdateManage getById(Integer id);
-    PageInfo<AppUpdateManage> listByPage(int pageNum, int pageSize, String platform);
-    AppUpdateManage checkForceUpdate(String versionCode, String platform);
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class AppUpdateManageService {
+    @Autowired
+    private AppUpdateManageMapper mapper;
+    public PageInfo<AppUpdateManage> selectPage(AppUpdateManage manage, int pageNum, int pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+        List<AppUpdateManage> list = mapper.selectAppUpdateManageList(manage);
+        PageInfo<AppUpdateManage> pageInfo = new PageInfo<>(list);
+        pageInfo.setTotal(list.size());
+        return pageInfo;
+    }
+
+    public AppUpdateManage getById(Long id) {
+        return mapper.selectAppUpdateManageById(id);
+    }
+
+    public AppUpdateManage getByVersionAndPlatform(String versionCode, String platform) {
+        return mapper.selectByVersionAndPlatform(versionCode, platform);
+    }
 }
