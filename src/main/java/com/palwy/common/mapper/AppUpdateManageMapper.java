@@ -26,5 +26,5 @@ public interface AppUpdateManageMapper {
 
     AppUpdateManage isAdd(@Param("appName") String appName,
                           @Param("platform") String platform,
-                          @Param("platform") String versionCode);
+                          @Param("versionCode") String versionCode);
 }
