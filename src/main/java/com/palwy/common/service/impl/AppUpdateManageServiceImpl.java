@@ -6,11 +6,12 @@ import com.palwy.common.entity.AppUpdateManage;
 import com.palwy.common.mapper.AppUpdateManageMapper;
 import com.palwy.common.req.AppUpdateManageReq;
 import com.palwy.common.service.AppUpdateManageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Slf4j
 @Service
 public class AppUpdateManageServiceImpl implements AppUpdateManageService {
     @Autowired
@@ -33,17 +34,23 @@ public class AppUpdateManageServiceImpl implements AppUpdateManageService {
 
     @Override
     public int update(AppUpdateManageReq record) {
-        String platformString = String.join(",", record.getPlatform());
-        AppUpdateManage appUpdateManage = new AppUpdateManage();
-        appUpdateManage.setAppName(record.getAppName());
-        appUpdateManage.setVersionCode(record.getVersionCode());
-        appUpdateManage.setVersionName(record.getVersionName());
-        appUpdateManage.setPlatform(platformString);
-        appUpdateManage.setForceUpdateType(record.getForceUpdateType());
-        appUpdateManage.setLowVersionCode(record.getLowVersionCode());
-        appUpdateManage.setUpdateDesc(record.getUpdateDesc());
-        appUpdateManage.setOsType(record.getOsType());
-        return mapper.update(appUpdateManage);
+        try {
+            String platformString = String.join(",", record.getPlatform());
+            AppUpdateManage appUpdateManage = new AppUpdateManage();
+            appUpdateManage.setId(record.getId());
+            appUpdateManage.setAppName(record.getAppName());
+            appUpdateManage.setVersionCode(record.getVersionCode());
+            appUpdateManage.setVersionName(record.getVersionName());
+            appUpdateManage.setPlatform(platformString);
+            appUpdateManage.setForceUpdateType(record.getForceUpdateType());
+            appUpdateManage.setLowVersionCode(record.getLowVersionCode());
+            appUpdateManage.setUpdateDesc(record.getUpdateDesc());
+            appUpdateManage.setOsType(record.getOsType());
+            return mapper.update(appUpdateManage);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

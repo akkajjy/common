@@ -29,7 +29,6 @@ public class AppUpdateManageReq {
 
     @ApiModelProperty("平台")
     @NotBlank(message = "发版平台不能为空")
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private List<String> platform;
 
     @ApiModelProperty("强制更新类型(0:不更新 1:不强制更新 2:强制更新)")

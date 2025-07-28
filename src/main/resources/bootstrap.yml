@@ -1,6 +1,6 @@
 spring:
   application:
-    name: fin-common-service
+    name: fin-common
   profiles:
     active: test
   cloud:
