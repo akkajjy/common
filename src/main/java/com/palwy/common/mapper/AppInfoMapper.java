@@ -12,7 +12,7 @@ import java.util.List;
 public interface AppInfoMapper {
     int insertAppInfo(AppInfo appInfo);
     int deleteAppInfo(@Param("id") Long id);
-    int updateAppInfo(AppInfo appInfo);
+    int updateAppInfo(@Param("appInfo") AppInfo appInfo);
     List<AppInfo> selectAppInfoByCondition(AppReq appReq);
     AppInfo selectById(@Param("id") Long id);
     List<AppInfo> getAllAppInfos();
