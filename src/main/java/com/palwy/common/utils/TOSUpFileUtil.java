@@ -154,11 +154,4 @@ public class TOSUpFileUtil {
         }
         return null;
     }
-
-    /**
-     * 重载方法：使用默认有效期(30分钟)
-     */
-    public String generatePresignedUrl(String objectKey) {
-        return generatePresignedUrl(objectKey, 30); // 默认30分钟
-    }
 }
