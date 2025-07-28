@@ -148,4 +148,20 @@
         </if>
         ORDER BY gmt_modified DESC
     </select>
+
+
+    <select id="isMax" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM app_update_manage
+        WHERE app_name = 'TDD'
+        AND platform = 'ad_huawei'
+        AND is_deleted = 'N'
+        AND CAST(version_code AS UNSIGNED) = (
+        SELECT MAX(CAST(version_code AS UNSIGNED))
+        FROM app_update_manage
+        WHERE app_name = 'TDD'
+        AND platform = 'ad_huawei'
+        AND is_deleted = 'N'
+        );
+    </select>
 </mapper>

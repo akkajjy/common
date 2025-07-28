@@ -103,16 +103,11 @@ public class AppService {
 
     @Transactional
     public void updateAppInfo(AppInfo appInfo) {
-        //
         if(appInfo.getModifier() == null) {
             appInfo.setModifier("system"); // 默认更新人
         }
         appInfo.setGmtModified(new Date());
-
-        //
         int rows = appInfoMapper.updateAppInfo(appInfo);
-
-        //
         if(rows > 0) {
             AppUpdateManage manage = new AppUpdateManage();
             manage.setAppId(appInfo.getId());

@@ -2,6 +2,7 @@ package com.palwy.common.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppUpdateManage;
+import com.palwy.common.mapper.AppUpdateManageMapper;
 import com.palwy.common.req.AppUpdateReq;
 import com.palwy.common.service.AppUpdateManageService;
 import com.palwy.common.util.ResultVOUtil;
@@ -17,7 +18,8 @@ import org.springframework.web.bind.annotation.*;
 public class AppUpdateManageController {
     @Autowired
     private AppUpdateManageService service;
-
+    @Autowired
+    private AppUpdateManageMapper mapper;
 
     @PostMapping("/page")
     @ApiOperation("分页查询应用更新信息")
@@ -43,7 +45,12 @@ public class AppUpdateManageController {
     @PostMapping("/updateById")
     @ApiOperation("根据Id更新")
     public ResultVO updateById(@RequestBody AppUpdateManage manage) {
-        service.updateById(manage);
-        return ResultVOUtil.success();
+        AppUpdateManage appUpdateManage = mapper.isMax(manage.getAppName(), manage.getPlatform());
+        if(appUpdateManage==null){
+            service.updateById(manage);
+            return ResultVOUtil.success();
+        }else{
+            return ResultVOUtil.fail("最大版本不允许修改！");
+        }
     }
 }
