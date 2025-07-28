@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppUpdateManage;
 import com.palwy.common.mapper.AppUpdateManageMapper;
+import com.palwy.common.req.AppUpdateReq;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,7 @@ import java.util.List;
 public class AppUpdateManageService {
     @Autowired
     private AppUpdateManageMapper mapper;
-    public PageInfo<AppUpdateManage> selectPage(AppUpdateManage manage, int pageNum, int pageSize) {
+    public PageInfo<AppUpdateManage> selectPage(AppUpdateReq manage, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<AppUpdateManage> list = mapper.selectAppUpdateManageList(manage);
         PageInfo<AppUpdateManage> pageInfo = new PageInfo<>(list);

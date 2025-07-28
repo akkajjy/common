@@ -95,6 +95,18 @@
         WHERE app_id = #{updateManage.appId}
     </update>
 
+    <update id="updateById" parameterType="com.palwy.common.entity.AppUpdateManage">
+        UPDATE app_update_manage
+        <set>
+            <if test="updateManage.appName != null">app_name = #{updateManage.appName},</if>
+            <if test="updateManage.versionCode != null">version_code = #{updateManage.versionCode},</if>
+            <if test="updateManage.versionName != null">version_name = #{updateManage.versionName},</if>
+            <if test="updateManage.platform != null">platform = #{updateManage.platform},</if>
+            <if test="updateManage.forceUpdateType != null">force_update_type = #{updateManage.forceUpdateType},</if>
+        </set>
+        WHERE id = #{updateManage.appId}
+    </update>
+
     <!-- 在resultMap后新增SQL -->
     <!-- 根据ID查询 -->
     <select id="selectAppUpdateManageById" resultMap="BaseResultMap">
@@ -115,7 +127,7 @@
     </select>
 
     <!-- 条件分页查询 -->
-    <select id="selectAppUpdateManageList" resultMap="BaseResultMap">
+    <select id="selectAppUpdateManageList" parameterType="com.palwy.common.req.AppUpdateReq" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
         FROM app_update_manage
         WHERE is_deleted = 'N'

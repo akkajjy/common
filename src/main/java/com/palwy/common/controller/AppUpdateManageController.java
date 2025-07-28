@@ -2,6 +2,7 @@ package com.palwy.common.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppUpdateManage;
+import com.palwy.common.req.AppUpdateReq;
 import com.palwy.common.service.AppUpdateManageService;
 import com.palwy.common.util.ResultVOUtil;
 import com.palwy.common.vo.ResultVO;
@@ -18,14 +19,10 @@ public class AppUpdateManageController {
     private AppUpdateManageService service;
 
 
-    @GetMapping("/page")
+    @PostMapping("/page")
     @ApiOperation("分页查询应用更新信息")
-    public ResultVO<PageInfo<AppUpdateManage>> page(
-            @RequestParam(defaultValue = "1") int pageNum,
-            @RequestParam(defaultValue = "10") int pageSize,
-            AppUpdateManage query
-    ) {
-        return ResultVOUtil.success(service.selectPage(query, pageNum, pageSize));
+    public ResultVO<PageInfo<AppUpdateManage>> page(AppUpdateReq req) {
+        return ResultVOUtil.success(service.selectPage(req, req.getPageNum(), req.getPageSize()));
     }
 
     @GetMapping("/{id}")

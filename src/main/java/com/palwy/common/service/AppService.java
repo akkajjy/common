@@ -86,14 +86,23 @@ public class AppService {
 
     @Transactional
     public void updateAppInfo(AppInfo appInfo) {
-        appInfoMapper.updateAppInfo(appInfo);
-        AppUpdateManage updateManage = new AppUpdateManage();
-        updateManage.setAppId(appInfo.getId()); // 关联ID
-        updateManage.setAppName(appInfo.getAppName());
-        updateManage.setVersionCode(appInfo.getVersionCode());
-        updateManage.setVersionName(appInfo.getVersionName());
-        updateManage.setPlatform(appInfo.getPlatform());
-        updateManageMapper.updateByAppId(updateManage);
+        //
+        if(appInfo.getModifier() == null) {
+            appInfo.setModifier("system"); // 默认更新人
+        }
+        appInfo.setGmtModified(new Date());
+
+        //
+        int rows = appInfoMapper.updateAppInfo(appInfo);
+
+        //
+        if(rows > 0) {
+            AppUpdateManage manage = new AppUpdateManage();
+            manage.setAppId(appInfo.getId());
+            manage.setVersionCode(appInfo.getVersionCode());
+            manage.setModifier("system");
+            updateManageMapper.updateByAppId(manage);
+        }
     }
 
     @Transactional

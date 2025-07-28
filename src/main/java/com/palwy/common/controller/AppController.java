@@ -73,6 +73,11 @@ public class AppController {
     @PostMapping("/update")
     @ApiOperation("更新应用信息")
     public ResultVO<Void> updateApp(@RequestBody AppInfo appInfo) {
+        AppInfo existing = appService.getAppById(appInfo.getId());
+        if(existing == null || "Y".equals(existing.getIsDeleted())) {
+            return ResultVOUtil.fail("记录不存在或已被删除");
+        }
+        appService.updateAppInfo(appInfo);
         appInfo.setModifier("system"); // 设置更新人
         appService.updateAppInfo(appInfo);
         return ResultVOUtil.success();

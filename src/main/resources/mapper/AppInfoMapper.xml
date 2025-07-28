@@ -51,19 +51,19 @@
     <update id="updateAppInfo" parameterType="com.palwy.common.entity.AppInfo">
         UPDATE app_info
         <set>
-            <if test="appInfo.appName != null">app_name = #{appInfo.appName},</if>
-            <if test="appInfo.appType != null">app_type = #{appInfo.appType},</if>
-            <if test="appInfo.osType != null">os_type = #{appInfo.osType},</if>
-            <if test="appInfo.platform != null">platform = #{appInfo.platform},</if>
-            <if test="appInfo.extraInfo != null">extra_info = #{appInfo.extraInfo},</if>
-            <if test="appInfo.modifier != null">modifier = #{appInfo.modifier},</if>
-            <if test="appInfo.versionCode != null">version_code = #{appInfo.versionCode},</if>
-            <if test="appInfo.versionName != null">version_name = #{appInfo.versionName},</if>
-            <if test="appInfo.downloadUrl != null">download_url = #{appInfo.downloadUrl},</if>
-            <if test="appInfo.filePath != null">file_path = #{appInfo.filePath},</if>
-            <if test="appInfo.channel != null">channel = #{appInfo.channel},</if>
-            <if test="appInfo.deviceFilter != null">device_filter = #{appInfo.deviceFilter},</if>
-            <if test="appInfo.showCashLoan != null">show_cash_loan = #{appInfo.showCashLoan},</if>
+            <if test="appName != null">app_name = #{appName},</if>
+            <if test="appType != null">app_type = #{appType},</if>
+            <if test="osType != null">os_type = #{osType},</if>
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="extraInfo != null">extra_info = #{extraInfo},</if>
+            <if test="modifier != null">modifier = #{modifier},</if>
+            <if test="versionCode != null">version_code = #{versionCode},</if>
+            <if test="versionName != null">version_name = #{versionName},</if>
+            <if test="downloadUrl != null">download_url = #{downloadUrl},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="channel != null">channel = #{channel},</if>
+            <if test="deviceFilter != null">device_filter = #{deviceFilter},</if>
+            <if test="showCashLoan != null">show_cash_loan = #{showCashLoan},</if>
             gmt_modified = NOW() <!-- 更新时间始终设置 -->
         </set>
         WHERE id = #{id} AND is_deleted = 'N'

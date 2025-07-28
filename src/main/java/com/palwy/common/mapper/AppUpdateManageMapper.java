@@ -1,6 +1,7 @@
 package com.palwy.common.mapper;
 
 import com.palwy.common.entity.AppUpdateManage;
+import com.palwy.common.req.AppUpdateReq;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -14,7 +15,7 @@ public interface AppUpdateManageMapper {
     int updateIsDeletedByAppId(@Param("appId") Long appId);
     int updateByAppId(@Param("updateManage") AppUpdateManage manage);
     // 新增方法
-    List<AppUpdateManage> selectAppUpdateManageList(AppUpdateManage manage);
+    List<AppUpdateManage> selectAppUpdateManageList(AppUpdateReq manage);
     AppUpdateManage selectAppUpdateManageById(@Param("id")Long id);
     AppUpdateManage selectByVersionAndPlatform(
             @Param("versionCode") String versionCode,
