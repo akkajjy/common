@@ -3,6 +3,8 @@ package com.palwy.common.controller;
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppUpdateManage;
 import com.palwy.common.service.AppUpdateManageService;
+import com.palwy.common.util.ResultVOUtil;
+import com.palwy.common.vo.ResultVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,26 +20,33 @@ public class AppUpdateManageController {
 
     @GetMapping("/page")
     @ApiOperation("分页查询应用更新信息")
-    public PageInfo<AppUpdateManage> page(
+    public ResultVO<PageInfo<AppUpdateManage>> page(
             @RequestParam(defaultValue = "1") int pageNum,
             @RequestParam(defaultValue = "10") int pageSize,
             AppUpdateManage query
     ) {
-        return service.selectPage(query, pageNum, pageSize);
+        return ResultVOUtil.success(service.selectPage(query, pageNum, pageSize));
     }
 
     @GetMapping("/{id}")
     @ApiOperation("根据ID查询应用更新详情")
-    public AppUpdateManage getById(@PathVariable Long id) {
-        return service.getById(id);
+    public ResultVO<AppUpdateManage> getById(@PathVariable Long id) {
+        return ResultVOUtil.success(service.getById(id));
     }
 
     @GetMapping("/checkIsUpdate")
     @ApiOperation("根据版本号和平台查询应用更新")
-    public AppUpdateManage checkIsUpdate(
+    public ResultVO<AppUpdateManage> checkIsUpdate(
             @RequestParam String versionCode,
             @RequestParam String platform
     ) {
-        return service.getByVersionAndPlatform(versionCode, platform);
+        return ResultVOUtil.success(service.getByVersionAndPlatform(versionCode, platform));
+    }
+
+    @PostMapping("/updateById")
+    @ApiOperation("根据Id更新")
+    public ResultVO updateById(@RequestBody AppUpdateManage manage) {
+        service.updateById(manage);
+        return ResultVOUtil.success();
     }
 }

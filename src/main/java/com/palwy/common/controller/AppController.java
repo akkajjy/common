@@ -2,8 +2,10 @@ package com.palwy.common.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppInfo;
+import com.palwy.common.entity.ClrDictDO;
 import com.palwy.common.req.AppReq;
 import com.palwy.common.service.AppService;
+import com.palwy.common.service.ClrDictService;
 import com.palwy.common.util.ResultVOUtil;
 import com.palwy.common.vo.ResultVO;
 import io.swagger.annotations.Api;
@@ -11,12 +13,42 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/apps")
 @Api(tags = "应用管理接口")
 public class AppController {
     @Autowired
     private AppService appService;
+    @Resource
+    private ClrDictService clrDictService;
+    //查询应用
+    @ApiOperation(value = "查询应用")
+    @GetMapping("/getAppList")
+    public ResultVO<List<AppInfo>> getAppList() {
+        return ResultVOUtil.success(appService.getAllAppInfos());
+    }
+    //查询发版平台
+    @ApiOperation(value = "查询发版平台")
+    @GetMapping("/getVersionPlatformList")
+    public ResultVO getVersionPlatformList() {
+        List<ClrDictDO> clrDictDOList = clrDictService.getClrDictListByDictType("VersionPlatformEnum");
+
+        // 转换为Map: dictValue -> dictLabel
+        Map<String, String> platformMap = clrDictDOList.stream()
+                .collect(Collectors.toMap(
+                        ClrDictDO::getDictValue,
+                        ClrDictDO::getDictLabel,
+                        (existing, replacement) -> existing // 重复键处理策略
+                ));
+
+        return ResultVOUtil.success(platformMap);
+    }
+
     @PostMapping("/getApps")
     @ApiOperation("分页查询应用列表")
     public ResultVO<PageInfo<AppInfo>> getApps(@RequestBody AppReq appReq) {

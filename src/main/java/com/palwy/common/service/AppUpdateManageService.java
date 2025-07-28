@@ -30,4 +30,7 @@ public class AppUpdateManageService {
     public AppUpdateManage getByVersionAndPlatform(String versionCode, String platform) {
         return mapper.selectByVersionAndPlatform(versionCode, platform);
     }
+    public void updateById(AppUpdateManage updateData){
+        mapper.updateByAppId(updateData);
+    }
 }

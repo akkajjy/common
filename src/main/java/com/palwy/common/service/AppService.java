@@ -23,6 +23,9 @@ public class AppService {
     @Autowired
     private AppUpdateManageMapper updateManageMapper;
 
+    public List<AppInfo> getAllAppInfos() {
+        return appInfoMapper.getAllAppInfos();
+    }
     @Transactional
     public void createAppWithDefaultUpdate(AppInfo appInfo) {
         // 设置默认值

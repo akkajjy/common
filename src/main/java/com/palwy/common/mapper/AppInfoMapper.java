@@ -15,4 +15,5 @@ public interface AppInfoMapper {
     int updateAppInfo(AppInfo appInfo);
     List<AppInfo> selectAppInfoByCondition(AppReq appReq);
     AppInfo selectById(@Param("id") Long id);
+    List<AppInfo> getAllAppInfos();
 }

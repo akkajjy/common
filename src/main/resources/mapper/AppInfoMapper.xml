@@ -92,4 +92,8 @@
         FROM app_info
         WHERE id = #{id} AND is_deleted = 'N'
     </select>
+
+    <select id="getAllAppInfos" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_info WHERE is_deleted = 'N'
+    </select>
 </mapper>
