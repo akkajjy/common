@@ -60,5 +60,5 @@ public class AppInfo {
     private String deviceFilter;
 
     @ApiModelProperty("是否展示现金贷(0:否 1:是)")
-    private Boolean showCashLoan;
+    private String showCashLoan;
 }

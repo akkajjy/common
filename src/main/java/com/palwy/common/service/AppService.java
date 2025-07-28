@@ -7,13 +7,18 @@ import com.palwy.common.entity.AppUpdateManage;
 import com.palwy.common.mapper.AppInfoMapper;
 import com.palwy.common.mapper.AppUpdateManageMapper;
 import com.palwy.common.req.AppReq;
+import com.palwy.common.utils.TOSUpFileUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +26,11 @@ public class AppService {
     @Autowired
     private AppInfoMapper appInfoMapper;
     @Autowired
+    private TOSUpFileUtil tosUpFileUtil;
+    @Autowired
     private AppUpdateManageMapper updateManageMapper;
+    @Autowired
+    private Executor asyncExecutor;
 
     public List<AppInfo> getAllAppInfos() {
         return appInfoMapper.getAllAppInfos();
@@ -53,9 +62,25 @@ public class AppService {
         // 使用PageHelper实现分页
         // 设置分页参数
         PageHelper.startPage(appReq.getPageNum(), appReq.getPageSize());
-        List<AppInfo> apps = appInfoMapper.selectAppInfoByCondition(appReq);
-        PageInfo<AppInfo> pageInfo = new PageInfo<>(apps);
-        pageInfo.setTotal(apps.size());
+        List<AppInfo> list = appInfoMapper.selectAppInfoByCondition(appReq);
+        // 并行生成预签名URL（使用线程池）
+        if (!CollectionUtils.isEmpty(list)) {
+            List<CompletableFuture<Void>> futures = new ArrayList<>();
+
+            for (AppInfo resp : list) {
+                futures.add(CompletableFuture.runAsync(() -> {
+                    String signedUrl = tosUpFileUtil.generatePresignedUrl(resp.getDownloadUrl(),6000);
+                    if (signedUrl != null) {
+                        resp.setDownloadUrl(signedUrl);
+                    }
+                }, asyncExecutor));
+            }
+
+            // 等待所有异步任务完成
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+        }
+        PageInfo<AppInfo> pageInfo = new PageInfo<>(list);
+        pageInfo.setTotal(list.size());
         return pageInfo;
     }
 
@@ -73,11 +98,7 @@ public class AppService {
 
     @Transactional
     public void deleteAppInfo(Long id) {
-        AppInfo appInfo = new AppInfo();
-        appInfo.setId(id);
-        appInfo.setIsDeleted("Y");          // 软删除标志
-        appInfo.setGmtModified(new Date()); // 更新时间
-        appInfoMapper.updateAppInfo(appInfo);
+        appInfoMapper.deleteAppInfo(id);
         updateManageMapper.updateIsDeletedByAppId(id); // 需实现此Mapper方法
     }
 

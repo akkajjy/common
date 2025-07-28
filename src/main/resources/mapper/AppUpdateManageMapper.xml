@@ -79,7 +79,7 @@
     <!-- 根据appId软删除记录 -->
     <update id="updateIsDeletedByAppId">
         UPDATE app_update_manage
-        SET is_deleted = 'Y',
+        SET is_deleted = 'Y'
         WHERE app_id = #{appId}
     </update>
 
