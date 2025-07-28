@@ -1,14 +1,16 @@
 package com.palwy.common.utils;
 
-import com.volcengine.tos.*;
-import com.volcengine.tos.auth.StaticCredentials;
 import com.volcengine.tos.model.object.*;
 import com.volcengine.tos.comm.HttpMethod;
+import com.volcengine.tos.TosClientException;
+import com.volcengine.tos.TosServerException;
+import com.volcengine.tos.TOSV2;
+import com.volcengine.tos.TOSV2ClientBuilder;
 import com.volcengine.tos.comm.common.ACLType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import com.volcengine.tos.TOSClientConfiguration;
+
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -17,6 +19,7 @@ import java.util.Date;
 @Slf4j
 @Component
 public class TOSUpFileUtil {
+    // 配置常量（建议抽离到配置中心）
     @Value("${tos.cn}")
     private String ENDPOINT;
     @Value("${tos.sh}")
@@ -38,9 +41,9 @@ public class TOSUpFileUtil {
     public enum BusinessType {
         FUND_PARTY, LIGHT_ASSET, MEMBER_BENEFITS, SELF_OPERATED
     }
-    private volatile TOSV2 presignedUrlClient;
+
     public String uploadFile(BusinessType businessType, String userId,
-                                    String filename, InputStream fileStream) {
+                             String filename, InputStream fileStream) {
         String objectKey = generateObjectKey(businessType, userId, filename);
         try {
             // 1. 上传文件
@@ -126,44 +129,36 @@ public class TOSUpFileUtil {
      */
     public String generatePresignedUrl(String objectKey, int expiryDurationMinutes) {
         try {
-            TOSV2 client = createCustomDomainClient();
+            // 确保客户端已初始化
+            TOSV2 client = getTosClient();
+
+            // 将分钟转换为秒
             long expiresSeconds = Duration.ofMinutes(expiryDurationMinutes).getSeconds();
 
-            // 关键修改1: 设置空存储桶名称
+            // 创建预签名URL请求
             PreSignedURLInput input = new PreSignedURLInput()
-                    .setHttpMethod(HttpMethod.GET)
-                    .setBucket(BUCKET)  // 使用空字符串
-                    .setKey(objectKey)
-                    .setExpires(expiresSeconds);
+                    .setHttpMethod(HttpMethod.GET)  // 设置HTTP方法
+                    .setBucket(BUCKET)             // 设置存储桶名称
+                    .setKey(objectKey)              // 设置对象键
+                    .setExpires(expiresSeconds);   // 设置过期时间
 
             PreSignedURLOutput output = client.preSignedURL(input);
-            String signedUrl = output.getSignedUrl();
+            return output.getSignedUrl(); // 从输出对象中获取URL字符串
 
-            // 关键修改2: 替换路径中的双重斜杠
-            if (signedUrl != null) {
-                // 处理可能的双重斜杠问题
-                signedUrl = signedUrl.replace("//" + FINAL_URL + "//", "//" + FINAL_URL + "/");
-            }
-
-            return signedUrl;
-        } catch (TosException e) {
-            log.error("生成预签名 URL 失败: {}", e.getMessage());
+        } catch (TosClientException e) {
+            log.error("客户端错误: {}", e.getMessage());
+        } catch (TosServerException e) {
+            log.error("服务端错误: 状态码={}, 错误码={}", e.getStatusCode(), e.getCode());
         } catch (Exception e) {
-            log.error("系统异常: {}", e.getMessage());
+            log.error("未知错误: {}", e.getMessage());
         }
         return null;
     }
 
-    private TOSV2 createCustomDomainClient() {
-        log.info("创建预签名URL专用客户端，域名: {}", FINAL_URL);
-
-        return new TOSV2ClientBuilder().build(
-                TOSClientConfiguration.builder()
-                        .endpoint(FINAL_URL)
-                        .disableEncodingMeta(true) // 关键修复：禁用路径编码
-                        .credentials(new StaticCredentials(ACCESS_KEY, ENCODED_SECRET))
-                        .region(REGION)
-                        .build()
-        );
+    /**
+     * 重载方法：使用默认有效期(30分钟)
+     */
+    public String generatePresignedUrl(String objectKey) {
+        return generatePresignedUrl(objectKey, 30); // 默认30分钟
     }
 }

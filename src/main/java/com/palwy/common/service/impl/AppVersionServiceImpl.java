@@ -179,7 +179,7 @@ public class AppVersionServiceImpl implements AppVersionService {
 
             for (AppVersionResp resp : list) {
                 futures.add(CompletableFuture.runAsync(() -> {
-                    String signedUrl = tosUpFileUtil.generatePresignedUrl(resp.getDownloadUrl(),60);
+                    String signedUrl = tosUpFileUtil.generatePresignedUrl(resp.getDownloadUrl(),6000);
                     if (signedUrl != null) {
                         resp.setDownloadUrl(signedUrl);
                     }
