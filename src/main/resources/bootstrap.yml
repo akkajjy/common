@@ -1,6 +1,6 @@
 spring:
   application:
-    name: fin-clrcore-service
+    name: fin-common-service
   profiles:
     active: test
   cloud:
