@@ -21,7 +21,7 @@ public class AppUpdateManageController {
 
     @PostMapping("/page")
     @ApiOperation("分页查询应用更新信息")
-    public ResultVO<PageInfo<AppUpdateManage>> page(AppUpdateReq req) {
+    public ResultVO<PageInfo<AppUpdateManage>> page(@RequestBody AppUpdateReq req) {
         return ResultVOUtil.success(service.selectPage(req, req.getPageNum(), req.getPageSize()));
     }
 

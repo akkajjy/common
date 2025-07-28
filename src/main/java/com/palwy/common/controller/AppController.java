@@ -29,8 +29,8 @@ public class AppController {
     //查询应用
     @ApiOperation(value = "查询应用")
     @GetMapping("/getAppList")
-    public ResultVO<List<AppInfo>> getAppList() {
-        return ResultVOUtil.success(appService.getAllAppInfos());
+    public ResultVO<List<ClrDictDO>> getAppList() {
+        return ResultVOUtil.success(clrDictService.getClrDictListByDictType("AppNameEnum"));
     }
     //查询发版平台
     @ApiOperation(value = "查询发版平台")

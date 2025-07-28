@@ -104,7 +104,7 @@
             <if test="updateManage.platform != null">platform = #{updateManage.platform},</if>
             <if test="updateManage.forceUpdateType != null">force_update_type = #{updateManage.forceUpdateType},</if>
         </set>
-        WHERE id = #{updateManage.appId}
+        WHERE id = #{updateManage.id}
     </update>
 
     <!-- 在resultMap后新增SQL -->
