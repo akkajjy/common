@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppInfo;
 import com.palwy.common.entity.AppUpdateManage;
+import com.palwy.common.entity.ClrDictDO;
 import com.palwy.common.mapper.AppInfoMapper;
 import com.palwy.common.mapper.AppUpdateManageMapper;
 import com.palwy.common.req.AppReq;
@@ -14,11 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +35,9 @@ public class AppService {
     private AppUpdateManageMapper updateManageMapper;
     @Autowired
     private Executor asyncExecutor;
-
+    @Autowired
+    @Resource
+    private ClrDictService clrDictService;
     public List<AppInfo> getAllAppInfos() {
         return appInfoMapper.getAllAppInfos();
     }
@@ -63,6 +69,17 @@ public class AppService {
         // 设置分页参数
         PageHelper.startPage(appReq.getPageNum(), appReq.getPageSize());
         List<AppInfo> list = appInfoMapper.selectAppInfoByCondition(appReq);
+        List<ClrDictDO> appNameList = clrDictService.getClrDictListByDictType("AppNameEnum");
+        Map<String, String> dictMap = appNameList.stream()
+                .collect(Collectors.toMap(ClrDictDO::getDictValue, ClrDictDO::getDictLabel));
+
+// 单层循环替换应用名称
+        for (AppInfo appInfo : list) {
+            String dictLabel = dictMap.get(appInfo.getAppName());
+            if (dictLabel != null) {
+                appInfo.setAppName(dictLabel);
+            }
+        }
         // 并行生成预签名URL（使用线程池）
         if (!CollectionUtils.isEmpty(list)) {
             List<CompletableFuture<Void>> futures = new ArrayList<>();

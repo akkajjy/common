@@ -79,7 +79,7 @@
             AND os_type = #{osType}
         </if>
         <if test="channel != null and channel != ''">
-            AND channel = #{channel}
+            AND platform = #{channel}
         </if>
         <if test="versionCode != null and versionCode != ''">
             AND version_code = #{versionCode}
