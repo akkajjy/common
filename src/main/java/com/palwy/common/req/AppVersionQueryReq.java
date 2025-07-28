@@ -2,6 +2,7 @@ package com.palwy.common.req;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public class AppVersionQueryReq {
 
     @ApiModelProperty(value = "每页数量", example = "10")
     private Integer pageSize = 10;
+    @ApiModelProperty("版本号")
+    private String versionCode;
 }

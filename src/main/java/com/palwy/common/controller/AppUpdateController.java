@@ -67,12 +67,10 @@ public class AppUpdateController {
         return ResultVOUtil.success(service.listByPage(req.getPageNum(), req.getPageSize(), req.getChannel()));
     }
 
-    @GetMapping("/checkForceUpdate")
+    @PostMapping("/checkForceUpdate")
     @ApiOperation("检查强制更新状态")
-    public ResultVO<AppUpdateManage> checkForceUpdate(
-            @RequestHeader("versionCode") String versionCode,
-            @RequestHeader("platform") String platform) {
-        AppUpdateManage appUpdateManage = service.checkForceUpdate(versionCode, platform);
+    public ResultVO<AppUpdateManage> checkForceUpdate(AppVersionQueryReq req) {
+        AppUpdateManage appUpdateManage = service.checkForceUpdate(req.getVersionCode(), req.getChannel());
         return ResultVOUtil.success(appUpdateManage);
     }
 }

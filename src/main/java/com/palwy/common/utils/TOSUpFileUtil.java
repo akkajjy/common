@@ -1,11 +1,9 @@
 package com.palwy.common.utils;
 
+import com.volcengine.tos.*;
+import com.volcengine.tos.auth.StaticCredentials;
 import com.volcengine.tos.model.object.*;
 import com.volcengine.tos.comm.HttpMethod;
-import com.volcengine.tos.TosClientException;
-import com.volcengine.tos.TosServerException;
-import com.volcengine.tos.TOSV2;
-import com.volcengine.tos.TOSV2ClientBuilder;
 import com.volcengine.tos.comm.common.ACLType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -111,9 +109,14 @@ public class TOSUpFileUtil {
     private TOSV2 getTosClient() {
         if (tosClient == null) {
             synchronized (TOSUpFileUtil.class) {
+                TOSClientConfiguration configuration = TOSClientConfiguration.builder()
+                        .region(REGION)
+                        .endpoint(ENDPOINT)
+                        .isCustomDomain(true)   // 标识当前域名为自定义域名
+                        .credentials(new StaticCredentials(ACCESS_KEY, ENCODED_SECRET)).build();
                 if (tosClient == null) {
                     tosClient = new TOSV2ClientBuilder()
-                            .build(REGION, ENDPOINT, ACCESS_KEY, ENCODED_SECRET);
+                            .build(configuration);
                 }
             }
         }
