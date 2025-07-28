@@ -64,7 +64,7 @@ public class AppUpdateController {
     @ApiOperation("分页查询应用更新记录")
     public ResultVO<PageInfo<AppUpdateManage>> listByPage(
             @RequestBody AppVersionQueryReq req) {
-        return ResultVOUtil.success(service.listByPage(req.getPageNum(), req.getPageSize(), req.getAppName(), req.getOsType()));
+        return ResultVOUtil.success(service.listByPage(req.getPageNum(), req.getPageSize(), req.getChannel()));
     }
 
     @GetMapping("/checkForceUpdate")

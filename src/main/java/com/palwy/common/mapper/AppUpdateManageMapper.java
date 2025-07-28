@@ -15,8 +15,7 @@ public interface AppUpdateManageMapper {
     List<AppUpdateManage> selectAll();
 
     // 分页查询
-    List<AppUpdateManage> selectByPage(@Param("appName") String appName,
-                                       @Param("osType") String osType);
+    List<AppUpdateManage> selectByPage(@Param("platform") String platform);
 
     // 强制更新查询接口
     AppUpdateManage selectForceUpdate(@Param("osType") String osType,

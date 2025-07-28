@@ -17,24 +17,23 @@
         <result property="gmtCreated" column="gmt_created" />
         <result property="gmtModified" column="gmt_modified" />
         <result property="isDeleted" column="is_deleted" />
-        <result property="osType" column="os_type" />
     </resultMap>
 
     <!-- 2. 定义可重用SQL片段 -->
     <sql id="Base_Column_List">
         id, app_name, version_code, version_name, platform,
         force_update_type, low_version_code, update_desc,
-        creator, modifier, gmt_created, gmt_modified, is_deleted, os_type
+        creator, modifier, gmt_created, gmt_modified, is_deleted
     </sql>
 
     <!-- 3. 使用显式参数类型和resultMap -->
     <insert id="insert" parameterType="com.palwy.common.entity.AppUpdateManage">
         INSERT INTO app_update_manage (
             app_name, version_code, version_name, platform, force_update_type,
-            low_version_code, update_desc, os_type
+            low_version_code, update_desc
         ) VALUES (
                      #{appName}, #{versionCode}, #{versionName}, #{platform}, #{forceUpdateType},
-                     #{lowVersionCode}, #{updateDesc}, #{osType}
+                     #{lowVersionCode}, #{updateDesc}
                  )
     </insert>
 
@@ -74,11 +73,8 @@
         SELECT <include refid="Base_Column_List"/>
         FROM app_update_manage
         WHERE is_deleted = 'N'
-        <if test="appName != null and appName != ''">
-            AND app_name LIKE CONCAT('%', #{appName}, '%')
-        </if>
-        <if test="osType != null and osType != ''">
-            AND os_type = #{osType}
+        <if test="platform != null and platform != ''">
+            AND FIND_IN_SET(#{platform}, platform) > 0
         </if>
         ORDER BY gmt_modified DESC
     </select>
@@ -86,8 +82,7 @@
     <select id="selectForceUpdate" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
         FROM app_update_manage
-        WHERE os_type = #{osType}
-        AND FIND_IN_SET(#{platform}, platform) > 0
+        WHERE FIND_IN_SET(#{platform}, platform) > 0
         AND version_code = #{versionCode}
         AND is_deleted = 'N'
         LIMIT 1

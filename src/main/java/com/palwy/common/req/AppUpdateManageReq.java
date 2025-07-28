@@ -58,9 +58,4 @@ public class AppUpdateManageReq {
     @ApiModelProperty("删除标识(N:未删除 Y:已删除)")
     @Pattern(regexp = "^[NY]$", message = "删除标识值不合法，只能是N或Y")
     private String isDeleted = "N"; // 默认值
-
-    @ApiModelProperty("系统类型(1:Android 2:iOS)")
-    @NotNull(message = "系统类型不能为空")
-    @Pattern(regexp = "^[12]$", message = "系统类型值不合法，只能是1或2")
-    private String osType;
 }

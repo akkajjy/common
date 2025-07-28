@@ -28,7 +28,6 @@ public class AppUpdateManageServiceImpl implements AppUpdateManageService {
         appUpdateManage.setForceUpdateType(record.getForceUpdateType());
         appUpdateManage.setLowVersionCode(record.getLowVersionCode());
         appUpdateManage.setUpdateDesc(record.getUpdateDesc());
-        appUpdateManage.setOsType(record.getOsType());
         return mapper.insert(appUpdateManage);
     }
 
@@ -45,7 +44,6 @@ public class AppUpdateManageServiceImpl implements AppUpdateManageService {
             appUpdateManage.setForceUpdateType(record.getForceUpdateType());
             appUpdateManage.setLowVersionCode(record.getLowVersionCode());
             appUpdateManage.setUpdateDesc(record.getUpdateDesc());
-            appUpdateManage.setOsType(record.getOsType());
             return mapper.update(appUpdateManage);
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -64,10 +62,9 @@ public class AppUpdateManageServiceImpl implements AppUpdateManageService {
     }
 
     @Override
-    public PageInfo<AppUpdateManage> listByPage(int pageNum, int pageSize,
-                                                String appName, String osType) {
+    public PageInfo<AppUpdateManage> listByPage(int pageNum, int pageSize, String platform) {
         PageHelper.startPage(pageNum, pageSize);
-        List<AppUpdateManage> list = mapper.selectByPage(appName, osType);
+        List<AppUpdateManage> list = mapper.selectByPage(platform);
         PageInfo<AppUpdateManage> pageList = new PageInfo<>(list);
         pageList.setTotal(list.size());
         return pageList;

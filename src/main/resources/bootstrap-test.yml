@@ -23,7 +23,7 @@ spring:
         password: tstNccos54
 
 tos:
-  cn: tos-cn-shanghai.volces.com
+  cn: https://clrcorecdn-test.shhpalwy.com
   key: AKLTNGYzZGJhOGQ0Y2EzNGRlYThhZWIzNDZkMjg2Y2JjNzk
   secret: TTJOaVpXTTRZall5WWpSaE5HRmhNR0ZpWkdaa1pURTNaVEEzWVRReE9XVQ==
   bucket: wy-tdd-test
