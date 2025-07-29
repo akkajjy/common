@@ -34,7 +34,7 @@ spring:
       max-request-size: 200MB
 #注意！！！
 server:
-  port: 9082
+  port: 9094
   tomcat:
     uri-encoding: utf-8
   servlet:
