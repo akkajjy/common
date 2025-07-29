@@ -14,6 +14,9 @@ public class AppUpdateReq {
     @ApiModelProperty("平台")
     private String platform;
 
+    @ApiModelProperty(value = "操作系统类型: IOS/ANDROID", example = "ANDROID")
+    private String osType;
+
     @ApiModelProperty("强制更新类型(0/1/2)")
     private String forceUpdateType;
 

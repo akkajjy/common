@@ -139,6 +139,9 @@
         <if test="platform != null and platform != ''">
             AND platform = #{platform}
         </if>
+        <if test="osType != null and osType != ''">
+            AND os_type = #{osType}
+        </if>
         <if test="forceUpdateType != null and forceUpdateType != ''">
             AND force_update_type = #{forceUpdateType}
         </if>

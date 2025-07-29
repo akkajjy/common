@@ -50,4 +50,7 @@ public class AppUpdateManage {
 
     @ApiModelProperty("删除标识(N-未删除；Y-已删除)")
     private String isDeleted = "N";
+
+    @ApiModelProperty(value = "操作系统类型(1:Android 2:iOS)", required = true)
+    private String osType;
 }

@@ -53,6 +53,7 @@ public class AppService {
         // 创建默认的更新管理记录
         AppUpdateManage updateManage = new AppUpdateManage();
         updateManage.setAppName(appInfo.getAppName());
+        updateManage.setOsType(appInfo.getOsType());
         updateManage.setAppId(appInfo.getId());
         updateManage.setVersionCode(appInfo.getVersionCode());
         updateManage.setVersionName(appInfo.getVersionName());
