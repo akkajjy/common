@@ -22,12 +22,4 @@ spring:
         username: nacos
         password: tstNccos54
 
-tos:
-  cn: https://clrcorecdn-test.shhpalwy.com
-  key: AKLTNGYzZGJhOGQ0Y2EzNGRlYThhZWIzNDZkMjg2Y2JjNzk
-  secret: TTJOaVpXTTRZall5WWpSaE5HRmhNR0ZpWkdaa1pURTNaVEEzWVRReE9XVQ==
-  bucket: wy-tdd-test
-  url: clrcorecdn-test.shhpalwy.com
-  sh: cn-shanghai
-
 
