@@ -24,7 +24,11 @@ public class AppUpdateManageController {
     @PostMapping("/page")
     @ApiOperation("分页查询应用更新信息")
     public ResultVO<PageInfo<AppUpdateManage>> page(@RequestBody AppUpdateReq req) {
-        return ResultVOUtil.success(service.selectPage(req, req.getPageNum(), req.getPageSize()));
+        try {
+            return ResultVOUtil.success(service.selectPage(req, req.getPageNum(), req.getPageSize()));
+        } catch (Exception e) {
+            return ResultVOUtil.fail("查询失败");
+        }
     }
 
     @GetMapping("/{id}")
@@ -50,7 +54,7 @@ public class AppUpdateManageController {
     @ApiOperation("根据Id更新")
     public ResultVO updateById(@RequestBody AppUpdateManage manage) {
         AppUpdateManage appUpdateManage = mapper.isMax(manage.getAppName(), manage.getPlatform());
-        if(appUpdateManage==null){
+        if(appUpdateManage==null||!appUpdateManage.getVersionCode().equals(manage.getVersionCode())){
             service.updateById(manage);
             return ResultVOUtil.success();
         }else{
