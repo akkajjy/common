@@ -60,7 +60,7 @@ public class AppService {
         updateManage.setForceUpdateType("0"); // 默认不更新
         updateManage.setCreator("system");
         updateManage.setModifier("system");
-
+        updateManage.setUpdateDesc(appInfo.getUpdateDesc());
         updateManageMapper.insertAppUpdateManage(updateManage);
     }
 

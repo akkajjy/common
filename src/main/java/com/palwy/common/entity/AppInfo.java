@@ -61,4 +61,7 @@ public class AppInfo {
 
     @ApiModelProperty("是否展示现金贷(0:否 1:是)")
     private String showCashLoan;
+
+    @ApiModelProperty("更新描述")
+    private String updateDesc;
 }

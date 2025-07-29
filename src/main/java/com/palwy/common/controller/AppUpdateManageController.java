@@ -39,7 +39,11 @@ public class AppUpdateManageController {
             @RequestParam String versionCode,
             @RequestParam String platform
     ) {
-        return ResultVOUtil.success(service.getByVersionAndPlatform(versionCode, platform));
+        AppUpdateManage appUpdateManage = service.getByVersionAndPlatform(versionCode, platform);
+        if(appUpdateManage==null){
+            return ResultVOUtil.fail("未找到版本");
+        }
+        return ResultVOUtil.success(appUpdateManage);
     }
 
     @PostMapping("/updateById")
