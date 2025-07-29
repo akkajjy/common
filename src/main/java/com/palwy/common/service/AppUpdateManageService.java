@@ -86,12 +86,15 @@ public class AppUpdateManageService {
     }
 
     public AppUpdateManage getByVersionAndPlatform(String versionCode, String platform) {
+        AppUpdateManage updateManage = new AppUpdateManage();
         AppUpdateManage appUpdateManage = mapper.selectByVersionAndPlatform(versionCode, platform);
         if(appUpdateManage==null){
             return null;
         }
-        if(appUpdateManage.getForceUpdateType().equals("2")){
-            appUpdateManage = mapper.isMax(appUpdateManage.getAppName(), platform);
+        if(!appUpdateManage.getForceUpdateType().equals("0")){
+            updateManage = mapper.isMax(appUpdateManage.getAppName(), platform);
+            updateManage.setForceUpdateType(appUpdateManage.getForceUpdateType());
+            return updateManage;
         }
         return appUpdateManage;
     }
