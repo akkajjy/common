@@ -2,7 +2,6 @@ package com.palwy.common.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.palwy.common.entity.AppInfo;
 import com.palwy.common.entity.AppUpdateManage;
 import com.palwy.common.entity.ClrDictDO;
 import com.palwy.common.mapper.AppUpdateManageMapper;
