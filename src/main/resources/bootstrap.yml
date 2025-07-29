@@ -9,13 +9,13 @@ spring:
     nacos:
       discovery:
         server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
-        namespace: fa0bddca-28f5-4b37-b4d9-5d1e2718416c
+        namespace: 40dbacf5-3a92-4b50-83c4-796faa3b8190
         group: DEFAULT_GROUP
         username: nacos
         password: tstNccos54
       config:
         server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
-        namespace: fa0bddca-28f5-4b37-b4d9-5d1e2718416c
+        namespace: 40dbacf5-3a92-4b50-83c4-796faa3b8190
         file-extension: yaml
         group: DEFAULT_GROUP
         username: nacos
