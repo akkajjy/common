@@ -16,22 +16,23 @@
         <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
         <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
         <result column="is_deleted" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="os_type" property="osType" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         id, app_name,app_id, version_code, version_name, platform,
     force_update_type, low_version_code, update_desc,
-    creator, gmt_created, modifier, gmt_modified, is_deleted
+    creator, gmt_created, modifier, gmt_modified, is_deleted,os_type
     </sql>
     <!-- 插入应用更新管理记录 -->
     <insert id="insertAppUpdateManage" parameterType="com.palwy.common.entity.AppUpdateManage" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO app_update_manage (
             app_name,app_id, version_code, version_name, platform,
             force_update_type, low_version_code, update_desc,
-            creator, gmt_created, modifier, gmt_modified, is_deleted
+            creator, gmt_created, modifier, gmt_modified, is_deleted,os_type
         ) VALUES (
                      #{appName}, #{appId},#{versionCode}, #{versionName}, #{platform},
                      #{forceUpdateType}, #{lowVersionCode}, #{updateDesc},
-                     #{creator}, NOW(), #{modifier}, NOW(), 'N'
+                     #{creator}, NOW(), #{modifier}, NOW(), 'N',#{osType}
                  )
     </insert>
 
