@@ -8,7 +8,7 @@ public class AppReq {
     @ApiModelProperty("应用名称")
     private String appName;
 
-    @ApiModelProperty(value = "操作系统类型: IOS/ANDROID", example = "ANDROID")
+    @ApiModelProperty(value = "操作系统类型: 1 IOS/ 2ANDROID", example = "ANDROID")
     private String osType;
 
     @ApiModelProperty("渠道列表")
