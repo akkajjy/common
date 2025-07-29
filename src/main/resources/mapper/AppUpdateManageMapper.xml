@@ -120,6 +120,7 @@
         SELECT <include refid="Base_Column_List"/>
         FROM app_update_manage
         WHERE version_code = #{versionCode}
+        AND app_name = #{appName}
         AND platform = #{platform}
         AND is_deleted = 'N'
         ORDER BY gmt_modified DESC

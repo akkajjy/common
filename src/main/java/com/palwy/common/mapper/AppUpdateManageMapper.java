@@ -17,7 +17,7 @@ public interface AppUpdateManageMapper {
     // 新增方法
     List<AppUpdateManage> selectAppUpdateManageList(AppUpdateReq manage);
     AppUpdateManage selectAppUpdateManageById(@Param("id")Long id);
-    AppUpdateManage selectByVersionAndPlatform(
+    AppUpdateManage selectByVersionAndPlatform(@Param("appName") String appName,
             @Param("versionCode") String versionCode,
             @Param("platform") String platform
     );

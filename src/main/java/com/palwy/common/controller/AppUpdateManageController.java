@@ -40,10 +40,11 @@ public class AppUpdateManageController {
     @GetMapping("/checkIsUpdate")
     @ApiOperation("根据版本号和平台查询应用更新")
     public ResultVO<AppUpdateManage> checkIsUpdate(
-            @RequestParam String versionCode,
-            @RequestParam String platform
+            @RequestParam("appName") String appName,
+            @RequestParam("versionCode") String versionCode,
+            @RequestParam("platform") String platform
     ) {
-        AppUpdateManage appUpdateManage = service.getByVersionAndPlatform(versionCode, platform);
+        AppUpdateManage appUpdateManage = service.getByVersionAndPlatform(appName,versionCode, platform);
         if(appUpdateManage==null){
             return ResultVOUtil.fail("未找到版本");
         }

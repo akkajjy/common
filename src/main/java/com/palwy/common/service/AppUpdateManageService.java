@@ -85,9 +85,9 @@ public class AppUpdateManageService {
         return mapper.selectAppUpdateManageById(id);
     }
 
-    public AppUpdateManage getByVersionAndPlatform(String versionCode, String platform) {
+    public AppUpdateManage getByVersionAndPlatform(String appName,String versionCode, String platform) {
         AppUpdateManage updateManage = new AppUpdateManage();
-        AppUpdateManage appUpdateManage = mapper.selectByVersionAndPlatform(versionCode, platform);
+        AppUpdateManage appUpdateManage = mapper.selectByVersionAndPlatform(appName,versionCode, platform);
         if(appUpdateManage==null){
             return null;
         }
