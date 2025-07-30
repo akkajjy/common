@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/app-update")
+@RequestMapping("/v1/app-update")
 @Api(tags = "应用更新管理接口")
 public class AppUpdateManageController {
     @Autowired

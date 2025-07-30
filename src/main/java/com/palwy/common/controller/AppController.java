@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/apps")
+@RequestMapping("/v1/apps")
 @Api(tags = "应用管理接口")
 public class AppController {
     @Autowired
