@@ -121,11 +121,10 @@ public class AppService {
     @Transactional
     public void deleteAppInfo(Long id) {
         appInfoMapper.deleteAppInfo(id);
-        updateManageMapper.updateIsDeletedByAppId(id); // 需实现此Mapper方法
+        updateManageMapper.updateIsDeletedByAppId(id);
     }
 
     public AppInfo getAppById(Long id) {
-        // 实现根据ID查询逻辑，注意过滤已删除数据（isDeleted='N'）
         return appInfoMapper.selectById(id);
     }
 }
