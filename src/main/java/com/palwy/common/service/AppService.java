@@ -87,7 +87,7 @@ public class AppService {
 
             for (AppInfo resp : list) {
                 futures.add(CompletableFuture.runAsync(() -> {
-                    String signedUrl = tosUpFileUtil.generatePresignedUrl(resp.getDownloadUrl(),6000);
+                    String signedUrl = tosUpFileUtil.generatePresignedUrl(resp.getFilePath(),6000);
                     if (signedUrl != null) {
                         resp.setDownloadUrl(signedUrl);
                     }
