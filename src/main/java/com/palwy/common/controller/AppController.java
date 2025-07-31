@@ -63,6 +63,14 @@ public class AppController {
     @PostMapping("/create")
     @ApiOperation("创建应用并初始化更新配置")
     public ResultVO<Long> createApp(@RequestBody AppInfo appInfo) {
+        try {
+            int code = Integer.parseInt(appInfo.getVersionCode()); // String转整型
+            if (code <= 0) {
+                return ResultVOUtil.fail("版本号必须为正整数"); // 禁止0或负值
+            }
+        } catch (NumberFormatException e) {
+            return ResultVOUtil.fail("版本号只能填整数"); // 非数字捕获
+        }
         AppUpdateManage appUpdateManage = mapper.isAdd(appInfo.getAppName(),appInfo.getPlatform(),appInfo.getVersionCode());
         if(appUpdateManage==null){
             appService.createAppWithDefaultUpdate(appInfo);
@@ -82,6 +90,14 @@ public class AppController {
     @PostMapping("/update")
     @ApiOperation("更新应用信息")
     public ResultVO<Void> updateApp(@RequestBody AppInfo appInfo) {
+        try {
+            int code = Integer.parseInt(appInfo.getVersionCode()); // String转整型
+            if (code <= 0) {
+                return ResultVOUtil.fail("版本号必须为正整数"); // 禁止0或负值
+            }
+        } catch (NumberFormatException e) {
+            return ResultVOUtil.fail("版本号只能填整数"); // 非数字捕获
+        }
         AppInfo existing = appService.getAppById(appInfo.getId());
         if(existing == null || "Y".equals(existing.getIsDeleted())) {
             return ResultVOUtil.fail("记录不存在或已被删除");

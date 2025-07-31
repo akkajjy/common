@@ -54,6 +54,14 @@ public class AppUpdateManageController {
     @PostMapping("/updateById")
     @ApiOperation("根据Id更新")
     public ResultVO updateById(@RequestBody AppUpdateManage manage) {
+        try {
+            int code = Integer.parseInt(manage.getVersionCode()); // String转整型
+            if (code <= 0) {
+                return ResultVOUtil.fail("版本号必须为正整数"); // 禁止0或负值
+            }
+        } catch (NumberFormatException e) {
+            return ResultVOUtil.fail("版本号只能填整数"); // 非数字捕获
+        }
         AppUpdateManage appUpdateManage = mapper.isMax(manage.getAppName(), manage.getPlatform());
         if(appUpdateManage==null||!appUpdateManage.getVersionCode().equals(manage.getVersionCode())){
             service.updateById(manage);
