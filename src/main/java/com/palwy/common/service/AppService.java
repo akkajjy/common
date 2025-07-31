@@ -111,9 +111,16 @@ public class AppService {
         int rows = appInfoMapper.updateAppInfo(appInfo);
         if(rows > 0) {
             AppUpdateManage manage = new AppUpdateManage();
+            manage.setAppName(appInfo.getAppName());
+            manage.setOsType(appInfo.getOsType());
             manage.setAppId(appInfo.getId());
             manage.setVersionCode(appInfo.getVersionCode());
+            manage.setVersionName(appInfo.getVersionName());
+            manage.setPlatform(appInfo.getPlatform());
+            manage.setForceUpdateType("0"); // 默认不更新
+            manage.setCreator("system");
             manage.setModifier("system");
+            manage.setUpdateDesc(appInfo.getUpdateDesc());
             updateManageMapper.updateByAppId(manage);
         }
     }

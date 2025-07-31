@@ -66,6 +66,9 @@ public class AppUpdateManageController {
         if(appUpdateManage==null||!appUpdateManage.getVersionCode().equals(manage.getVersionCode())){
             service.updateById(manage);
             return ResultVOUtil.success();
+        }else if("0".equals(appUpdateManage.getForceUpdateType())){
+            service.updateById(manage);
+            return ResultVOUtil.success();
         }else{
             return ResultVOUtil.fail("最大版本不允许修改！");
         }
