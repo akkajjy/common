@@ -8,20 +8,20 @@ spring:
       enabled: true
     nacos:
       discovery:
-        server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
-        namespace: fa0bddca-28f5-4b37-b4d9-5d1e2718416c
+        server-addr: 10.32.0.10:8848
+        namespace: 36d7afc6-e42a-4e53-9338-a317bcb25faa
         group: DEFAULT_GROUP
         username: nacos
-        password: tstNccos54
+        password: dev@123
       config:
-        server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
-        namespace: fa0bddca-28f5-4b37-b4d9-5d1e2718416c
+        server-addr: 10.32.0.10:8848
+        namespace: 36d7afc6-e42a-4e53-9338-a317bcb25faa
         file-extension: yaml
         auto-refresh: true
         refresh-enabled: true
         group: DEFAULT_GROUP
         username: nacos
-        password: tstNccos54
+        password: dev@123
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8

@@ -8,6 +8,7 @@
 	<springProperty name="logging.path" source="logging.file.path" defaultValue="/vedata1/logs/fin-common"/>
 	<springProperty name="logging.level" source="logging.level" defaultValue="INFO"/>
 	<springProperty name="app.name.monitor" source="app.monitor.name" defaultValue="fincommon"/>
+	<springProperty name="app.name.monitor.prex" source="app.monitor.name" defaultValue="fin-common"/>
 
 
 	<springProfile name="test">

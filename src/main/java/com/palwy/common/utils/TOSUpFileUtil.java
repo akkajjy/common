@@ -1,5 +1,6 @@
 package com.palwy.common.utils;
 
+import com.palwy.common.req.TOSRespVO;
 import com.volcengine.tos.*;
 import com.volcengine.tos.auth.StaticCredentials;
 import com.volcengine.tos.model.object.*;
@@ -40,9 +41,8 @@ public class TOSUpFileUtil {
         FUND_PARTY, LIGHT_ASSET, MEMBER_BENEFITS, SELF_OPERATED
     }
 
-    public String uploadFile(BusinessType businessType, String userId,
-                             String filename, InputStream fileStream) {
-        String objectKey = generateObjectKey(businessType, userId, filename);
+    public TOSRespVO uploadFile(BusinessType businessType, String filename, InputStream fileStream) {
+        String objectKey = generateObjectKey(businessType, filename);
         try {
             // 1. 上传文件
             PutObjectInput putRequest = new PutObjectInput()
@@ -58,7 +58,10 @@ public class TOSUpFileUtil {
 
             // 2. 设置 ACL
             setObjectPublicRead(objectKey);
-            return generateFileUrl(objectKey);
+            TOSRespVO tosRespVO = new TOSRespVO();
+            tosRespVO.setObjectKey(objectKey);
+            tosRespVO.setAccessUrl(generateFileUrl(objectKey));
+            return tosRespVO;
         } catch (TosClientException e) {
             log.error("客户端参数错误: {}", e.getMessage());
         } catch (TosServerException e) {
@@ -69,6 +72,22 @@ public class TOSUpFileUtil {
         return null;
     }
 
+    public void deleteFile(String objectKey) {
+        try {
+            // 1. 上传文件
+            DeleteObjectInput delRequest = new DeleteObjectInput()
+                    .setBucket(BUCKET)
+                    .setKey(objectKey);
+
+            getTosClient().deleteObject(delRequest);
+        } catch (TosClientException e) {
+            log.error("客户端参数错误: {}", e.getMessage());
+        } catch (TosServerException e) {
+            log.error("服务端响应异常 [{}] {}", e.getStatusCode(), e.getCode());
+        } catch (Exception e) {
+            log.error("系统异常: {}", e.getMessage());
+        }
+    }
     private void setObjectPublicRead(String objectKey) {
         try {
             log.debug("设置 ACL，objectKey: {}", objectKey);
@@ -86,13 +105,12 @@ public class TOSUpFileUtil {
     /**
      * 构建对象存储路径
      */
-    private String generateObjectKey(BusinessType businessType, String userId, String filename) {
+    public String generateObjectKey(BusinessType businessType, String filename) {
         String dateDir = new SimpleDateFormat("yyyyMMdd").format(new Date());
-        return String.format("contract/%s/%s/%s/%s_%s",  // 增加环境层级
+        return String.format("common/%s/%s/%s/%s",  // 增加环境层级
                 ENV,                // 环境变量（dev/test/prod）
                 businessType.name(),
                 dateDir,
-                userId,
                 filename.replaceAll("[^a-zA-Z0-9-_.]", "_"));
     }
 
