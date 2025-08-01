@@ -10,6 +10,7 @@ import com.palwy.common.mapper.AppUpdateManageMapper;
 import com.palwy.common.req.AppReq;
 import com.palwy.common.utils.TOSUpFileUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Collectors;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AppService {
@@ -68,34 +69,40 @@ public class AppService {
     public PageInfo<AppInfo> getAppPage(AppReq appReq) {
         // 使用PageHelper实现分页
         // 设置分页参数
-        PageHelper.startPage(appReq.getPageNum(), appReq.getPageSize());
-        List<AppInfo> list = appInfoMapper.selectAppInfoByCondition(appReq);
-        List<ClrDictDO> appNameList = clrDictService.getClrDictListByDictType("AppNameEnum");
-        Map<String, String> dictMap = appNameList.stream()
-                .collect(Collectors.toMap(ClrDictDO::getDictValue, ClrDictDO::getDictLabel));
+        try {
+            PageHelper.startPage(appReq.getPageNum(), appReq.getPageSize());
+            List<AppInfo> list = appInfoMapper.selectAppInfoByCondition(appReq);
+            List<ClrDictDO> appNameList = clrDictService.getClrDictListByDictType("AppNameEnum");
+            Map<String, String> dictMap = appNameList.stream()
+                    .collect(Collectors.toMap(ClrDictDO::getDictValue, ClrDictDO::getDictLabel));
 
-        // 并行生成预签名URL（使用线程池）替换应用名称
-        if (!CollectionUtils.isEmpty(list)) {
-            List<CompletableFuture<Void>> futures = new ArrayList<>();
-            for (AppInfo resp : list) {
-                String dictLabel = dictMap.get(resp.getAppName());
-                if (dictLabel != null) {
-                    resp.setAppName(dictLabel);
-                }
-                futures.add(CompletableFuture.runAsync(() -> {
-                    String signedUrl = tosUpFileUtil.generatePresignedUrl(resp.getFilePath(),6000);
-                    if (signedUrl != null) {
-                        resp.setDownloadUrl(signedUrl);
+            // 并行生成预签名URL（使用线程池）替换应用名称
+            if (!CollectionUtils.isEmpty(list)) {
+                List<CompletableFuture<Void>> futures = new ArrayList<>();
+                for (AppInfo resp : list) {
+                    String dictLabel = dictMap.get(resp.getAppName());
+                    if (dictLabel != null) {
+                        resp.setAppName(dictLabel);
                     }
-                }, asyncExecutor));
-            }
+                    futures.add(CompletableFuture.runAsync(() -> {
+                        String signedUrl = tosUpFileUtil.generatePresignedUrl(resp.getFilePath(),6000);
+                        if (signedUrl != null) {
+                            resp.setDownloadUrl(signedUrl);
+                        }
+                    }, asyncExecutor));
+                }
 
-            // 等待所有异步任务完成
-            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+                // 等待所有异步任务完成
+                CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+            }
+            PageInfo<AppInfo> pageInfo = new PageInfo<>(list);
+            pageInfo.setTotal(list.size());
+            log.info("查询结果返回");
+            return pageInfo;
+        } catch (Exception e) {
+            log.info("查询失败：{}", e.getMessage());
+            return null;
         }
-        PageInfo<AppInfo> pageInfo = new PageInfo<>(list);
-        pageInfo.setTotal(list.size());
-        return pageInfo;
     }
 
     @Transactional
