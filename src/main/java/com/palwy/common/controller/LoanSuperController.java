@@ -61,7 +61,7 @@ public class LoanSuperController {
         log.info("---贷超查询配置列表开始---");
         List<LoanSuperConfigVO> list = loanSuperService.getList();
         ResultVO returnVO = ResultVOUtil.success(list);
-        log.info("贷超修改配置出参:{}", JSON.toJSONString(returnVO));
+        log.info("贷超查询配置列表出参:{}", JSON.toJSONString(returnVO));
         return returnVO;
     }
 

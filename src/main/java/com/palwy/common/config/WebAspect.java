@@ -11,8 +11,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.InputStream;
+import java.util.Arrays;
 
 /**
  * 类HttpAspect.java的实现描述
@@ -52,7 +55,8 @@ public class WebAspect {
         this.logger.info("class={} and method name ={}", joinPoint.getSignature().getDeclaringTypeName(),
                 joinPoint.getSignature().getName());
         //参数 FileAppender
-        this.logger.info("参数={}", JSONObject.toJSONString(joinPoint.getArgs()));
+        String argsJson = this.argsToJson(request.getMethod(), joinPoint.getArgs());
+        this.logger.info("参数={}", argsJson);
         Object result = null;
         final long start = System.currentTimeMillis();
         try {
@@ -70,4 +74,24 @@ public class WebAspect {
 
     }
 
+    private String argsToJson(String method,Object[] args){
+        try {
+            Object[] loggableArgs = Arrays.stream(args)
+                    .map(arg -> {
+                        if (arg instanceof MultipartFile) {
+                            MultipartFile file = (MultipartFile) arg;
+                            // 只记录文件名和大小，不尝试序列化整个文件对象
+                            return "文件[" + file.getOriginalFilename() + "](大小:" + file.getSize() + "字节)";
+                        }else if (arg instanceof InputStream) {
+                            return "InputStream[不可直接序列化]";
+                        }
+                        return arg; // 其他类型正常处理
+                    })
+                    .toArray();
+            return  JSONObject.toJSONString(loggableArgs);
+        }catch (Exception e){
+            logger.error("{}接口入参序列化异常",method,e);
+        }
+        return null;
+    }
 }

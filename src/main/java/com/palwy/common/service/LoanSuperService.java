@@ -12,6 +12,7 @@ import com.palwy.common.mapper.LoanSuperLinkClickRecordMapper;
 import com.palwy.common.req.LoanSuperClickVO;
 import com.palwy.common.req.LoanSuperConfigVO;
 import com.palwy.common.util.ResultVOUtil;
+import com.palwy.common.util.WorkDayUtil;
 import com.palwy.common.utils.*;
 import com.palwy.common.vo.ResultVO;
 import eu.bitwalker.useragentutils.UserAgent;
@@ -25,9 +26,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -47,14 +46,18 @@ public class LoanSuperService {
     private TOSUpFileUtil tosUpFileUtil;
     public PageInfo<LoanSuperConfigVO> getPageList(LoanSuperConfigVO req){
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
-        List<LoanSuperConfigVO> list = loanSuperConfigMapper.getList(req);
+        List<LoanSuperConfig> list = loanSuperConfigMapper.getList(req);
+        List<LoanSuperConfigVO> voList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(list)){
-            for(LoanSuperConfigVO loanSuperConfigResp : list){
+            for(LoanSuperConfig loanSuperConfigResp : list){
+                LoanSuperConfigVO configVO = new LoanSuperConfigVO();
+                BeanUtils.copyProperties(loanSuperConfigResp,configVO);
                 String accessUrl = tosUpFileUtil.generatePresignedUrl(loanSuperConfigResp.getPrdLogo(), 60);
-                loanSuperConfigResp.setPrdLogoAccessUrl(accessUrl);
+                configVO.setPrdLogoAccessUrl(accessUrl);
+                voList.add(configVO);
             }
         }
-        PageInfo<LoanSuperConfigVO> pageInfo = new PageInfo<>(list);
+        PageInfo<LoanSuperConfigVO> pageInfo = new PageInfo<>(voList);
         pageInfo.setTotal(list.size());
         return pageInfo;
     }
@@ -82,33 +85,39 @@ public class LoanSuperService {
     public List<LoanSuperConfigVO> getList() {
         LoanSuperConfigVO req = new LoanSuperConfigVO();
         req.setPrdStatus(LoanSuperPrdStatusEnum.ENABLE.name());
-        List<LoanSuperConfigVO> list = loanSuperConfigMapper.getList(req);
-        if(CollectionUtils.isNotEmpty(list)){
-            for(LoanSuperConfigVO loanSuperConfigResp : list){
-                loanSuperConfigResp.setShowLink(FlagValueEnum.N.name());
-                //判断时间段
-                String startTime = loanSuperConfigResp.getShowTimeStart() + ":00";
-                String endTime = loanSuperConfigResp.getShowTimeEnd() + ":00";
-                LocalTime nowTime = LocalTime.now();
-                if(nowTime.compareTo(LocalTime.parse(startTime)) >= 0 && nowTime.compareTo(LocalTime.parse(endTime)) <= 0){
-                    //判断节假日是否需展示
-                    if(FlagValueEnum.Y.name().equals(loanSuperConfigResp.getShowHoliday())){
-                        loanSuperConfigResp.setShowLink(FlagValueEnum.Y.name());
-                    }else {
-                        //如果节假日无需展示 判断今天是否是节假日,如果不是节假日则展示
-                        if(!WorkDayUtil.getInstance().isHoliday(new Date())){
-                            loanSuperConfigResp.setShowLink(FlagValueEnum.Y.name());
-                        }
+        List<LoanSuperConfig> list = loanSuperConfigMapper.getList(req);
+        if(CollectionUtils.isEmpty(list)){
+            return null;
+        }
+        List<LoanSuperConfigVO> voList = new ArrayList<>();
+        for(LoanSuperConfig loanSuperConfigResp : list){
+            LoanSuperConfigVO configVO = new LoanSuperConfigVO();
+            BeanUtils.copyProperties(loanSuperConfigResp,configVO);
+            configVO.setShowLink(FlagValueEnum.N.name());
+            //判断时间段
+            String startTime = loanSuperConfigResp.getShowTimeStart() + ":00";
+            String endTime = loanSuperConfigResp.getShowTimeEnd() + ":00";
+            LocalTime nowTime = LocalTime.now();
+            if(nowTime.compareTo(LocalTime.parse(startTime)) >= 0 && nowTime.compareTo(LocalTime.parse(endTime)) <= 0){
+                //判断节假日是否需展示
+                if(FlagValueEnum.Y.name().equals(loanSuperConfigResp.getShowHoliday())){
+                    configVO.setShowLink(FlagValueEnum.Y.name());
+                }else {
+                    //如果节假日无需展示 判断今天是否是节假日,如果不是节假日则展示
+                    if(!WorkDayUtil.getInstance().isHoliday(new Date())){
+                        configVO.setShowLink(FlagValueEnum.Y.name());
                     }
                 }
-                if(FlagValueEnum.Y.name().equals(loanSuperConfigResp.getShowLink())){
-                    //获取预览url
-                    String accessUrl = tosUpFileUtil.generatePresignedUrl(loanSuperConfigResp.getPrdLogo(), 60);
-                    loanSuperConfigResp.setPrdLogoAccessUrl(accessUrl);
-                }
             }
+            if(FlagValueEnum.Y.name().equals(configVO.getShowLink())){
+                //获取预览url
+                String accessUrl = tosUpFileUtil.generatePresignedUrl(loanSuperConfigResp.getPrdLogo(), 60);
+                configVO.setPrdLogoAccessUrl(accessUrl);
+            }
+            voList.add(configVO);
         }
-        return list;
+        voList.sort(Comparator.comparing(LoanSuperConfigVO::getShowOrder));
+        return voList;
     }
 
     public ResultVO click(LoanSuperClickVO loanSuperClickVO) {

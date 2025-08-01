@@ -7,6 +7,7 @@ import com.volcengine.tos.model.object.*;
 import com.volcengine.tos.comm.HttpMethod;
 import com.volcengine.tos.comm.common.ACLType;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
+import java.util.Objects;
 
 @Slf4j
 @Component
@@ -43,19 +45,21 @@ public class TOSUpFileUtil {
 
     public TOSRespVO uploadFile(BusinessType businessType, String filename, InputStream fileStream) {
         String objectKey = generateObjectKey(businessType, filename);
+        return this.upload(objectKey,fileStream);
+    }
+
+    public TOSRespVO upload(String objectKey, InputStream fileStream){
         try {
             // 1. 上传文件
             PutObjectInput putRequest = new PutObjectInput()
                     .setBucket(BUCKET)
                     .setKey(objectKey)
                     .setContent(fileStream);
-
             PutObjectOutput output = getTosClient().putObject(putRequest);
-            if (output == null || output.getEtag() == null) {
+            if (Objects.isNull(output) || StringUtils.isEmpty(output.getEtag())) {
                 log.error("文件上传失败");
                 return null;
             }
-
             // 2. 设置 ACL
             setObjectPublicRead(objectKey);
             TOSRespVO tosRespVO = new TOSRespVO();
@@ -118,7 +122,7 @@ public class TOSUpFileUtil {
      * 构建文件访问URL
      */
     private String generateFileUrl(String objectKey) {
-        return String.format("http://%s/%s", FINAL_URL, objectKey);
+        return FINAL_URL + objectKey;
     }
 
     /**
@@ -127,14 +131,9 @@ public class TOSUpFileUtil {
     private TOSV2 getTosClient() {
         if (tosClient == null) {
             synchronized (TOSUpFileUtil.class) {
-                TOSClientConfiguration configuration = TOSClientConfiguration.builder()
-                        .region(REGION)
-                        .endpoint(ENDPOINT)
-                        .isCustomDomain(true)   // 标识当前域名为自定义域名
-                        .credentials(new StaticCredentials(ACCESS_KEY, ENCODED_SECRET)).build();
                 if (tosClient == null) {
                     tosClient = new TOSV2ClientBuilder()
-                            .build(configuration);
+                            .build(REGION, ENDPOINT, ACCESS_KEY, ENCODED_SECRET);
                 }
             }
         }

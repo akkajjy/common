@@ -43,8 +43,28 @@ public class FileController {
         return ResultVOUtil.fail("上传失败");
     }
 
-    @ApiOperation("文件上传")
-    @PostMapping(value = "/remove")
+    /**
+     * 上传文件到tos指定目录
+     * @param file
+     * @return
+     */
+    @ApiOperation("文件上传自定义key")
+    @PostMapping(value = "/uploadSpecifyKey")
+    public ResultVO uploadSpecifyKey(MultipartFile file,String objectKey){
+        if(Objects.isNull(file)){
+            return ResultVOUtil.fail("文件不能为空");
+        }
+        try(InputStream inputStream = file.getInputStream()) {
+            TOSRespVO tosRespVO = tosUpFileUtil.upload(objectKey, inputStream);
+            return ResultVOUtil.success("上传成功",tosRespVO);
+        } catch (Exception e) {
+            log.info("上传文件自定义key至tos异常:{}", e);
+        }
+        return ResultVOUtil.fail("上传失败");
+    }
+
+    @ApiOperation("文件删除")
+    @GetMapping(value = "/remove")
     public ResultVO removeFile(String objectKey){
         tosUpFileUtil.deleteFile(objectKey);
         return ResultVOUtil.success("删除成功");

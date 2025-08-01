@@ -30,6 +30,6 @@ public interface LoanSuperConfigMapper {
 
     int updateByPrimaryKey(LoanSuperConfig record);
 
-    List<LoanSuperConfigVO> getList(LoanSuperConfigVO req);
+    List<LoanSuperConfig> getList(LoanSuperConfigVO req);
 
 }

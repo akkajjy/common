@@ -1,8 +1,8 @@
 package com.palwy.common;
 
-import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
-import com.palwy.common.utils.WorkDayUtil;
+import com.palwy.common.util.WorkDayUtil;
+import com.palwy.common.utils.DateTimeUtils;
 import org.junit.Test;
 
 import java.time.LocalDate;
@@ -15,9 +15,19 @@ public class BaseTest {
     @Test
     public void test1(){
         WorkDayUtil workDayUtil = WorkDayUtil.getInstance();
-        String dateStr = "2025-08-03";
+        String dateStr = "2025-10-11";
         System.out.println("是否工作日:" + workDayUtil.isWorkingDay(LocalDate.parse(dateStr)));
     }
+
+    @Test
+    public void testDate(){
+        WorkDayUtil workDayUtil = WorkDayUtil.getInstance();
+        String dateStr = "2025-09-30";
+        System.out.println("是否工作日:" + workDayUtil.isWorkingDay(DateTimeUtils.parseDate(dateStr)));
+        System.out.println("是否节假日:" + workDayUtil.isHoliday(DateTimeUtils.parseDate(dateStr)));
+
+    }
+
 
     @Test
     public void test2(){
@@ -40,5 +50,12 @@ public class BaseTest {
         String endTime =  "21:00:00";
         LocalTime nowTime = LocalTime.parse("21:00:01");
         System.out.println(nowTime.compareTo(LocalTime.parse(startTime)) >= 0 && nowTime.compareTo(LocalTime.parse(endTime)) <= 0);
+    }
+
+    @Test
+    public void test4(){
+        WorkDayUtil workDayUtil = WorkDayUtil.getInstance();
+        String dateStr = "2025-08-03";
+        System.out.println("是否节假日:" + workDayUtil.isHoliday(DateTimeUtils.parseDate(dateStr)));
     }
 }
