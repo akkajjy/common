@@ -63,14 +63,11 @@ public class AppUpdateManageController {
             return ResultVOUtil.fail("版本号只能填整数"); // 非数字捕获
         }
         AppUpdateManage appUpdateManage = mapper.isMax(manage.getAppName(), manage.getPlatform());
-        if(appUpdateManage==null||!appUpdateManage.getVersionCode().equals(manage.getVersionCode())){
-            service.updateById(manage);
-            return ResultVOUtil.success();
-        }else if("0".equals(appUpdateManage.getForceUpdateType())){
+        if(appUpdateManage==null||"0".equals(manage.getForceUpdateType())||!appUpdateManage.getVersionCode().equals(manage.getVersionCode())){
             service.updateById(manage);
             return ResultVOUtil.success();
         }else{
-            return ResultVOUtil.fail("最大版本不允许修改！");
+            return ResultVOUtil.fail("最大版本不允许修改是否强制更新！");
         }
     }
 }
