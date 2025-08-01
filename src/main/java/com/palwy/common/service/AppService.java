@@ -1,5 +1,6 @@
 package com.palwy.common.service;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.entity.AppInfo;
@@ -72,10 +73,11 @@ public class AppService {
         try {
             PageHelper.startPage(appReq.getPageNum(), appReq.getPageSize());
             List<AppInfo> list = appInfoMapper.selectAppInfoByCondition(appReq);
+            log.info("查询结果返回,{}", JSON.toJSONString(list));
             List<ClrDictDO> appNameList = clrDictService.getClrDictListByDictType("AppNameEnum");
             Map<String, String> dictMap = appNameList.stream()
                     .collect(Collectors.toMap(ClrDictDO::getDictValue, ClrDictDO::getDictLabel));
-
+            log.info("开始替换");
             // 并行生成预签名URL（使用线程池）替换应用名称
             if (!CollectionUtils.isEmpty(list)) {
                 List<CompletableFuture<Void>> futures = new ArrayList<>();
@@ -86,6 +88,7 @@ public class AppService {
                     }
                     futures.add(CompletableFuture.runAsync(() -> {
                         String signedUrl = tosUpFileUtil.generatePresignedUrl(resp.getFilePath(),6000);
+                        log.info("替换：{}",signedUrl);
                         if (signedUrl != null) {
                             resp.setDownloadUrl(signedUrl);
                         }
@@ -95,12 +98,12 @@ public class AppService {
                 // 等待所有异步任务完成
                 CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
             }
+            log.info("开始结束");
             PageInfo<AppInfo> pageInfo = new PageInfo<>(list);
-            pageInfo.setTotal(list.size());
-            log.info("查询结果返回");
+            log.info("查询结果返回,{}", JSON.toJSONString(pageInfo));
             return pageInfo;
         } catch (Exception e) {
-            log.info("查询失败：{}", e.getMessage());
+            log.info("查询失败：{}",e.getMessage());
             return null;
         }
     }
