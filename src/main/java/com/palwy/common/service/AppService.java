@@ -74,18 +74,14 @@ public class AppService {
         Map<String, String> dictMap = appNameList.stream()
                 .collect(Collectors.toMap(ClrDictDO::getDictValue, ClrDictDO::getDictLabel));
 
-// 单层循环替换应用名称
-        for (AppInfo appInfo : list) {
-            String dictLabel = dictMap.get(appInfo.getAppName());
-            if (dictLabel != null) {
-                appInfo.setAppName(dictLabel);
-            }
-        }
-        // 并行生成预签名URL（使用线程池）
+        // 并行生成预签名URL（使用线程池）替换应用名称
         if (!CollectionUtils.isEmpty(list)) {
             List<CompletableFuture<Void>> futures = new ArrayList<>();
-
             for (AppInfo resp : list) {
+                String dictLabel = dictMap.get(resp.getAppName());
+                if (dictLabel != null) {
+                    resp.setAppName(dictLabel);
+                }
                 futures.add(CompletableFuture.runAsync(() -> {
                     String signedUrl = tosUpFileUtil.generatePresignedUrl(resp.getFilePath(),6000);
                     if (signedUrl != null) {
