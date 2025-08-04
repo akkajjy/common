@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Component
@@ -122,7 +123,7 @@ public class TOSUpFileUtil {
      * 构建文件访问URL
      */
     private String generateFileUrl(String objectKey) {
-        return FINAL_URL + objectKey;
+        return ENDPOINT  + "/" + objectKey;
     }
 
     /**
@@ -131,14 +132,20 @@ public class TOSUpFileUtil {
     private TOSV2 getTosClient() {
         if (tosClient == null) {
             synchronized (TOSUpFileUtil.class) {
+                TOSClientConfiguration configuration = TOSClientConfiguration.builder()
+                        .region(REGION)
+                        .endpoint(ENDPOINT)
+                        .isCustomDomain(true)   // 标识当前域名为自定义域名
+                        .credentials(new StaticCredentials(ACCESS_KEY, ENCODED_SECRET)).build();
                 if (tosClient == null) {
                     tosClient = new TOSV2ClientBuilder()
-                            .build(REGION, ENDPOINT, ACCESS_KEY, ENCODED_SECRET);
+                            .build(configuration);
                 }
             }
         }
         return tosClient;
     }
+
 
 
     /**
