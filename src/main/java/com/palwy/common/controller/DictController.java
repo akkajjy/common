@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("dict/")
+@RequestMapping("/v1/dict/")
 @Api(tags = "字典表接口")
 @Slf4j
 public class DictController {

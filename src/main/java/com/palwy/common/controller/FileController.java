@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/v1/file")
 @Api(tags = "文件相关接口")
 @Slf4j
 public class FileController {

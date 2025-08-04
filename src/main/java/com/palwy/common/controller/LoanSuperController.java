@@ -20,7 +20,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/loan/super")
+@RequestMapping("/v1/loan/super")
 @Api(tags = "贷超接口")
 @Slf4j
 public class LoanSuperController {
