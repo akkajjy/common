@@ -2,23 +2,26 @@ spring:
   application:
     name: fin-common
   profiles:
-    active: dev
+    active: test
   cloud:
-    bootstrap:
-      enabled: true
+    loadbalancer:
+      nacos:
+        enabled: true # 开启 nacos 的负载均衡策略
     nacos:
-      discovery:
+      config:
+        enabled: true
         server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
-        namespace: fa0bddca-28f5-4b37-b4d9-5d1e2718416c
+        namespace: 40dbacf5-3a92-4b50-83c4-796faa3b8190
+        file-extension: yaml
         group: DEFAULT_GROUP
+        refresh-enabled: true
         username: nacos
         password: tstNccos54
-      config:
+        import-check:
+          enabled: false
+      discovery:
         server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
-        namespace: fa0bddca-28f5-4b37-b4d9-5d1e2718416c
-        file-extension: yaml
-        auto-refresh: true
-        refresh-enabled: true
+        namespace: 40dbacf5-3a92-4b50-83c4-796faa3b8190
         group: DEFAULT_GROUP
         username: nacos
         password: tstNccos54
@@ -67,3 +70,10 @@ management:
   health:
     db:
       enabled: false
+
+sequence:
+  single:
+    innerStep: 1000
+    retryTimes: 5
+    sequenceNames:
+      - seq_clr_trial_apply
