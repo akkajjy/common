@@ -116,7 +116,7 @@ public class TOSUpFileUtil {
                 ENV,                // 环境变量（dev/test/prod）
                 businessType.name(),
                 dateDir,
-                filename.replaceAll("[^a-zA-Z0-9-_.]", "_"));
+                filename);
     }
 
     /**
