@@ -78,7 +78,9 @@ public class LoanSuperService {
         if(Objects.isNull(loanSuperConfig)){
             return ResultVOUtil.fail("无效的配置id");
         }
-        loanSuperConfig.setPrdStatus(req.getPrdStatus());
+        if(StringUtils.isNotEmpty(req.getPrdStatus())){
+            loanSuperConfig.setPrdStatus(req.getPrdStatus());
+        }
         loanSuperConfig.setPrdName(req.getPrdName());
         loanSuperConfig.setPrdLogo(req.getPrdLogo());
         loanSuperConfig.setPrdTag(req.getPrdTag());
