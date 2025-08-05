@@ -68,6 +68,7 @@ public class LoanSuperService {
         req.setPrdCode(prdCode);
         LoanSuperConfig loanSuperConfig = new LoanSuperConfig();
         BeanUtils.copyProperties(req,loanSuperConfig);
+        loanSuperConfig.setPrdStatus(LoanSuperPrdStatusEnum.ENABLE.name());
         loanSuperConfigMapper.insertSelective(loanSuperConfig);
         return ResultVOUtil.success("新增配置成功");
     }
@@ -77,7 +78,16 @@ public class LoanSuperService {
         if(Objects.isNull(loanSuperConfig)){
             return ResultVOUtil.fail("无效的配置id");
         }
-        BeanUtils.copyProperties(req,loanSuperConfig);
+        loanSuperConfig.setPrdStatus(req.getPrdStatus());
+        loanSuperConfig.setPrdName(req.getPrdName());
+        loanSuperConfig.setPrdLogo(req.getPrdLogo());
+        loanSuperConfig.setPrdTag(req.getPrdTag());
+        loanSuperConfig.setAmtUpper(req.getAmtUpper());
+        loanSuperConfig.setShowTimeStart(req.getShowTimeStart());
+        loanSuperConfig.setShowTimeEnd(req.getShowTimeEnd());
+        loanSuperConfig.setShowHoliday(req.getShowHoliday());
+        loanSuperConfig.setShowOrder(req.getShowOrder());
+        loanSuperConfig.setLinkUrl(req.getLinkUrl());
         loanSuperConfigMapper.updateByPrimaryKey(loanSuperConfig);
         return ResultVOUtil.success("修改配置成功");
     }
@@ -95,10 +105,8 @@ public class LoanSuperService {
             BeanUtils.copyProperties(loanSuperConfigResp,configVO);
             configVO.setShowLink(FlagValueEnum.N.name());
             //判断时间段
-            String startTime = loanSuperConfigResp.getShowTimeStart() + ":00";
-            String endTime = loanSuperConfigResp.getShowTimeEnd() + ":00";
             LocalTime nowTime = LocalTime.now();
-            if(nowTime.compareTo(LocalTime.parse(startTime)) >= 0 && nowTime.compareTo(LocalTime.parse(endTime)) <= 0){
+            if(nowTime.compareTo(LocalTime.parse(loanSuperConfigResp.getShowTimeStart())) >= 0 && nowTime.compareTo(LocalTime.parse(loanSuperConfigResp.getShowTimeEnd())) <= 0){
                 //判断节假日是否需展示
                 if(FlagValueEnum.Y.name().equals(loanSuperConfigResp.getShowHoliday())){
                     configVO.setShowLink(FlagValueEnum.Y.name());
