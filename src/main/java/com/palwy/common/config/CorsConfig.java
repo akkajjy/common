@@ -1,3 +1,4 @@
+/*
 package com.palwy.common.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -16,4 +17,4 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowCredentials(true) // 允许携带凭证
                 .maxAge(3600); // 预检请求缓存时间（秒）
     }
-}
+}*/
