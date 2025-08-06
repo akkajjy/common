@@ -63,6 +63,11 @@ public class LoanSuperService {
     }
 
     public ResultVO createConfig(LoanSuperConfigVO req) {
+        if(StringUtils.isNotEmpty(req.getShowOrder())){
+            if(CollectionUtils.isNotEmpty(this.getByOrder(req.getShowOrder(),null))){
+                return ResultVOUtil.fail("展示顺序不可重复");
+            }
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(FORMAT);
         String prdCode = PRD_PREFIX + LocalDateTime.now().format(formatter) ;
         req.setPrdCode(prdCode);
@@ -171,9 +176,14 @@ public class LoanSuperService {
 
     public List<LoanSuperConfig> getByOrder(String order,Long filterId){
         LoanSuperConfigExample example = new LoanSuperConfigExample();
-        example.createCriteria().andIsDeletedEqualTo(FlagValueEnum.N.name())
-                .andShowOrderEqualTo(order)
-                .andIdNotEqualTo(filterId);
+        LoanSuperConfigExample.Criteria criteria = example.createCriteria();
+        criteria.andIsDeletedEqualTo(FlagValueEnum.N.name());
+        if(StringUtils.isNotEmpty(order)){
+            criteria.andShowOrderEqualTo(order);
+        }
+        if(Objects.nonNull(filterId)){
+            criteria.andIdNotEqualTo(filterId);
+        }
         return loanSuperConfigMapper.selectByExample(example);
     }
 }
