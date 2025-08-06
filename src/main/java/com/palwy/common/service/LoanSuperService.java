@@ -136,7 +136,9 @@ public class LoanSuperService {
             }
             voList.add(configVO);
         }
-        voList.sort(Comparator.comparing(LoanSuperConfigVO::getShowOrder));
+        voList.sort(Comparator.comparing(
+                vo -> Integer.parseInt(StringUtils.isNotEmpty(vo.getShowOrder()) ? vo.getShowOrder() : "9999")
+        ));
         return voList;
     }
 
