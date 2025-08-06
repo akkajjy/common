@@ -78,6 +78,11 @@ public class LoanSuperService {
         if(Objects.isNull(loanSuperConfig)){
             return ResultVOUtil.fail("无效的配置id");
         }
+        if(StringUtils.isNotEmpty(req.getShowOrder())){
+            if(CollectionUtils.isNotEmpty(this.getByOrder(req.getShowOrder()))){
+                return ResultVOUtil.fail("展示顺序不可重复");
+            }
+        }
         if(StringUtils.isNotEmpty(req.getPrdStatus())){
             loanSuperConfig.setPrdStatus(req.getPrdStatus());
         }
@@ -162,5 +167,12 @@ public class LoanSuperService {
                 .andPrdCodeEqualTo(prdCode);
         List<LoanSuperConfig> loanSuperConfigs = loanSuperConfigMapper.selectByExample(example);
         return CollectionUtils.isNotEmpty(loanSuperConfigs) ? loanSuperConfigs.get(0) : null;
+    }
+
+    public List<LoanSuperConfig> getByOrder(String order){
+        LoanSuperConfigExample example = new LoanSuperConfigExample();
+        example.createCriteria().andIsDeletedEqualTo(FlagValueEnum.N.name())
+                .andShowOrderEqualTo(order);
+        return loanSuperConfigMapper.selectByExample(example);
     }
 }
