@@ -23,7 +23,8 @@ import java.util.List;
                 "https://common-test.shhpalwy.com",
                 "https://common.shhpalwy.com",
                 "http://10.32.0.4:9094/"
-        }
+        },
+        allowCredentials = "true"
 )
 @Api(tags = "贷超接口")
 @Slf4j
