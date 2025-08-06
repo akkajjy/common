@@ -22,7 +22,8 @@ import java.util.List;
         origins = {
                 "https://common-test.shhpalwy.com",
                 "https://common.shhpalwy.com",
-                "http://10.32.0.4:9094/"
+                "http://10.32.0.4:9094/",
+                "http://localhost:8080"
         },
         allowCredentials = "true"
 )
