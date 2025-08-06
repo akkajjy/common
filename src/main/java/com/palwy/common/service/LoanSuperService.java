@@ -79,7 +79,7 @@ public class LoanSuperService {
             return ResultVOUtil.fail("无效的配置id");
         }
         if(StringUtils.isNotEmpty(req.getShowOrder())){
-            if(CollectionUtils.isNotEmpty(this.getByOrder(req.getShowOrder()))){
+            if(CollectionUtils.isNotEmpty(this.getByOrder(req.getShowOrder(),loanSuperConfig.getId()))){
                 return ResultVOUtil.fail("展示顺序不可重复");
             }
         }
@@ -169,10 +169,11 @@ public class LoanSuperService {
         return CollectionUtils.isNotEmpty(loanSuperConfigs) ? loanSuperConfigs.get(0) : null;
     }
 
-    public List<LoanSuperConfig> getByOrder(String order){
+    public List<LoanSuperConfig> getByOrder(String order,Long filterId){
         LoanSuperConfigExample example = new LoanSuperConfigExample();
         example.createCriteria().andIsDeletedEqualTo(FlagValueEnum.N.name())
-                .andShowOrderEqualTo(order);
+                .andShowOrderEqualTo(order)
+                .andIdNotEqualTo(filterId);
         return loanSuperConfigMapper.selectByExample(example);
     }
 }
