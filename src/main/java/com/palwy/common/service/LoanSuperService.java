@@ -47,6 +47,7 @@ public class LoanSuperService {
     public PageInfo<LoanSuperConfigVO> getPageList(LoanSuperConfigVO req){
         PageHelper.startPage(req.getPageNum(), req.getPageSize());
         List<LoanSuperConfig> list = loanSuperConfigMapper.getList(req);
+        PageInfo pageInfo = new PageInfo<>(list);
         List<LoanSuperConfigVO> voList = new ArrayList<>();
         if(CollectionUtils.isNotEmpty(list)){
             for(LoanSuperConfig loanSuperConfigResp : list){
@@ -57,8 +58,7 @@ public class LoanSuperService {
                 voList.add(configVO);
             }
         }
-        PageInfo<LoanSuperConfigVO> pageInfo = new PageInfo<>(voList);
-        pageInfo.setTotal(list.size());
+        pageInfo.setList(voList);
         return pageInfo;
     }
 
