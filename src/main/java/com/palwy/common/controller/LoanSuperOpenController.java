@@ -20,9 +20,7 @@ import java.util.List;
 @RequestMapping("/v1/loan/super/open")
 @CrossOrigin(
         origins = {
-                "https://common-test.shhpalwy.com",
-                "https://common.shhpalwy.com",
-                "http://10.32.0.4:9094/",
+                "http://h5-installment-shop-test.shhpalwy.com",
                 "http://localhost:8080"
         },
         allowCredentials = "true"
