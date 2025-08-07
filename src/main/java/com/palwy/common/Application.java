@@ -26,6 +26,7 @@ import java.net.InetAddress;
 @RefreshScope
 @MapperScan("com.palwy.common.mapper")
 @ComponentScan(basePackages = {
+        "com.palwy.bytehouse",
         "com.palwy.common",
         "com.palwy.common.mapper",
         "com.palwy.common.controller" // 新增控制器包路径

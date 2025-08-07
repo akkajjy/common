@@ -391,6 +391,21 @@
             <artifactId>fin-common-share</artifactId>
             <version>${fin-common-share.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.palwy</groupId>
+            <artifactId>fin-bytehouse-sdk</artifactId>
+            <version>1.0.4-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.bytedance.bytehouse</groupId>
+            <artifactId>driver-java</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>1.2.16</version>
+        </dependency>
     </dependencies>
 
     <build>
