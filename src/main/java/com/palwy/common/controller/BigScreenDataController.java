@@ -19,8 +19,8 @@ import java.util.Objects;
 @RequestMapping("/v1/big-screen-data")
 @CrossOrigin(
         origins = {
-                "https://installment.shhpalwy.com/",
-                "http://h5-installment-shop-test.shhpalwy.com",
+                "https://datav-test.shhpalwy.com",
+                "https://datav.shhpalwy.com/",
                 "http://localhost:8080"
         },
         allowCredentials = "true"
