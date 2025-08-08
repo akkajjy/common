@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -58,15 +59,15 @@ public class BigScreenDataService {
             distributionVO.setLabel(queryDataVO.getIndex());
             distributionVO.setValue(queryDataVO.getIndexValue());
             if("当日总金额".equals(queryDataVO.getData_label())){
-                bigScreenDataVO.setCurrentTotalAmt(queryDataVO.getIndexValue());
+                bigScreenDataVO.setCurrentTotalAmt(this.formatToTenThousand(queryDataVO.getIndexValue()));
             }else if("当日订单量".equals(queryDataVO.getData_label())){
                 bigScreenDataVO.setCurrentTotalCount(queryDataVO.getIndexValue());
             }else if("件均".equals(queryDataVO.getData_label())){
                 bigScreenDataVO.setItemsAre(queryDataVO.getIndexValue());
             }else if("累计金额排名".equals(queryDataVO.getData_label()) && "商城".equals(queryDataVO.getIndex())){
-                bigScreenDataVO.setShopAmt(queryDataVO.getIndexValue());
+                bigScreenDataVO.setShopAmt(this.formatToTenThousand(queryDataVO.getIndexValue()));
             }else if("累计金额排名".equals(queryDataVO.getData_label()) && "权益".equals(queryDataVO.getIndex())){
-                bigScreenDataVO.setLegalRightAmt(queryDataVO.getIndexValue());
+                bigScreenDataVO.setLegalRightAmt(this.formatToTenThousand(queryDataVO.getIndexValue()));
             }else if("年龄分布".equals(queryDataVO.getData_label())){
                 ageGroup.add(distributionVO);
             }else if("学历分布".equals(queryDataVO.getData_label())){
@@ -112,6 +113,19 @@ public class BigScreenDataService {
         this.processGroup(shopSalesTop10);
         bigScreenDataVO.setShopSalesTop10(shopSalesTop10);
         return bigScreenDataVO;
+    }
+
+    public String formatToTenThousand(BigDecimal value) {
+        if (value == null) {
+            return "0";
+        }
+        // 转换为万元(除以10000)
+        BigDecimal tenThousand = this.yuanToWan(value);
+        // 创建千位分隔格式
+        NumberFormat format = NumberFormat.getNumberInstance(Locale.CHINA);
+        format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(2);
+        return format.format(tenThousand);
     }
 
     public List<DistributionVO> calculateWithApacheCommons(List<DistributionVO> values) {
