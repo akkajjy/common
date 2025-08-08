@@ -19,11 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/loan/super/open")
 @CrossOrigin(
-        origins = {
-                "https://installment.shhpalwy.com",
-                "http://h5-installment-shop-test.shhpalwy.com",
-                "http://localhost:8080"
-        },
+        origins = "*",
         allowCredentials = "true"
 )
 @Api(tags = "贷超接口")
