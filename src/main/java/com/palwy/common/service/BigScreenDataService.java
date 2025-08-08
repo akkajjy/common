@@ -59,15 +59,15 @@ public class BigScreenDataService {
             distributionVO.setLabel(queryDataVO.getIndex());
             distributionVO.setValue(queryDataVO.getIndexValue());
             if("当日总金额".equals(queryDataVO.getData_label())){
-                bigScreenDataVO.setCurrentTotalAmt(this.formatToTenThousand(queryDataVO.getIndexValue()));
+                bigScreenDataVO.setCurrentTotalAmt(this.yuanToWan(queryDataVO.getIndexValue(),2));
             }else if("当日订单量".equals(queryDataVO.getData_label())){
                 bigScreenDataVO.setCurrentTotalCount(queryDataVO.getIndexValue());
             }else if("件均".equals(queryDataVO.getData_label())){
                 bigScreenDataVO.setItemsAre(queryDataVO.getIndexValue());
             }else if("累计金额排名".equals(queryDataVO.getData_label()) && "商城".equals(queryDataVO.getIndex())){
-                bigScreenDataVO.setShopAmt(this.formatToTenThousand(queryDataVO.getIndexValue()));
+                bigScreenDataVO.setShopAmt(this.yuanToWan(queryDataVO.getIndexValue(),2));
             }else if("累计金额排名".equals(queryDataVO.getData_label()) && "权益".equals(queryDataVO.getIndex())){
-                bigScreenDataVO.setLegalRightAmt(this.formatToTenThousand(queryDataVO.getIndexValue()));
+                bigScreenDataVO.setLegalRightAmt(this.yuanToWan(queryDataVO.getIndexValue(),2));
             }else if("年龄分布".equals(queryDataVO.getData_label())){
                 ageGroup.add(distributionVO);
             }else if("学历分布".equals(queryDataVO.getData_label())){
@@ -95,7 +95,7 @@ public class BigScreenDataService {
                 .collect(Collectors.toList());
         shopLineChartVO.setIndexList(indexList);
         List<BigDecimal> valueList = shopDataGrowthTrend.stream()
-                .map(data -> yuanToWan(data.getValue()))
+                .map(data -> yuanToWan(data.getValue(),0))
                 .collect(Collectors.toList());
         shopLineChartVO.setValueList(valueList);
         bigScreenDataVO.setShopDataGrowthTrend(shopLineChartVO);
@@ -106,26 +106,13 @@ public class BigScreenDataService {
                 .collect(Collectors.toList());
         legalRightLineChartVO.setIndexList(legalRightIndexList);
         List<BigDecimal> legalRightValueList = legalRightDataGrowthTrend.stream()
-                .map(data -> yuanToWan(data.getValue()))
+                .map(data -> yuanToWan(data.getValue(),0))
                 .collect(Collectors.toList());
         legalRightLineChartVO.setValueList(legalRightValueList);
         bigScreenDataVO.setLegalRightDataGrowthTrend(legalRightLineChartVO);
         this.processGroup(shopSalesTop10);
         bigScreenDataVO.setShopSalesTop10(shopSalesTop10);
         return bigScreenDataVO;
-    }
-
-    public String formatToTenThousand(BigDecimal value) {
-        if (value == null) {
-            return "0";
-        }
-        // 转换为万元(除以10000)
-        BigDecimal tenThousand = this.yuanToWan(value);
-        // 创建千位分隔格式
-        NumberFormat format = NumberFormat.getNumberInstance(Locale.CHINA);
-        format.setMaximumFractionDigits(2);
-        format.setMinimumFractionDigits(2);
-        return format.format(tenThousand);
     }
 
     public List<DistributionVO> calculateWithApacheCommons(List<DistributionVO> values) {
@@ -187,11 +174,12 @@ public class BigScreenDataService {
         return result;
     }
 
-    public BigDecimal yuanToWan(BigDecimal yuanAmount) {
+
+    public BigDecimal yuanToWan(BigDecimal yuanAmount,int scale) {
         if (yuanAmount == null) {
             return BigDecimal.ZERO;
         }
-        return yuanAmount.divide(new BigDecimal("10000"), 0, RoundingMode.HALF_UP);
+        return yuanAmount.divide(new BigDecimal("10000"), scale, RoundingMode.HALF_UP);
     }
 
     public void processGroup(List<DistributionVO> list) {

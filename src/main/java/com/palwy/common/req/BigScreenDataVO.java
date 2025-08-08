@@ -10,7 +10,7 @@ import java.util.List;
 public class BigScreenDataVO {
 
     @ApiModelProperty("当日总金额")
-    private String currentTotalAmt;
+    private BigDecimal currentTotalAmt;
 
     @ApiModelProperty("当日订单量")
     private BigDecimal currentTotalCount;
@@ -19,10 +19,10 @@ public class BigScreenDataVO {
     private BigDecimal itemsAre;
 
     @ApiModelProperty("商城累计金额")
-    private String shopAmt;
+    private BigDecimal shopAmt;
 
     @ApiModelProperty("权益累计金额")
-    private String legalRightAmt;
+    private BigDecimal legalRightAmt;
 
     @ApiModelProperty("年龄分布")
     private List<DistributionVO> ageGroup;
