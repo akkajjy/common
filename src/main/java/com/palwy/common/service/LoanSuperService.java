@@ -119,8 +119,8 @@ public class LoanSuperService {
             //判断时间段
             LocalTime nowTime = LocalTime.now();
             if(nowTime.compareTo(LocalTime.parse(loanSuperConfigResp.getShowTimeStart())) >= 0 && nowTime.compareTo(LocalTime.parse(loanSuperConfigResp.getShowTimeEnd())) <= 0){
-                //判断节假日是否需展示 如果=N 节假日展示
-                if(FlagValueEnum.N.name().equals(loanSuperConfigResp.getShowHoliday())){
+                //判断节假日是否需展示 如果=Y 节假日展示
+                if(FlagValueEnum.Y.name().equals(loanSuperConfigResp.getShowHoliday())){
                     configVO.setShowLink(FlagValueEnum.Y.name());
                 }else {
                     //如果节假日无需展示 判断今天是否是节假日,如果不是节假日则展示
