@@ -18,7 +18,7 @@ public class AppReq {
     private Integer pageNum = 1;
 
     @ApiModelProperty(value = "每页数量", example = "10")
-    private Integer pageSize = 10;
+    private Integer size = 10;
     @ApiModelProperty("版本号")
     private String versionCode;
 }

@@ -70,7 +70,7 @@ public class AppService {
         // 使用PageHelper实现分页
         // 设置分页参数
         try {
-            PageHelper.startPage(appReq.getPageNum(), appReq.getPageSize());
+            PageHelper.startPage(appReq.getPageNum(), appReq.getSize());
             List<AppInfo> list = appInfoMapper.selectAppInfoByCondition(appReq);
             List<ClrDictDO> appNameList = clrDictService.getClrDictListByDictType("AppNameEnum");
             Map<String, String> dictMap = appNameList.stream()

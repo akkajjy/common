@@ -27,5 +27,5 @@ public class AppUpdateReq {
     private Integer pageNum = 1;
 
     @ApiModelProperty("每页数量，默认10")
-    private Integer pageSize = 10;
+    private Integer size = 10;
 }

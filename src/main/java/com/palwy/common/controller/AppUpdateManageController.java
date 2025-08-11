@@ -25,7 +25,7 @@ public class AppUpdateManageController {
     @ApiOperation("分页查询应用更新信息")
     public ResultVO<PageInfo<AppUpdateManage>> page(@RequestBody AppUpdateReq req) {
         try {
-            return ResultVOUtil.success(service.selectPage(req, req.getPageNum(), req.getPageSize()));
+            return ResultVOUtil.success(service.selectPage(req, req.getPageNum(), req.getSize()));
         } catch (Exception e) {
             return ResultVOUtil.fail("查询失败");
         }
