@@ -15,10 +15,10 @@ public class AppReq {
     private String channel;
 
     @ApiModelProperty(value = "页码", example = "1")
-    private Integer page = 1;
+    private Integer pageNum = 1;
 
     @ApiModelProperty(value = "每页数量", example = "10")
-    private Integer size = 10;
+    private Integer pageSize = 10;
     @ApiModelProperty("版本号")
     private String versionCode;
 }
