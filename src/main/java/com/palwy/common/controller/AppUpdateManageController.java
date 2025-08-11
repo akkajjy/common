@@ -14,6 +14,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1/app-update")
+@CrossOrigin(
+        origins = {
+                "http://one-in.shhpalwy.com",
+                "http://one-in-test.shhpalwy.com",
+                "http://10.32.0.2:8080"
+        },
+        allowCredentials = "true"
+)
 @Api(tags = "应用更新管理接口")
 public class AppUpdateManageController {
     @Autowired

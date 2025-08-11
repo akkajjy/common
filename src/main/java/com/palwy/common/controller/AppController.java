@@ -22,6 +22,14 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/v1/apps")
+@CrossOrigin(
+        origins = {
+                "http://one-in.shhpalwy.com",
+                "http://one-in-test.shhpalwy.com",
+                "http://10.32.0.2:8080"
+        },
+        allowCredentials = "true"
+)
 @Api(tags = "应用管理接口")
 public class AppController {
     @Autowired
