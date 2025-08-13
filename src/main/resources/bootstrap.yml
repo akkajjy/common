@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: fin-common
+  profiles:
+    active: test
+  cloud:
+    loadbalancer:
+      nacos:
+        enabled: true # 开启 nacos 的负载均衡策略
+    nacos:
+      config:
+        enabled: true
+        server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
+        namespace: 40dbacf5-3a92-4b50-83c4-796faa3b8190
+        file-extension: yaml
+        group: DEFAULT_GROUP
+        refresh-enabled: true
+        username: nacos
+        password: tstNccos54
+        import-check:
+          enabled: false
+      discovery:
+        server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
+        namespace: 40dbacf5-3a92-4b50-83c4-796faa3b8190
+        group: DEFAULT_GROUP
+        username: nacos
+        password: tstNccos54
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+    default-property-inclusion: non_null
+  main:
+    web-application-type: servlet
+    allow-bean-definition-overriding: true
+  servlet:
+
+    multipart:
+      max-file-size: 200MB
+      max-request-size: 200MB
+#注意！！！
+server:
+  port: 9094
+  tomcat:
+    uri-encoding: utf-8
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+      enabled: true
+# 端点配置
+management:
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+    tags:
+      application: ${spring.application.name}
+      monitor-type: jvm
+  endpoints:
+    web:
+      exposure:
+        include: health, loggers, prometheus, za-nacos-discovery-endpoint, sentinel
+      base-path: /
+    metrics:
+      enabled: true
+    prometheus:
+      enabled: true
+  server:
+    port: ${server.port}
+  health:
+    db:
+      enabled: false
+
+sequence:
+  single:
+    innerStep: 1000
+    retryTimes: 5
+    sequenceNames:
+      - seq_clr_trial_apply

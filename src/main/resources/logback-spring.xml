@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="600 seconds"
+			   debug="false">
+	<springProperty scope="context" name="app.name" source="app.name" defaultValue="fin-common"/>
+	<springProfile name="dev">
+		<root level="DEBUG"/>
+	</springProfile>
+	<springProperty name="logging.path" source="logging.file.path" defaultValue="/vedata1/logs/fin-common"/>
+	<springProperty name="logging.level" source="logging.level" defaultValue="INFO"/>
+	<springProperty name="app.name.monitor" source="app.monitor.name" defaultValue="fincommon"/>
+	<springProperty name="app.name.monitor.prex" source="app.monitor.name" defaultValue="fin-common"/>
+
+
+	<springProfile name="test">
+		<property name="SensitiveDataAllowRun" value="true" scope="context"/>
+	</springProfile>
+	<springProfile name="!test">
+		<property name="SensitiveDataAllowRun" value="false" scope="context"/>
+	</springProfile>
+
+	<if condition='property("SensitiveDataAllowRun").equals("true")'>
+		<then>
+			<conversionRule conversionWord="msg"
+							converterClass="com.ksvip.next.components.datasecure.logback.SensitiveDataConverter" />
+			<conversionRule conversionWord="ex"
+							converterClass="com.ksvip.next.components.datasecure.logback.SensitiveDataThrowableProxyConverter" />
+			<conversionRule conversionWord="exception"
+							converterClass="com.ksvip.next.components.datasecure.logback.SensitiveDataThrowableProxyConverter" />
+			<conversionRule conversionWord="throwable"
+							converterClass="com.ksvip.next.components.datasecure.logback.SensitiveDataThrowableProxyConverter" />
+		</then>
+	</if>
+
+
+	<!--	<property name="logging.level" value="INFO" />-->
+<!--	<property name="app.name" value="fin-clrcore"/>-->
+<!--	<property name="app.name.monitor" value="finclrcore"/>-->
+<!--	<property name="logging.path" value="/vedata1/logs/${app.name}"/>-->
+
+	<include resource="jaegertrace-logger.xml" />
+
+
+	<appender name="STDOUT"
+			  class="ch.qos.logback.core.ConsoleAppender">
+		<target>System.out</target>
+		<encoder
+				class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<charset>UTF-8</charset>
+			<pattern>%d [%thread] [%X{uuid}] %-5p [%c] [%F:%L] - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+<!--	<property name="SensitiveDataAllowRun" value="true" scope="context"/>-->
+<!--	&lt;!&ndash; 环境检测：生产环境激活脱敏 &ndash;&gt;-->
+<!--	<if condition='property("spring.profiles.active").equals("test")'>-->
+<!--		<then>-->
+
+<!--		</then>-->
+<!--		<else>-->
+<!--			<property name="SensitiveDataAllowRun" value="false" scope="context"/>-->
+<!--		</else>-->
+<!--	</if>-->
+
+
+<!--	&lt;!&ndash; 注册脱敏转换器（仅在开启时生效） &ndash;&gt;-->
+<!--	<if condition='property("SensitiveDataAllowRun").equals("true")'>-->
+<!--		<then>-->
+<!--			-->
+<!--		</then>-->
+<!--	</if>-->
+
+	<!-- 日志脱敏实体bean属性  敏感字段添加这里-->
+	<property scope="context" name="sensitiveDataKeys"
+			  value='[{"fieldName":"userName","format":"NAME"},
+       {"fieldName":"mobile","format":"PHONE_NO"},
+       {"fieldName":"contactsPhone","format":"PHONE_NO"},
+       {"fieldName":"phone","format":"PHONE_NO"},
+       {"fieldName":"phoneNo","format":"PHONE_NO"},
+       {"fieldName":"contactsName","format":"NAME"},
+       {"fieldName":"accName","format":"NAME"},
+       {"fieldName":"name","format":"NAME"},
+       {"fieldName":"realName","format":"NAME"},
+       {"fieldName":"bankCardNo","format":"CARD_NO"},
+       {"fieldName":"cardNo","format":"CARD_NO"},
+       {"fieldName":"certNo","format":"CERTI_NO"},
+       {"fieldName":"certificatesNumber","format":"CERTI_NO"},
+       {"fieldName":"certiNo","format":"CERTI_NO"},
+       {"fieldName":"ocrCertNo","format":"CERTI_NO"},
+       {"fieldName":"custCertNo","format":"CERTI_NO"},
+       {"fieldName":"custMobile","format":"PHONE_NO"}
+
+       ]'/>
+
+	<property name="logging.infoAppender.fileName"
+			  value="${app.name.monitor}-ss_micro_app_${app.name.monitor}_lt_info" />
+
+
+	<logger name="ERROR_LOGGER" additivity="false" level="info">
+		<appender-ref ref="errorAppender" />
+	</logger>
+
+	<logger name="org.apache">
+		<level value="INFO" />
+	</logger>
+
+	<logger name="org.springframework">
+		<level value="INFO" />
+	</logger>
+	<!--myibatis log configure -->
+	<logger name="com.apache.ibatis" level="TRACE" />
+	<logger name="java.sql.Connection" level="DEBUG" />
+	<logger name="java.sql.Statement" level="DEBUG" />
+	<logger name="java.sql.PreparedStatement" level="DEBUG" />
+
+	<logger name="com.palwy.clp" level="INFO" />
+
+	<root>
+		<level value="${logging.level}" />
+		<appender-ref ref="errorAppenderAsync" />
+		<appender-ref ref="infoAppenderAsync" />
+		<appender-ref ref="STDOUT" />
+
+	</root>
+
+</configuration>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.palwy.common.mapper.ClrDictDOMapper">
+
+    <resultMap id="BaseResultMap" type="com.palwy.common.entity.ClrDictDO">
+        <id column="id" property="id" />
+        <result column="dict_type" property="dictType" />
+        <result column="dict_value" property="dictValue" />
+        <result column="dict_label" property="dictLabel" />
+        <result column="sort" property="sort" />
+        <result column="status" property="status" />
+        <result column="remark" property="remark" />
+        <result column="gmt_created" property="gmtCreated" />
+        <result column="gmt_modified" property="gmtModified" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, dict_type, dict_value, dict_label, sort, status, remark, gmt_created, gmt_modified
+    </sql>
+    <!--新增-->
+    <insert id="insert">
+        INSERT INTO `clr_dict`(`dict_type`, `dict_value`, `dict_label`, `sort`, `status`, `remark`)
+        VALUES (#{dictType},#{dictValue},#{dictLabel},#{sort},#{status},#{remark})
+    </insert>
+
+    <update id="update">
+        update clr_dict
+        <set>
+            <if test="dictType != null">
+                dict_type = #{dictType},
+            </if>
+            <if test="dictValue != null">
+                dict_value = #{dictValue},
+            </if>
+            <if test="dictLabel != null">
+                dict_label = #{dictLabel},
+            </if>
+            <if test="sort != null">
+                sort = #{sort},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--查询（单条）-->
+    <select id="select" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM clr_dict
+        <where>
+            <if test="dictType != null and dictType != ''">
+                and dict_type = #{dictType}
+            </if>
+            <if test="dictValue != null and dictValue != ''">
+                and dict_value = #{dictValue}
+            </if>
+            <if test="dictLabel != null and dictLabel != ''">
+                and dict_label = #{dictLabel}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectList" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM clr_dict
+        <where>
+            <if test="dictType != null and dictType != ''">
+                and dict_type = #{dictType}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
+    </select>
+
+</mapper>

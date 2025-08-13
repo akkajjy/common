@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.palwy.common.mapper.AppInfoMapper">
+    <resultMap id="BaseResultMap" type="com.palwy.common.entity.AppInfo">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="app_name" property="appName" jdbcType="VARCHAR"/>
+        <result column="app_type" property="appType" jdbcType="VARCHAR"/>
+        <result column="os_type" property="osType" jdbcType="VARCHAR"/>
+        <result column="platform" property="platform" jdbcType="VARCHAR"/>
+        <result column="extra_info" property="extraInfo" jdbcType="VARCHAR"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="VARCHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="version_code" property="versionCode" jdbcType="VARCHAR"/>
+        <result column="version_name" property="versionName" jdbcType="VARCHAR"/>
+        <result column="download_url" property="downloadUrl" jdbcType="VARCHAR"/>
+        <result column="file_path" property="filePath" jdbcType="VARCHAR"/>
+        <result column="channel" property="channel" jdbcType="VARCHAR"/>
+        <result column="device_filter" property="deviceFilter" jdbcType="VARCHAR"/>
+        <result column="show_cash_loan" property="showCashLoan" jdbcType="BOOLEAN"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, app_name, app_type, os_type, platform, extra_info, is_deleted,
+    creator, gmt_created, modifier, gmt_modified, version_code,
+    version_name, download_url, file_path, channel, device_filter, show_cash_loan
+    </sql>
+    <!-- 插入应用信息 -->
+    <insert id="insertAppInfo" parameterType="com.palwy.common.entity.AppInfo" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO app_info (
+            app_name, app_type, os_type, platform, extra_info, is_deleted,
+            creator, gmt_created, modifier, gmt_modified, version_code,
+            version_name, download_url, file_path, channel, device_filter, show_cash_loan
+        ) VALUES (
+                     #{appName}, #{appType}, #{osType}, #{platform}, #{extraInfo}, 'N',
+                     #{creator}, NOW(), #{modifier}, NOW(), #{versionCode},
+                     #{versionName}, #{downloadUrl}, #{filePath}, #{channel}, #{deviceFilter}, #{showCashLoan}
+                 )
+    </insert>
+
+    <!-- 软删除应用 -->
+    <update id="deleteAppInfo" parameterType="java.lang.Long">
+        UPDATE app_info
+        SET is_deleted = 'Y',
+            modifier = 'system',
+            gmt_modified = NOW()
+        WHERE id = #{id} AND is_deleted = 'N'
+    </update>
+
+    <update id="updateAppInfo" parameterType="com.palwy.common.entity.AppInfo">
+        UPDATE app_info
+        <set>
+            <if test="appName != null">app_name = #{appName},</if>
+            <if test="appType != null">app_type = #{appType},</if>
+            <if test="osType != null">os_type = #{osType},</if>
+            <if test="platform != null">platform = #{platform},</if>
+            <if test="extraInfo != null">extra_info = #{extraInfo},</if>
+            <if test="modifier != null">modifier = #{modifier},</if>
+            <if test="versionCode != null">version_code = #{versionCode},</if>
+            <if test="versionName != null">version_name = #{versionName},</if>
+            <if test="downloadUrl != null">download_url = #{downloadUrl},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="channel != null">channel = #{channel},</if>
+            <if test="deviceFilter != null">device_filter = #{deviceFilter},</if>
+            <if test="showCashLoan != null">show_cash_loan = #{showCashLoan},</if>
+            gmt_modified = NOW() <!-- 更新时间始终设置 -->
+        </set>
+        WHERE id = #{id} AND is_deleted = 'N'
+    </update>
+
+    <select id="selectAppInfoByCondition" parameterType="com.palwy.common.req.AppReq" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_info
+        WHERE is_deleted = 'N'
+        <if test="appName != null and appName != ''">
+            AND app_name LIKE CONCAT('%', #{appName}, '%')
+        </if>
+        <if test="osType != null and osType != ''">
+            AND os_type = #{osType}
+        </if>
+        <if test="channel != null and channel != ''">
+            AND platform = #{channel}
+        </if>
+        <if test="versionCode != null and versionCode != ''">
+            AND version_code = #{versionCode}
+        </if>
+        ORDER BY gmt_modified DESC
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM app_info
+        WHERE id = #{id} AND is_deleted = 'N'
+    </select>
+
+    <select id="getAllAppInfos" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM app_info WHERE is_deleted = 'N'
+    </select>
+</mapper>
