@@ -88,7 +88,7 @@ public class BigScreenDataService {
         bigScreenDataVO.setEnduGroup(this.calculateWithApacheCommons(enduGroup));
         this.processGroup(areaGroup);
         bigScreenDataVO.setAreaGroup(areaGroup);
-        this.processGroup(shopDataGrowthTrend);
+        this.processDateGroup(shopDataGrowthTrend);
         LineChartVO shopLineChartVO = new LineChartVO();
         List<String> indexList = shopDataGrowthTrend.stream()
                 .map(DistributionVO::getXIndex)
@@ -99,7 +99,7 @@ public class BigScreenDataService {
                 .collect(Collectors.toList());
         shopLineChartVO.setValueList(valueList);
         bigScreenDataVO.setShopDataGrowthTrend(shopLineChartVO);
-        this.processGroup(legalRightDataGrowthTrend);
+        this.processDateGroup(legalRightDataGrowthTrend);
         LineChartVO legalRightLineChartVO = new LineChartVO();
         List<String> legalRightIndexList = legalRightDataGrowthTrend.stream()
                 .map(DistributionVO::getXIndex)
@@ -201,6 +201,23 @@ public class BigScreenDataService {
         list.addAll(sortedList);
     }
 
+    public void processDateGroup(List<DistributionVO> list) {
+        // 1. 按照value转为BigDecimal倒序排序
+        List<DistributionVO> sortedList = list.stream()
+                .sorted(Comparator.comparing(
+                        vo -> vo.getXIndex()
+                ))
+                .collect(Collectors.toList());
+
+        // 2. 为每个元素设置order (NO01, NO02...)
+        IntStream.range(0, sortedList.size())
+                .forEach(i -> {
+                    String orderNumber = String.format("NO.%02d", i + 1);
+                    sortedList.get(i).setOrder(orderNumber);
+                });
+        list.clear();
+        list.addAll(sortedList);
+    }
 
 
     private String formatDateTime(String dataTime){
