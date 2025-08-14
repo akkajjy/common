@@ -75,10 +75,10 @@ public class BigScreenDataService {
             }else if("地域分布".equals(queryDataVO.getData_label())){
                 areaGroup.add(distributionVO);
             }else if("数据增长趋势-商城".equals(queryDataVO.getData_label())){
-                distributionVO.setXIndex(this.formatDateTime(queryDataVO.getData_time()));
+                distributionVO.setXIndex(this.formatDateTime(queryDataVO.getIndex()));
                 shopDataGrowthTrend.add(distributionVO);
             }else if("数据增长趋势-权益".equals(queryDataVO.getData_label())){
-                distributionVO.setXIndex(this.formatDateTime(queryDataVO.getData_time()));
+                distributionVO.setXIndex(this.formatDateTime(queryDataVO.getIndex()));
                 legalRightDataGrowthTrend.add(distributionVO);
             }else if("商品销售排行TOP10".equals(queryDataVO.getData_label())){
                 shopSalesTop10.add(distributionVO);
@@ -205,9 +205,9 @@ public class BigScreenDataService {
 
     private String formatDateTime(String dataTime){
         try {
-            LocalDateTime dateTime = DateTimeUtils.parseDateTime(dataTime,DateTimeUtils.DATE_TIME_FORMAT);
+            LocalDate date = LocalDate.parse(dataTime);
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MM/dd");
-            String formattedDate = dateTime.format(outputFormatter);
+            String formattedDate = date.format(outputFormatter);
             return formattedDate;
         }catch (Exception e){
             log.error("日期格式化异常:{}",dataTime,e);
