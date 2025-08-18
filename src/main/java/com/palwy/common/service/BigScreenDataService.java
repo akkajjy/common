@@ -75,10 +75,10 @@ public class BigScreenDataService {
             }else if("地域分布".equals(queryDataVO.getData_label())){
                 areaGroup.add(distributionVO);
             }else if("数据增长趋势-商城".equals(queryDataVO.getData_label())){
-                distributionVO.setXIndex(this.formatDateTime(queryDataVO.getData_time()));
+                distributionVO.setXIndex(this.formatDateTime(queryDataVO.getIndex()));
                 shopDataGrowthTrend.add(distributionVO);
             }else if("数据增长趋势-权益".equals(queryDataVO.getData_label())){
-                distributionVO.setXIndex(this.formatDateTime(queryDataVO.getData_time()));
+                distributionVO.setXIndex(this.formatDateTime(queryDataVO.getIndex()));
                 legalRightDataGrowthTrend.add(distributionVO);
             }else if("商品销售排行TOP10".equals(queryDataVO.getData_label())){
                 shopSalesTop10.add(distributionVO);
@@ -88,7 +88,7 @@ public class BigScreenDataService {
         bigScreenDataVO.setEnduGroup(this.calculateWithApacheCommons(enduGroup));
         this.processGroup(areaGroup);
         bigScreenDataVO.setAreaGroup(areaGroup);
-        this.processGroup(shopDataGrowthTrend);
+        this.processDateGroup(shopDataGrowthTrend);
         LineChartVO shopLineChartVO = new LineChartVO();
         List<String> indexList = shopDataGrowthTrend.stream()
                 .map(DistributionVO::getXIndex)
@@ -99,7 +99,7 @@ public class BigScreenDataService {
                 .collect(Collectors.toList());
         shopLineChartVO.setValueList(valueList);
         bigScreenDataVO.setShopDataGrowthTrend(shopLineChartVO);
-        this.processGroup(legalRightDataGrowthTrend);
+        this.processDateGroup(legalRightDataGrowthTrend);
         LineChartVO legalRightLineChartVO = new LineChartVO();
         List<String> legalRightIndexList = legalRightDataGrowthTrend.stream()
                 .map(DistributionVO::getXIndex)
@@ -201,13 +201,30 @@ public class BigScreenDataService {
         list.addAll(sortedList);
     }
 
+    public void processDateGroup(List<DistributionVO> list) {
+        // 1. 按照value转为BigDecimal倒序排序
+        List<DistributionVO> sortedList = list.stream()
+                .sorted(Comparator.comparing(
+                        vo -> vo.getXIndex()
+                ))
+                .collect(Collectors.toList());
+
+        // 2. 为每个元素设置order (NO01, NO02...)
+        IntStream.range(0, sortedList.size())
+                .forEach(i -> {
+                    String orderNumber = String.format("NO.%02d", i + 1);
+                    sortedList.get(i).setOrder(orderNumber);
+                });
+        list.clear();
+        list.addAll(sortedList);
+    }
 
 
     private String formatDateTime(String dataTime){
         try {
-            LocalDateTime dateTime = DateTimeUtils.parseDateTime(dataTime,DateTimeUtils.DATE_TIME_FORMAT);
+            LocalDate date = LocalDate.parse(dataTime);
             DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("MM/dd");
-            String formattedDate = dateTime.format(outputFormatter);
+            String formattedDate = date.format(outputFormatter);
             return formattedDate;
         }catch (Exception e){
             log.error("日期格式化异常:{}",dataTime,e);
