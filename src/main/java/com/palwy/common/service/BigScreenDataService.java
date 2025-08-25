@@ -110,6 +110,9 @@ public class BigScreenDataService {
                 .collect(Collectors.toList());
         legalRightLineChartVO.setValueList(legalRightValueList);
         bigScreenDataVO.setLegalRightDataGrowthTrend(legalRightLineChartVO);
+        shopSalesTop10 = shopSalesTop10.stream().filter(e -> !e.getLabel().contains("黄金") && !e.getLabel().contains("金勺"))
+                .limit(10)
+                .collect(Collectors.toList());
         this.processGroup(shopSalesTop10);
         bigScreenDataVO.setShopSalesTop10(shopSalesTop10);
         return bigScreenDataVO;
