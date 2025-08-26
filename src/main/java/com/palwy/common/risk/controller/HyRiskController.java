@@ -19,7 +19,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/risk")
-@Api(tags = "慧眼风控联合登录接口") // 添加类级描述
+@Api(tags = "华翊风控联合登录接口") // 添加类级描述
 public class HyRiskController {
 
     private final HyRiskService hyRiskService;
