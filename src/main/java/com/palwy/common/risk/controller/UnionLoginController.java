@@ -30,6 +30,8 @@ public class UnionLoginController {
             notes = "根据用户标识和手机号生成联合登录链接。手机号末位为奇数时调用华翊风控，偶数时调用优鉴风控")
     @GetMapping("/Login")
     public ResultVO<String> unionLogin(
+            @ApiParam(value = "用户唯一标识", required = true, example = "user123")
+            @RequestParam String uuid,
             @ApiParam(value = "用户手机号", required = true, example = "13800138000")
             @RequestParam String mobile) {
 
@@ -53,11 +55,10 @@ public class UnionLoginController {
             if (lastDigit % 2 == 1) { // 奇数：调用华翊风控
                 log.info("手机号末位为奇数，启用华翊风控");
                 UnionLoginReq req = new UnionLoginReq();
+                req.setThirdUserId(uuid);
                 //根据手机号查询商城用户信息进行组装
                 redirectUrl = hyRiskService.generateUnionLoginUrl(req);
             } else { // 偶数：调用优鉴风控
-                //根据手机号查询商城用户userId
-                String uuid ="";
                 log.info("手机号末位为偶数，启用优鉴风控");
                 redirectUrl = yjRiskService.generateUnionLoginUrl(uuid, mobile);
             }
