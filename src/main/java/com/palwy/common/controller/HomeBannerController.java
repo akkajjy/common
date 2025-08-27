@@ -19,6 +19,15 @@ import java.util.List;
 @Api(tags = "首页背景图管理接口")
 @RestController
 @RequestMapping("/v1/homeBanners")
+@CrossOrigin(
+        origins = {
+                "https://installment.shhpalwy.com",
+                "http://h5-installment-shop-test.shhpalwy.com",
+                "http://localhost:8080",
+                "http://zy-shop-test02.palwy.com"
+        },
+        allowCredentials = "true"
+)
 public class HomeBannerController {
     @Autowired
     private HomeBannerBackgroundService homeBannerBackgroundService;
