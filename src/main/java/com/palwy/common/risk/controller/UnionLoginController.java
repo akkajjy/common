@@ -1,5 +1,6 @@
 package com.palwy.common.risk.controller;
 
+import com.palwy.common.risk.service.HyRiskService;
 import com.palwy.common.risk.service.YjRiskService;
 import com.palwy.common.util.ResultVOUtil;
 import com.palwy.common.vo.ResultVO;
@@ -14,14 +15,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@Api(tags = "优鉴风控联合登录接口") // 添加类级描述
+@Api(tags = "风控联合登录接口") // 添加类级描述
 public class UnionLoginController {
     @Autowired
     private YjRiskService yjRiskService;
 
+    @Autowired
+    private HyRiskService hyRiskService;
+
     @ApiOperation(value = "生成联合登录URL",
             notes = "根据用户标识和手机号生成优鉴联合登录链接")
-    @GetMapping("/yj/unionLogin")
+    @GetMapping("/v1/unionLogin")
     public ResultVO<String> unionLogin(
             @ApiParam(value = "用户唯一标识（可选）", required = false, example = "123e4567-e89b-12d3-a456-426614174000")
             @RequestParam String uuid,
