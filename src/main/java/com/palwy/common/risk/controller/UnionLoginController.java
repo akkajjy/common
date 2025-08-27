@@ -23,7 +23,7 @@ public class UnionLoginController {
             notes = "根据用户标识和手机号生成优鉴联合登录链接")
     @GetMapping("/yj/unionLogin")
     public ResultVO<String> unionLogin(
-            @ApiParam(value = "用户唯一标识（可选）", required = true, example = "123e4567-e89b-12d3-a456-426614174000")
+            @ApiParam(value = "用户唯一标识（可选）", required = false, example = "123e4567-e89b-12d3-a456-426614174000")
             @RequestParam String uuid,
 
             @ApiParam(value = "用户手机号", example = "13800138000")
