@@ -18,16 +18,11 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/risk")
+@RequestMapping("/vi/risk")
 @Api(tags = "华翊风控联合登录接口") // 添加类级描述
 public class HyRiskController {
 
-    private final HyRiskService hyRiskService;
-
-    @Autowired
-    public HyRiskController(HyRiskService hyRiskService) {
-        this.hyRiskService = hyRiskService;
-    }
+    private HyRiskService hyRiskService;
 
     @ApiOperation(value = "加密联合登录数据",
             notes = "对联合登录请求参数进行加密和签名处理")
