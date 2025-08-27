@@ -57,7 +57,7 @@ public class UnionLoginController {
                 redirectUrl = hyRiskService.generateUnionLoginUrl(req);
             } else { // 偶数：调用优鉴风控
                 //根据手机号查询商城用户userId
-                String uuid ="" ;
+                String uuid ="";
                 log.info("手机号末位为偶数，启用优鉴风控");
                 redirectUrl = yjRiskService.generateUnionLoginUrl(uuid, mobile);
             }
