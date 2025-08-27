@@ -10,15 +10,21 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @Api(tags = "风控联合登录接口")
 @RequestMapping("/v1/union")
+@CrossOrigin(
+        origins = {
+                "https://installment.shhpalwy.com",
+                "http://h5-installment-shop-test.shhpalwy.com",
+                "http://localhost:8080",
+                "http://zy-shop-test02.palwy.com"
+        },
+        allowCredentials = "true"
+)
 public class UnionLoginController {
     @Autowired
     private YjRiskService yjRiskService;
