@@ -24,7 +24,10 @@ import java.util.List;
                 "https://installment.shhpalwy.com",
                 "http://h5-installment-shop-test.shhpalwy.com",
                 "http://localhost:8080",
-                "http://zy-shop-test02.palwy.com"
+                "http://localhost:9528",
+                "http://zy-shop-test02.palwy.com",
+                "http://zy-shop-test.shhpalwy.com",
+                "https://zy-admin.shhpalwy.com"
         },
         allowCredentials = "true"
 )
