@@ -32,8 +32,8 @@ public class HomeBannerBackgroundServiceImpl implements HomeBannerBackgroundServ
         HomeBannerBackground homeBannerBackground = new HomeBannerBackground();
         homeBannerBackground.setTheme(request.getTheme());
         homeBannerBackground.setSmallImage(tosUpFileUtil.generatePublicFileUrl(request.getSmallImageFile()));
-
         homeBannerBackground.setLargeImage(tosUpFileUtil.generatePublicFileUrl(request.getLargeImageFile()));
+        homeBannerBackground.setSmallImageFile(request.getSmallImageFile());
         homeBannerBackground.setLargeImageFile(request.getLargeImageFile());
         // 默认状态为下架
         homeBannerBackground.setStatus(0);
