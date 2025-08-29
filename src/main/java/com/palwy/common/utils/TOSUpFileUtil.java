@@ -126,6 +126,11 @@ public class TOSUpFileUtil {
         return ENDPOINT  + "/" + objectKey;
     }
 
+    public String generatePublicFileUrl(String objectKey) {
+        this.setObjectPublicRead(objectKey);
+        return ENDPOINT  + "/" + objectKey;
+    }
+
     /**
      * 初始化TOS客户端（双重校验锁单例）
      */

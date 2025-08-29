@@ -6,6 +6,8 @@ import com.palwy.common.banner.entity.HomeBannerBackground;
 import com.palwy.common.mapper.HomeBannerBackgroundMapper;
 import com.palwy.common.banner.service.HomeBannerBackgroundService;
 import com.palwy.common.util.ResultVOUtil;
+import com.palwy.common.utils.StringUtils;
+import com.palwy.common.utils.TOSUpFileUtil;
 import com.palwy.common.vo.ResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,15 +22,18 @@ public class HomeBannerBackgroundServiceImpl implements HomeBannerBackgroundServ
     @Autowired
     private HomeBannerBackgroundMapper homeBannerBackgroundMapper;
 
+    @Autowired
+    private TOSUpFileUtil tosUpFileUtil;
+
     @Override
     @Transactional
     public HomeBannerBackground addHomeBanner(HomeBannerRequest request) {
         // 创建新的背景图配置
         HomeBannerBackground homeBannerBackground = new HomeBannerBackground();
         homeBannerBackground.setTheme(request.getTheme());
-        homeBannerBackground.setSmallImage(request.getSmallImage());
-        homeBannerBackground.setLargeImage(request.getLargeImage());
-        homeBannerBackground.setSmallImageFile(request.getSmallImageFile());
+        homeBannerBackground.setSmallImage(tosUpFileUtil.generatePublicFileUrl(request.getSmallImageFile()));
+
+        homeBannerBackground.setLargeImage(tosUpFileUtil.generatePublicFileUrl(request.getLargeImageFile()));
         homeBannerBackground.setLargeImageFile(request.getLargeImageFile());
         // 默认状态为下架
         homeBannerBackground.setStatus(0);
@@ -68,10 +73,14 @@ public class HomeBannerBackgroundServiceImpl implements HomeBannerBackgroundServ
 
         // 更新字段
         existingBanner.setTheme(request.getTheme());
-        existingBanner.setSmallImage(request.getSmallImage());
-        existingBanner.setLargeImage(request.getLargeImage());
         existingBanner.setSmallImageFile(request.getSmallImageFile());
+        if(StringUtils.isNotEmpty(request.getSmallImageFile())){
+            existingBanner.setSmallImage(tosUpFileUtil.generatePublicFileUrl(request.getSmallImageFile()));
+        }
         existingBanner.setLargeImageFile(request.getLargeImageFile());
+        if(StringUtils.isNotEmpty(request.getLargeImageFile())){
+            existingBanner.setLargeImage(tosUpFileUtil.generatePublicFileUrl(request.getLargeImageFile()));
+        }
         existingBanner.setGmtModified(new Date());
         existingBanner.setModifier("system");
 

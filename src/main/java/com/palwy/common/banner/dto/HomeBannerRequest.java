@@ -18,11 +18,9 @@ public class HomeBannerRequest {
     @ApiModelProperty(value = "主题名称", required = true, example = "春节")
     private String theme;
 
-    @NotBlank(message = "小图不能为空")
     @ApiModelProperty(value = "小图URL", required = true, example = "/images/small.jpg")
     private String smallImage;
 
-    @NotBlank(message = "大图不能为空")
     @ApiModelProperty(value = "大图URL", required = true, example = "/images/large.jpg")
     private String largeImage;
 
