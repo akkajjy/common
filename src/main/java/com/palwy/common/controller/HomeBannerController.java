@@ -1,5 +1,6 @@
 package com.palwy.common.controller;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.palwy.common.banner.dto.HomeBannerRequest;
 import com.palwy.common.banner.dto.HomeBannerStatusRequest;
@@ -72,8 +73,10 @@ public class HomeBannerController {
     public ResultVO<PageInfo<HomeBannerBackground>> getHomeBanners(
             @ApiParam(value = "分页查询参数", required = true)
             @RequestBody HomeBannerRequest request) {
+
         // 注意：这里需要根据实际需求实现分页查询
         // 由于原需求中没有分页参数，这里返回所有数据
+        PageHelper.startPage(request.getPageNum(), request.getPageSize());
         List<HomeBannerBackground> allBanners = homeBannerBackgroundService.getAllHomeBanners();
         PageInfo<HomeBannerBackground> pageInfo = new PageInfo<>(allBanners);
         return ResultVOUtil.success(pageInfo);

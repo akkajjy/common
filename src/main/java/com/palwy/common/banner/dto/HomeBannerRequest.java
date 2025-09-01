@@ -31,4 +31,10 @@ public class HomeBannerRequest {
     @NotBlank(message = "大图文件路径不能为空")
     @ApiModelProperty(value = "大图文件路径", required = true, example = "/images/large.jpg")
     private String largeImageFile;
+
+    @ApiModelProperty(value = "页码", example = "1")
+    private Integer pageNum = 1;
+
+    @ApiModelProperty(value = "每页数量", example = "10")
+    private Integer pageSize = 10;
 }
