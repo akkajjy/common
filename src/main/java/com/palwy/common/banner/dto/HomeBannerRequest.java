@@ -10,8 +10,8 @@ import javax.validation.constraints.NotBlank;
 @Data
 @ApiModel(description = "首页背景图添加/编辑请求")
 public class HomeBannerRequest {
-    @JsonFormat(shape = JsonFormat.Shape.STRING)
     @ApiModelProperty(value = "主键ID", example = "1",required = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
     @NotBlank(message = "主题不能为空")

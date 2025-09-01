@@ -1,5 +1,6 @@
 package com.palwy.common.banner.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,6 +13,7 @@ import java.util.Date;
 public class HomeBannerBackground {
 
     @ApiModelProperty(value = "主键ID", example = "1", hidden = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
     @NotBlank(message = "主题不能为空")

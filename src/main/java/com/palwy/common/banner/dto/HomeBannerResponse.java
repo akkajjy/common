@@ -1,5 +1,6 @@
 package com.palwy.common.banner.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,6 +11,7 @@ import java.util.Date;
 public class HomeBannerResponse {
 
     @ApiModelProperty(value = "主键ID", example = "1")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
     @ApiModelProperty(value = "主题名称", example = "春节")
