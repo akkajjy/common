@@ -25,7 +25,8 @@ import java.util.List;
                 "http://zy-shop-test02.palwy.com",
                 "https://common-test.shhpalwy.com",
                 "http://192.168.1.172:9094",
-                "https://zy-admin.shhpalwy.com"
+                "https://zy-admin.shhpalwy.com",
+                "http://zy-shop-test03.palwy.com/"
         },
         allowCredentials = "true"
 )
