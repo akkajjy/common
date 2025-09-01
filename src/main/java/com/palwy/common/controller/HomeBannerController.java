@@ -28,7 +28,9 @@ import java.util.List;
                 "http://zy-shop-test02.palwy.com",
                 "http://zy-shop-test.shhpalwy.com",
                 "https://zy-admin.shhpalwy.com",
-                "http://10.16.0.4:9094/"
+                "http://10.16.0.4:9094/",
+                "https://fin-clrcore-test.shhpalwy.com",
+                "http://one-in-test.shhpalwy.com"
         },
         allowCredentials = "true"
 )
