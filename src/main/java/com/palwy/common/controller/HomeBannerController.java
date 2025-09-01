@@ -22,7 +22,7 @@ import java.util.List;
                 "https://installment.shhpalwy.com",
                 "http://h5-installment-shop-test.shhpalwy.com",
                 "http://localhost:8080",
-                "http://localhost:9528",
+                "http://localhost:9529",
                 "http://zy-shop-test02.palwy.com",
                 "https://common-test.shhpalwy.com",
                 "http://192.168.1.172:9094",
