@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,7 +27,7 @@ import java.util.List;
                 "https://common-test.shhpalwy.com",
                 "http://192.168.1.172:9094",
                 "https://zy-admin.shhpalwy.com",
-                "http://zy-shop-test03.palwy.com/"
+                "http://zy-shop-test03.palwy.com"
         },
         allowCredentials = "true"
 )
@@ -34,10 +35,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/homeBanners")
 public class HomeBannerController {
-
     @Autowired
     private HomeBannerBackgroundService homeBannerBackgroundService;
-
+    // 特别注意：为POST接口添加OPTIONS映射
+    @ApiOperation(value = "预检请求处理", hidden = true)
+    @RequestMapping(
+            value = "/create",
+            method = RequestMethod.OPTIONS
+    )
+    public ResponseEntity<?> handleCreatePreflight() {
+        return ResponseEntity.ok().build();
+    }
     @ApiOperation(value = "添加首页背景图配置")
     @PostMapping("/create")
     public ResultVO<Long> createHomeBanner(
@@ -50,7 +58,15 @@ public class HomeBannerController {
             return ResultVOUtil.fail(e.getMessage());
         }
     }
-
+    // 为所有POST接口添加OPTIONS映射 (复制上述模式)
+    @ApiOperation(value = "预检请求处理", hidden = true)
+    @RequestMapping(
+            value = "/getList",
+            method = RequestMethod.OPTIONS
+    )
+    public ResponseEntity<?> handleGetListPreflight() {
+        return ResponseEntity.ok().build();
+    }
     @ApiOperation(value = "分页查询首页背景图列表")
     @PostMapping("/getList")
     public ResultVO<PageInfo<HomeBannerBackground>> getHomeBanners(
@@ -86,7 +102,15 @@ public class HomeBannerController {
             return ResultVOUtil.fail(e.getMessage());
         }
     }
-
+    // 为所有POST接口添加OPTIONS映射 (复制上述模式)
+    @ApiOperation(value = "预检请求处理", hidden = true)
+    @RequestMapping(
+            value = "/update",
+            method = RequestMethod.OPTIONS
+    )
+    public ResponseEntity<?> handleUpdatePreflight() {
+        return ResponseEntity.ok().build();
+    }
     @ApiOperation(value = "更新首页背景图信息")
     @PostMapping("/update")
     public ResultVO<Void> updateHomeBanner(
@@ -100,7 +124,15 @@ public class HomeBannerController {
             return ResultVOUtil.fail(e.getMessage());
         }
     }
-
+    // 为所有POST接口添加OPTIONS映射 (复制上述模式)
+    @ApiOperation(value = "预检请求处理", hidden = true)
+    @RequestMapping(
+            value = "/updateStatus",
+            method = RequestMethod.OPTIONS
+    )
+    public ResponseEntity<?> handleUpdateStatusPreflight() {
+        return ResponseEntity.ok().build();
+    }
     @ApiOperation(value = "更新首页背景图状态（上架/下架）")
     @PostMapping("/updateStatus")
     public ResultVO<Void> updateHomeBannerStatus(
