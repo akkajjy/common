@@ -21,6 +21,7 @@ import java.util.List;
 @RequestMapping("/v1/homeBanners")
 @CrossOrigin(
         origins = {
+
                 "https://installment.shhpalwy.com",
                 "http://h5-installment-shop-test.shhpalwy.com",
                 "http://localhost:8080",
@@ -33,9 +34,6 @@ import java.util.List;
                 "https://fin-clrcore-test.shhpalwy.com",
                 "http://one-in-test.shhpalwy.com"
         },
-        allowedHeaders = "*", // 添加此行
-        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS}, // 添加此行
-        maxAge = 3600, // 添加此行
         allowCredentials = "true"
 )
 public class HomeBannerController {
