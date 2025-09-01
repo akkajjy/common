@@ -52,6 +52,8 @@ public class HomeBannerBackgroundServiceImpl implements HomeBannerBackgroundServ
         for(HomeBannerBackground homeBannerBackground : list){
             if(homeBannerBackground.getStatus()==0){
                 homeBannerBackground.setStatus(1);
+            }else{
+                homeBannerBackground.setStatus(0);
             }
         }
         return list;
