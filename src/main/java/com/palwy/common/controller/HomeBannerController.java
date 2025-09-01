@@ -29,9 +29,13 @@ import java.util.List;
                 "http://zy-shop-test.shhpalwy.com",
                 "https://zy-admin.shhpalwy.com",
                 "http://10.16.0.4:9094/",
+                "http://10.32.0.4:9094/",
                 "https://fin-clrcore-test.shhpalwy.com",
                 "http://one-in-test.shhpalwy.com"
         },
+        allowedHeaders = "*", // 添加此行
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS}, // 添加此行
+        maxAge = 3600, // 添加此行
         allowCredentials = "true"
 )
 public class HomeBannerController {
