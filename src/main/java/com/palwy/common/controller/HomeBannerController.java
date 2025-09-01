@@ -16,6 +16,18 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+@CrossOrigin(
+        origins = {
+                "https://installment.shhpalwy.com",
+                "http://h5-installment-shop-test.shhpalwy.com",
+                "http://localhost:8080",
+                "http://zy-shop-test02.palwy.com",
+                "https://common-test.shhpalwy.com",
+                "http://192.168.1.172:9094",
+                "https://zy-admin.shhpalwy.com"
+        },
+        allowCredentials = "true"
+)
 @Api(tags = "首页背景图管理接口")
 @RestController
 @RequestMapping("/v1/homeBanners")
