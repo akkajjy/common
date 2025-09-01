@@ -27,7 +27,8 @@ import java.util.List;
                 "http://localhost:9528",
                 "http://zy-shop-test02.palwy.com",
                 "http://zy-shop-test.shhpalwy.com",
-                "https://zy-admin.shhpalwy.com"
+                "https://zy-admin.shhpalwy.com",
+                "http://10.16.0.4:9094/"
         },
         allowCredentials = "true"
 )
