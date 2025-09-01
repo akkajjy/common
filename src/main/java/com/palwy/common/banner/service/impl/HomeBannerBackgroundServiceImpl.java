@@ -48,7 +48,13 @@ public class HomeBannerBackgroundServiceImpl implements HomeBannerBackgroundServ
 
     @Override
     public List<HomeBannerBackground> getAllHomeBanners() {
-        return homeBannerBackgroundMapper.selectAll();
+        List<HomeBannerBackground> list = homeBannerBackgroundMapper.selectAll();
+        for(HomeBannerBackground homeBannerBackground : list){
+            if(homeBannerBackground.getStatus()==0){
+                homeBannerBackground.setStatus(1);
+            }
+        }
+        return list;
     }
 
     @Override
