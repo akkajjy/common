@@ -2,6 +2,7 @@ package com.palwy.common.risk.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.palwy.common.risk.domain.req.UnionLoginReq;
+import com.palwy.common.risk.domain.resp.LoginResp;
 import com.palwy.common.risk.service.HyRiskService;
 import com.palwy.common.risk.service.YjRiskService;
 import com.palwy.common.util.ResultVOUtil;
@@ -35,7 +36,7 @@ public class UnionLoginController {
     @ApiOperation(value = "生成联合登录URL",
             notes = "根据用户标识和手机号生成联合登录链接。手机号末位为奇数时调用华翊风控，偶数时调用优鉴风控")
     @PostMapping("/Login")
-    public ResultVO<String> unionLogin(@RequestBody UnionLoginReq unionLoginReq) {
+    public ResultVO<LoginResp> unionLogin(@RequestBody UnionLoginReq unionLoginReq) {
 
         log.info("联合登录请求参数 : {}", JSON.toJSONString(unionLoginReq));
 
@@ -64,7 +65,9 @@ public class UnionLoginController {
             }
 
             log.info("生成的联合登录URL: {}", redirectUrl);
-            return ResultVOUtil.success(redirectUrl);
+            LoginResp loginResp = new LoginResp();
+            loginResp.setLoginUrl(redirectUrl);
+            return ResultVOUtil.success(loginResp);
 
         } catch (RuntimeException e) {
             log.error("联合登录失败: {}", e.getMessage());
