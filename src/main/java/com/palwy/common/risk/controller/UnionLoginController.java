@@ -62,7 +62,7 @@ public class UnionLoginController {
             String type = weightCategoryUtils.getWeightRandomRightsType(unionLoginReq.getUserPhone(), category,weight);
             if (StringUtils.equals(type,"hy")) { // 奇数：调用华翊风控
                 log.info("手机号末位为奇数，启用华翊风控");
-                loginResp.setType("ty");
+                loginResp.setType("hy");
                 //根据手机号查询商城用户信息进行组装
                 redirectUrl = hyRiskService.generateUnionLoginUrl(unionLoginReq);
             } else { // 偶数：调用优鉴风控
