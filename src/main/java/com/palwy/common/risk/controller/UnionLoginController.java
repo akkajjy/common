@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(
         origins = {
                 "https://installment.shhpalwy.com",
-                "http://h5-installment-shop-test.shhpalwy.com",
+                "https://h5-installment-shop-test.shhpalwy.com",
                 "http://localhost:8080",
-                "http://zy-shop-test02.palwy.com"
+                "https://zy-shop-test02.palwy.com"
         },
         allowCredentials = "true"
 )
