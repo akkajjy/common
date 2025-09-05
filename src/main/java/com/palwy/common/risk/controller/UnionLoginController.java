@@ -50,7 +50,7 @@ public class UnionLoginController {
             notes = "根据用户标识和手机号生成联合登录链接。手机号末位为奇数时调用华翊风控，偶数时调用优鉴风控")
     @PostMapping("/Login")
     public ResultVO<LoginResp> unionLogin(@RequestBody UnionLoginReq unionLoginReq) {
-
+        LoginResp loginResp = new LoginResp();
         log.info("联合登录请求参数 : {}", JSON.toJSONString(unionLoginReq));
 
         try {
@@ -62,15 +62,17 @@ public class UnionLoginController {
             String type = weightCategoryUtils.getWeightRandomRightsType(unionLoginReq.getUserPhone(), category,weight);
             if (StringUtils.equals(type,"hy")) { // 奇数：调用华翊风控
                 log.info("手机号末位为奇数，启用华翊风控");
+                loginResp.setType("ty");
                 //根据手机号查询商城用户信息进行组装
                 redirectUrl = hyRiskService.generateUnionLoginUrl(unionLoginReq);
             } else { // 偶数：调用优鉴风控
                 log.info("手机号末位为偶数，启用优鉴风控");
+                loginResp.setType("yj");
                 redirectUrl = yjRiskService.generateUnionLoginUrl(unionLoginReq.getThirdUserId(), unionLoginReq.getUserPhone());
             }
 
             log.info("生成的联合登录URL: {}", redirectUrl);
-            LoginResp loginResp = new LoginResp();
+
             loginResp.setLoginUrl(redirectUrl);
             return ResultVOUtil.success(loginResp);
 

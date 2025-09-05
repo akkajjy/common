@@ -7,4 +7,7 @@ import lombok.Data;
 public class LoginResp {
     @ApiModelProperty(value = "url", required = true)
     private String loginUrl;
+
+    @ApiModelProperty(value = "type", required = true)
+    private String type;
 }
