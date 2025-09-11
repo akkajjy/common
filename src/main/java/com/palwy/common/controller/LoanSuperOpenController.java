@@ -22,6 +22,7 @@ import java.util.List;
         origins = {
                 "https://installment.shhpalwy.com",
                 "https://h5-installment-shop-test.shhpalwy.com",
+                "http://h5-installment-shop-test.shhpalwy.com",
                 "http://localhost:8080",
                 "https://zy-shop-test02.palwy.com",
                 "http://zy-shop-test02.palwy.com",
