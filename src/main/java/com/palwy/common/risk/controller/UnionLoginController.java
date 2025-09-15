@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
                 "http://h5-installment-shop-test.shhpalwy.com",
                 "http://localhost:8080",
                 "https://zy-shop-test02.palwy.com",
+                "http://zy-shop-test03.palwy.com/", "https://zy-shop-test03.palwy.com/",
                 "http://zy-shop-test03.palwy.com", "https://zy-shop-test03.palwy.com",
                 "http://zy-shop-test.shhpalwy.com",
                 "https://zy-shop-test.shhpalwy.com",
