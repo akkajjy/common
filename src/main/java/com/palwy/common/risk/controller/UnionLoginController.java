@@ -32,7 +32,7 @@ import org.springframework.web.bind.annotation.*;
                 "http://zy-shop-test.shhpalwy.com",
                 "https://zy-shop-test.shhpalwy.com",
                 "https://common-test.shhpalwy.com",
-                "http://common-test.shhpalwy.com"
+                "http://common-test.shhpalwy.com","https://zy.shhpalwy.com"
         },
         allowCredentials = "true"
 )
