@@ -4,9 +4,9 @@
 
     <resultMap id="BaseResultMap" type="com.palwy.common.entity.ListConfig">
         <id column="id" property="id" />
-        <result column="plateForm" property="plateForm" />
+        <result column="plate_form" property="plateForm" />
         <result column="version" property="version" />
-        <result column="showFlag" property="showFlag" />
+        <result column="show_flag" property="showFlag" />
         <result column="is_deleted" property="isDeleted" />
         <result column="creator" property="creator" />
         <result column="gmt_created" property="gmtCreated" />
@@ -15,12 +15,12 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, plateForm, version, showFlag, is_deleted, creator, gmt_created, modifier, gmt_modified
+        id, plate_form, version, show_flag, is_deleted, creator, gmt_created, modifier, gmt_modified
     </sql>
 
     <insert id="insert" parameterType="com.palwy.common.entity.ListConfig" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO list_config (
-            plateForm, version, showFlag, is_deleted, creator, gmt_created, modifier, gmt_modified
+            plate_form, version, show_flag, is_deleted, creator, gmt_created, modifier, gmt_modified
         ) VALUES (
                      #{plateForm}, #{version}, #{showFlag}, #{isDeleted}, #{creator}, #{gmtCreated}, #{modifier}, #{gmtModified}
                  )
@@ -29,9 +29,9 @@
     <insert id="insertSelective" parameterType="com.palwy.common.entity.ListConfig" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO list_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="plateForm != null">plateForm,</if>
+            <if test="plateForm != null">plate_form,</if>
             <if test="version != null">version,</if>
-            showFlag,
+            show_flag,
             <if test="isDeleted != null">is_deleted,</if>
             <if test="creator != null">creator,</if>
             <if test="gmtCreated != null">gmt_created,</if>
@@ -57,9 +57,9 @@
 
     <update id="updateByPrimaryKey" parameterType="com.palwy.common.entity.ListConfig">
         UPDATE list_config
-        SET plateForm = #{plateForm},
+        SET plate_form = #{plateForm},
             version = #{version},
-            showFlag = #{showFlag},
+            show_flag = #{showFlag},
             is_deleted = #{isDeleted},
             creator = #{creator},
             gmt_created = #{gmtCreated},
@@ -71,9 +71,9 @@
     <update id="updateByPrimaryKeySelective" parameterType="com.palwy.common.entity.ListConfig">
         UPDATE list_config
         <set>
-            <if test="plateForm != null">plateForm = #{plateForm},</if>
+            <if test="plateForm != null">plate_form = #{plateForm},</if>
             <if test="version != null">version = #{version},</if>
-            <if test="showFlag != null">showFlag = #{showFlag},</if>
+            <if test="showFlag != null">show_flag = #{showFlag},</if>
             <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
             <if test="creator != null">creator = #{creator},</if>
             <if test="gmtCreated != null">gmt_created = #{gmtCreated},</if>
@@ -103,13 +103,13 @@
         FROM list_config
         WHERE is_deleted = 'N'
         <if test="plateForm != null and plateForm != ''">
-            AND plateForm = #{plateForm}
+            AND plate_form = #{plateForm}
         </if>
         <if test="version != null and version != ''">
             AND version = #{version}
         </if>
         <if test="showFlag != null and showFlag != ''">
-            AND showFlag = #{showFlag}
+            AND show_flag = #{showFlag}
         </if>
     </select>
 
@@ -117,7 +117,7 @@
         SELECT
         <include refid="Base_Column_List" />
         FROM list_config
-        WHERE plateForm = #{plateForm}
+        WHERE plate_form = #{plateForm}
         AND version = #{version}
         AND is_deleted = 'N'
     </select>
@@ -134,7 +134,7 @@
         SELECT
         <include refid="Base_Column_List" />
         FROM list_config
-        WHERE showFlag = 'N'
+        WHERE show_flag = 'N'
         AND is_deleted = 'N'
         ORDER BY gmt_created DESC
     </select>
