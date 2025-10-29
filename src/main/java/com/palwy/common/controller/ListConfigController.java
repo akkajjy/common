@@ -6,12 +6,14 @@ import com.palwy.common.entity.ListConfigReq;
 import com.palwy.common.service.ListConfigService;
 import com.palwy.common.util.ResultVOUtil;
 import com.palwy.common.vo.ResultVO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("/api/listConfig")
+@Slf4j
 public class ListConfigController {
 
     @Resource
@@ -20,8 +22,7 @@ public class ListConfigController {
 
     @PostMapping("/show")
     public ResultVO getShowConfigs(@RequestBody ListConfigReq req) {
-        ListConfig  listConfig1 =listConfigService.selectByCondition(req);
 
-        return ResultVOUtil.success("查询成功",listConfig1);
+        return  listConfigService.selectByCondition(req);
     }
 }
