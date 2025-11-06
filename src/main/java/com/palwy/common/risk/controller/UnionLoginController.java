@@ -32,7 +32,8 @@ import org.springframework.web.bind.annotation.*;
                 "http://zy-shop-test.shhpalwy.com",
                 "https://zy-shop-test.shhpalwy.com",
                 "https://common-test.shhpalwy.com",
-                "http://common-test.shhpalwy.com","https://zy.shhpalwy.com"
+                "http://common-test.shhpalwy.com","https://zy.shhpalwy.com",
+                "http://zy-admin.shhpalwy.com"
         },
         allowCredentials = "true"
 )
