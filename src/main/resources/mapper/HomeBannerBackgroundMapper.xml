@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.palwy.common.mapper.HomeBannerBackgroundMapper">
+
+    <!-- Base Result Map -->
+    <resultMap id="BaseResultMap" type="com.palwy.common.banner.entity.HomeBannerBackground">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="theme" property="theme" jdbcType="VARCHAR"/>
+        <result column="small_image" property="smallImage" jdbcType="VARCHAR"/>
+        <result column="large_image" property="largeImage" jdbcType="VARCHAR"/>
+        <result column="small_image_file" property="smallImageFile" jdbcType="VARCHAR"/>
+        <result column="large_image_file" property="largeImageFile" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="TINYINT"/>
+        <result column="gmt_created" property="gmtCreated" jdbcType="TIMESTAMP"/>
+        <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP"/>
+        <result column="is_deleted" property="isDeleted" jdbcType="CHAR"/>
+        <result column="creator" property="creator" jdbcType="VARCHAR"/>
+        <result column="modifier" property="modifier" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!-- Base Column List -->
+    <sql id="Base_Column_List">
+        id, theme, small_image, large_image, status, is_deleted, creator, modifier,gmt_created,gmt_modified,small_image_file,large_image_file
+    </sql>
+
+    <!-- 插入首页背景图配置 -->
+    <insert id="insert" parameterType="com.palwy.common.banner.entity.HomeBannerBackground">
+        INSERT INTO home_banner_background (
+            theme, small_image, large_image, status,
+            gmt_created, gmt_modified, is_deleted, creator, modifier,small_image_file,large_image_file
+        )
+        VALUES (
+                   #{theme,jdbcType=VARCHAR},
+                   #{smallImage,jdbcType=VARCHAR},
+                   #{largeImage,jdbcType=VARCHAR},
+                   #{status,jdbcType=TINYINT},
+                   #{gmtCreated,jdbcType=TIMESTAMP},
+                   #{gmtModified,jdbcType=TIMESTAMP},
+                   #{isDeleted,jdbcType=CHAR},
+                   #{creator,jdbcType=VARCHAR},
+                   #{modifier,jdbcType=VARCHAR},
+                   #{smallImageFile,jdbcType=VARCHAR},
+                   #{largeImageFile,jdbcType=VARCHAR}
+               )
+    </insert>
+
+    <!-- 根据ID查询首页背景图配置 -->
+    <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM home_banner_background
+        WHERE id = #{id,jdbcType=BIGINT}
+        AND is_deleted = 'N'
+    </select>
+
+    <!-- 查询所有首页背景图配置（按创建时间倒序） -->
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM home_banner_background
+        WHERE is_deleted = 'N'
+        ORDER BY gmt_created DESC
+    </select>
+
+    <!-- 查询所有上架的首页背景图配置 -->
+    <select id="selectAllOnline" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM home_banner_background
+        WHERE is_deleted = 'N'
+        AND status = 1
+        ORDER BY gmt_created DESC
+    </select>
+
+    <!-- 根据主题模糊查询首页背景图配置 -->
+    <select id="selectByTheme" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM home_banner_background
+        WHERE is_deleted = 'N'
+        AND theme LIKE CONCAT('%', #{theme,jdbcType=VARCHAR}, '%')
+        ORDER BY gmt_created DESC
+    </select>
+
+    <!-- 更新首页背景图配置 -->
+    <update id="update" parameterType="com.palwy.common.banner.entity.HomeBannerBackground">
+        UPDATE home_banner_background
+        SET
+            theme = #{theme,jdbcType=VARCHAR},
+            small_image = #{smallImage,jdbcType=VARCHAR},
+            large_image = #{largeImage,jdbcType=VARCHAR},
+            small_image_file = #{smallImageFile,jdbcType=VARCHAR},
+            large_image_file = #{largeImageFile,jdbcType=VARCHAR},
+            status = #{status,jdbcType=TINYINT},
+            gmt_modified = #{gmtModified,jdbcType=TIMESTAMP},
+            modifier = #{modifier,jdbcType=VARCHAR}
+        WHERE id = #{id,jdbcType=BIGINT}
+          AND is_deleted = 'N'
+    </update>
+
+    <!-- 更新状态（上架/下架） -->
+    <update id="updateStatus">
+        UPDATE home_banner_background
+        SET
+            status = #{status,jdbcType=TINYINT},
+            gmt_modified = NOW(),
+            modifier = 'system'
+        WHERE id = #{id,jdbcType=BIGINT}
+          AND is_deleted = 'N'
+    </update>
+
+    <!-- 逻辑删除首页背景图配置 -->
+    <update id="deleteById" parameterType="java.lang.Long">
+        UPDATE home_banner_background
+        SET
+            is_deleted = 'Y',
+            gmt_modified = NOW(),
+            modifier = 'system'
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

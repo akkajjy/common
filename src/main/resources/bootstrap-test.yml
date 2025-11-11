@@ -6,20 +6,20 @@ spring:
     nacos:
       config:
         enabled: true
-        server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
-        namespace: 40dbacf5-3a92-4b50-83c4-796faa3b8190
+        server-addr: 10.32.0.10:8848
+        namespace: a7133205-44ac-4f8b-9658-e04b63ad4f29
         file-extension: yaml
         group: DEFAULT_GROUP
         refresh-enabled: true
         username: nacos
-        password: tstNccos54
+        password: dev@123
         import-check:
           enabled: false
       discovery:
-        server-addr: 10.16.0.5:8848,10.16.0.2:8848,10.16.0.4:8848
-        namespace: 40dbacf5-3a92-4b50-83c4-796faa3b8190
+        server-addr: 10.32.0.10:8848
+        namespace: a7133205-44ac-4f8b-9658-e04b63ad4f29
         group: DEFAULT_GROUP
         username: nacos
-        password: tstNccos54
+        password: dev@123
 
 

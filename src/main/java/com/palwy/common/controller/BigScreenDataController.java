@@ -21,7 +21,7 @@ import java.util.Objects;
         origins = {
                 "https://datav-test.shhpalwy.com",
                 "https://datav.shhpalwy.com/",
-                "http://localhost:8080"
+                "http://localhost:8080","https://zy.shhpalwy.com"
         },
         allowCredentials = "true"
 )

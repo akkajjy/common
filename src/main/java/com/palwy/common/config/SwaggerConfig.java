@@ -20,11 +20,11 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                // 修正为实际Controller所在包路径
-                .apis(RequestHandlerSelectors.basePackage("com.palwy.common.controller"))
+                // 使用or条件组合多个包扫描
+                .apis(RequestHandlerSelectors.basePackage("com.palwy.common.controller")
+                        .or(RequestHandlerSelectors.basePackage("com.palwy.common.risk.controller")))
                 .paths(PathSelectors.any())
                 .build()
-                // 继续排除内置错误控制器
                 .ignoredParameterTypes(BasicErrorController.class);
     }
 
