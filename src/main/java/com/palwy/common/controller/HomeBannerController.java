@@ -34,7 +34,8 @@ import java.util.List;
                 "http://zy-shop-test03.palwy.com", "https://zy-shop-test03.palwy.com",
                 "http://zy-shop-test.shhpalwy.com",
                 "https://zy-shop-test.shhpalwy.com",
-                "http://common-test.shhpalwy.com","https://zy.shhpalwy.com"
+                "http://common-test.shhpalwy.com","https://zy.shhpalwy.com",
+                "http://zy-admin.shhpalwy.com"
         },
         allowCredentials = "true"
 )
