@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.palwy.common.mapper.ListConfigMapper">
+
+    <resultMap id="BaseResultMap" type="com.palwy.common.entity.ListConfig">
+        <id column="id" property="id" />
+        <result column="plate_form" property="plateForm" />
+        <result column="version" property="version" />
+        <result column="show_flag" property="showFlag" />
+        <result column="is_deleted" property="isDeleted" />
+        <result column="creator" property="creator" />
+        <result column="gmt_created" property="gmtCreated" />
+        <result column="modifier" property="modifier" />
+        <result column="gmt_modified" property="gmtModified" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, plate_form, version, show_flag, is_deleted, creator, gmt_created, modifier, gmt_modified
+    </sql>
+
+    <insert id="insert" parameterType="com.palwy.common.entity.ListConfig" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO list_config (
+            plate_form, version, show_flag, is_deleted, creator, gmt_created, modifier, gmt_modified
+        ) VALUES (
+                     #{plateForm}, #{version}, #{showFlag}, #{isDeleted}, #{creator}, #{gmtCreated}, #{modifier}, #{gmtModified}
+                 )
+    </insert>
+
+    <insert id="insertSelective" parameterType="com.palwy.common.entity.ListConfig" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO list_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="plateForm != null">plate_form,</if>
+            <if test="version != null">version,</if>
+            show_flag,
+            <if test="isDeleted != null">is_deleted,</if>
+            <if test="creator != null">creator,</if>
+            <if test="gmtCreated != null">gmt_created,</if>
+            <if test="modifier != null">modifier,</if>
+            <if test="gmtModified != null">gmt_modified,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="plateForm != null">#{plateForm},</if>
+            <if test="version != null">#{version},</if>
+            #{showFlag},
+            <if test="isDeleted != null">#{isDeleted},</if>
+            <if test="creator != null">#{creator},</if>
+            <if test="gmtCreated != null">#{gmtCreated},</if>
+            <if test="modifier != null">#{modifier},</if>
+            <if test="gmtModified != null">#{gmtModified},</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        DELETE FROM list_config
+        WHERE id = #{id}
+    </delete>
+
+    <update id="updateByPrimaryKey" parameterType="com.palwy.common.entity.ListConfig">
+        UPDATE list_config
+        SET plate_form = #{plateForm},
+            version = #{version},
+            show_flag = #{showFlag},
+            is_deleted = #{isDeleted},
+            creator = #{creator},
+            gmt_created = #{gmtCreated},
+            modifier = #{modifier},
+            gmt_modified = #{gmtModified}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.palwy.common.entity.ListConfig">
+        UPDATE list_config
+        <set>
+            <if test="plateForm != null">plate_form = #{plateForm},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="showFlag != null">show_flag = #{showFlag},</if>
+            <if test="isDeleted != null">is_deleted = #{isDeleted},</if>
+            <if test="creator != null">creator = #{creator},</if>
+            <if test="gmtCreated != null">gmt_created = #{gmtCreated},</if>
+            <if test="modifier != null">modifier = #{modifier},</if>
+            <if test="gmtModified != null">gmt_modified = #{gmtModified},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM list_config
+        WHERE id = #{id} AND is_deleted = 'N'
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM list_config
+        WHERE is_deleted = 'N'
+    </select>
+
+    <select id="selectByCondition" parameterType="com.palwy.common.entity.ListConfig" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM list_config
+        WHERE is_deleted = 'N'
+        <if test="plateForm != null and plateForm != ''">
+            AND plate_form = #{plateForm}
+        </if>
+        <if test="version != null and version != ''">
+            AND version = #{version}
+        </if>
+        <if test="showFlag != null and showFlag != ''">
+            AND show_flag = #{showFlag}
+        </if>
+    </select>
+
+    <select id="selectByPlatformAndVersion" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM list_config
+        WHERE plate_form = #{plateForm}
+        AND version = #{version}
+        AND is_deleted = 'N'
+    </select>
+
+    <update id="logicalDeleteByPrimaryKey" parameterType="java.lang.Long">
+        UPDATE list_config
+        SET is_deleted = 'Y',
+            modifier = 'system',
+            gmt_modified = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectShowConfigs" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM list_config
+        WHERE show_flag = 'N'
+        AND is_deleted = 'N'
+        ORDER BY gmt_created DESC
+    </select>
+
+</mapper>
